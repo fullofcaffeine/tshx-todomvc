@@ -1,0 +1,7 @@
+-D react=1.6.0
+# @install: lix --silent download "git:git@github.com:massiveinteractive/haxe-react.git#1b9beba64bf4567de0678a82d4d6d7d62968ba86" into react/1.6.0/git/1b9beba64bf4567de0678a82d4d6d7d62968ba86
+-lib html-entities
+-cp ${HAXE_LIBCACHE}/react/1.6.0/git/1b9beba64bf4567de0678a82d4d6d7d62968ba86/src/lib
+--macro react.jsx.JsxStaticMacro.addHook()
+--macro addGlobalMetadata('', '@:build(react.jsx.JsxStaticMacro.build())')
+

@@ -1,0 +1,13 @@
+-cp src/hx
+-lib react
+-lib hxtsdgen
+-lib coconut.data
+-lib hxnodejs
+-lib tink_web
+-lib tink_http
+-lib tink_await
+-js src/ts/client/hx.js
+-D  no-deprecation-warnings
+--macro include('client')
+--macro include('client.data')
+-dce full

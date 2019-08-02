@@ -1,0 +1,14 @@
+-cp src/hx
+-lib hxtsdgen
+-lib js-kit
+-lib hxnodejs
+-lib tink_web
+-lib tink_http
+-lib tink_await
+-js dist/server-root/server/server.js
+-main server.Main
+-D nodejs
+-debug
+-D source-map-content
+-D no-deprecation-warnings
+#-dce full

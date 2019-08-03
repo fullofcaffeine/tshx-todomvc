@@ -759,10 +759,10 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
-"@material-ui/core@^3.8.3":
-  version "3.9.3"
-  resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-3.9.3.tgz#d378c1f4beb18df9a534ca7258c2c33fb8e0e51f"
-  integrity sha512-REIj62+zEvTgI/C//YL4fZxrCVIySygmpZglsu/Nl5jPqy3CDjZv1F9ubBYorHqmRgeVPh64EghMMWqk4egmfg==
+"@material-ui/core@3.9.2":
+  version "3.9.2"
+  resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-3.9.2.tgz#41ed1a470e981d199829eb5d9317a671c66a6f7d"
+  integrity sha512-aukR3mSH3g115St2OnqoeMRtmxzxxx+Mch7pFKRV3Tz3URExBlZwOolimjxKZpG4LGec8HlhREawafLsDzjVWQ==
   dependencies:
     "@babel/runtime" "^7.2.0"
     "@material-ui/system" "^3.0.0-alpha.0"
@@ -791,6 +791,14 @@
     react-transition-group "^2.2.1"
     recompose "0.28.0 - 0.30.0"
     warning "^4.0.1"
+
+"@material-ui/icons@3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@material-ui/icons/-/icons-3.0.2.tgz#d67a6dd1ec8312d3a88ec97944a63daeef24fe10"
+  integrity sha512-QY/3gJnObZQ3O/e6WjH+0ah2M3MOgLOzCy8HTUoUx9B6dDrS18vP7Ycw3qrDEKlB6q1KNxy6CZHm5FCauWGy2g==
+  dependencies:
+    "@babel/runtime" "^7.2.0"
+    recompose "0.28.0 - 0.30.0"
 
 "@material-ui/system@^3.0.0-alpha.0":
   version "3.0.0-alpha.2"
@@ -2139,6 +2147,25 @@ chokidar@^2.0.2, chokidar@^2.1.5:
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-2.1.5.tgz#0ae8434d962281a5f56c72869e79cb6d9d86ad4d"
   integrity sha512-i0TprVWp+Kj4WRPtInjexJ8Q+BqTE909VpH8xVhXrJkoc5QC8VO9TryGOqTr+2hljzc1sC62t22h5tZePodM/A==
+  dependencies:
+    anymatch "^2.0.0"
+    async-each "^1.0.1"
+    braces "^2.3.2"
+    glob-parent "^3.1.0"
+    inherits "^2.0.3"
+    is-binary-path "^1.0.0"
+    is-glob "^4.0.0"
+    normalize-path "^3.0.0"
+    path-is-absolute "^1.0.0"
+    readdirp "^2.2.1"
+    upath "^1.1.1"
+  optionalDependencies:
+    fsevents "^1.2.7"
+
+chokidar@^2.0.4:
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-2.1.6.tgz#b6cad653a929e244ce8a834244164d241fa954c5"
+  integrity sha512-V2jUo67OKkc6ySiRpJrjlpJKl9kDuG+Xb8VgsGzb+aEouhgS1D0weyPU4lEzdAcsCAvrih2J2BqyXqHWvVLw5g==
   dependencies:
     anymatch "^2.0.0"
     async-each "^1.0.1"
@@ -3867,6 +3894,20 @@ forever-agent@~0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/forever-agent/-/forever-agent-0.6.1.tgz#fbc71f0c41adeb37f96c577ad1ed42d8fdacca91"
   integrity sha1-+8cfDEGt6zf5bFd60e1C2P2sypE=
+
+fork-ts-checker-webpack-plugin@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/fork-ts-checker-webpack-plugin/-/fork-ts-checker-webpack-plugin-1.5.0.tgz#ce1d77190b44d81a761b10b6284a373795e41f0c"
+  integrity sha512-zEhg7Hz+KhZlBhILYpXy+Beu96gwvkROWJiTXOCyOOMMrdBIRPvsBpBqgTI4jfJGrJXcqGwJR8zsBGDmzY0jsA==
+  dependencies:
+    babel-code-frame "^6.22.0"
+    chalk "^2.4.1"
+    chokidar "^2.0.4"
+    micromatch "^3.1.10"
+    minimatch "^3.0.4"
+    semver "^5.6.0"
+    tapable "^1.0.0"
+    worker-rpc "^0.1.0"
 
 form-data@~2.3.2:
   version "2.3.3"
@@ -6068,6 +6109,11 @@ methods@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/methods/-/methods-1.1.2.tgz#5529a4d67654134edcc5266656835b0f851afcee"
   integrity sha1-VSmk1nZUE07cxSZmVoNbD4Ua/O4=
+
+microevent.ts@~0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/microevent.ts/-/microevent.ts-0.1.1.tgz#70b09b83f43df5172d0205a63025bce0f7357fa0"
+  integrity sha512-jo1OfR4TaEwd5HOrt5+tAZ9mqT4jmpNAusXtyfNzqVm9uiSYFZlKM1wYL4oU7azZW/PxQW53wM0S6OR1JHNa2g==
 
 micromatch@^2.3.11:
   version "2.3.11"
@@ -10028,6 +10074,13 @@ worker-farm@^1.5.2:
   integrity sha512-6w+3tHbM87WnSWnENBUvA2pxJPLhQUg5LKwUQHq3r+XPhIM+Gh2R5ycbwPCyuGbNg+lPgdcnQUhuC02kJCvffQ==
   dependencies:
     errno "~0.1.7"
+
+worker-rpc@^0.1.0:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/worker-rpc/-/worker-rpc-0.1.1.tgz#cb565bd6d7071a8f16660686051e969ad32f54d5"
+  integrity sha512-P1WjMrUB3qgJNI9jfmpZ/htmBEjFh//6l/5y8SD9hg1Ef5zTTVVoRjTrTEzPrNBQvmhMxkoTsjOXN10GWU7aCg==
+  dependencies:
+    microevent.ts "~0.1.1"
 
 wrap-ansi@^2.0.0:
   version "2.1.0"

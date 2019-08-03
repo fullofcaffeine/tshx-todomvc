@@ -11,6 +11,9 @@ const cssnano = require('cssnano');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 
+//https://stackoverflow.com/questions/54675587/babel-typescript-doesnt-throw-errors-while-webpack-build
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+
 const config = require('./src/ts/server/config');
 const nodeModulesPath = path.resolve(__dirname, 'node_modules');
 
@@ -45,7 +48,11 @@ const plugins = [
         destination: path.join('assets', 'icons')
       }
     ]
-  })
+  }),
+  new ForkTsCheckerWebpackPlugin(
+    // See: https://github.com/TypeStrong/fork-ts-checker-webpack-plugin/issues/71#issuecomment-345929292
+    //{async: false} 
+  )
 ];
 
 //const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;

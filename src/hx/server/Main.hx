@@ -16,7 +16,7 @@ class Main {
     var path = js.Lib.require('path');
     
     app.set('view engine', 'ejs');
-    app.post('/cul', function(a: Request, b: Response ) {
+    app.post('/ssr-sample', function(a: Request, b: Response ) {
       b.set('Content-Type', 'text-html');
       b.send(new js.node.Buffer('Worales'));
     });

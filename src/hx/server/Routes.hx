@@ -1,10 +1,10 @@
 package server;
 
 import tink.core.Promise;
-import js.npm.express.Static;
-import js.npm.express.Response;
-import js.npm.express.Request;
-import js.npm.express.Router;
+import server.externs.express.Static;
+import server.externs.express.Response;
+import server.externs.express.Request;
+import server.externs.express.Router;
 import tink.core.Future;
 
 @:await class Routes {

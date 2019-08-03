@@ -211,14 +211,26 @@ var client_Client = function() { };
 client_Client.__name__ = true;
 client_Client.call = function() {
 	var remote = new tink_web_proxy_Remote0(new tink_http_clients_NodeClient(),tink_web_proxy__$Remote_RemoteEndpoint_$Impl_$._new(tink_url__$Host_Host_$Impl_$._new("localhost",3000)));
-	return remote.json();
+	var ret = remote.json().flatMap(function(o) {
+		switch(o._hx_index) {
+		case 0:
+			var e = o.data;
+			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(e));
+		case 1:
+			var e1 = o.failure;
+			throw new js__$Boot_HaxeError(e1);
+		}
+	});
+	var ret1 = ret.gather();
+	return ret1;
 };
 var client_data_Thing = function() {
 	this._updatePerformed = new tink_core_SignalTrigger();
 	this.updatePerformed = this._updatePerformed;
 	this.foo = "Hello from Coconut!";
 	this.__coco_bar = tink_state__$Observable_Observable_$Impl_$.auto(tink_state__$Observable_Computation_$Impl_$.async(function() {
-		return client_Client.call();
+		var ret = client_Client.call().map(tink_core_Outcome.Success);
+		return ret.gather();
 	}));
 	var this1 = new tink_state__$State_SimpleState(0,null,null);
 	this.__coco_transitionCount = this1;

@@ -1,12 +1,6 @@
 package client.data;
 
-import react.ReactComponent.ReactComponentOf;
 import coconut.data.Model;
-import js.Promise;
-//import tink.pure.List;
-using tink.CoreApi;
-import tink.core.Future;
-import react.ReactComponent.ReactComponentOfPropsAndState;
 import react.ReactComponent;
 
 using tink.state.Promised.PromisedTools;

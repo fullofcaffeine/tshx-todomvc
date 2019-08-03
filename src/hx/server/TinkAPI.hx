@@ -36,6 +36,8 @@ class Root {
         }
 }
 
+// Kevin has samples of how to organize the API including a Stripe one, check them out
+
 class TinkAPI {
     public static var main = {
         var router = new Router<Root>(new Root());

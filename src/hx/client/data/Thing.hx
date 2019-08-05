@@ -3,7 +3,11 @@ package client.data;
 import coconut.data.Model;
 import react.ReactComponent;
 
+import react.ReactMacro.jsx;
+
+
 using tink.state.Promised.PromisedTools;
+
 
 class Thing implements Model {
     @:constant var foo: String = 'Hello from Coconut!';
@@ -21,13 +25,16 @@ class Thing implements Model {
   var result: String;
 }
 
+typedef ReactComponent = ReactComponentOfPropsAndState<IThingProps, IThingState>;
+
 
 // Rename to viewModel, keep in this module for now
 @:expose
 class ThingController {
  public var bare(default, default): ApiResult.Result;
- private var reactComponent: ReactComponentOfPropsAndState<IThingProps, IThingState>;
- public function new(reactComponent: Dynamic) {
+ private var reactComponent: ReactComponent;
+
+ public function new(reactComponent: ReactComponent) {
    this.reactComponent = reactComponent;
  
    var model = new Thing();

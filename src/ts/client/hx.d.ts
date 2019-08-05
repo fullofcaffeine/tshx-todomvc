@@ -17,7 +17,7 @@ export type Result = {
 
 export namespace client.data {
 	export class ThingController {
-		constructor(reactComponent: any);
+		constructor(reactComponent: React.Component<client.data.IThingProps,client.data.IThingState,any>);
 		bare: Result;
 		clickBtn(): void;
 	}

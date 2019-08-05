@@ -4,13 +4,13 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "noEmit": true,
+    "jsx": "react",
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
     "outDir": "./dist",
     "lib": ["es2015", "dom"],
     "types": [],
-    "jsx": "react"
   },
   "files": ["./types.d.ts", "./src/ts/client/client.tsx"]
 }

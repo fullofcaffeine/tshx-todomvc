@@ -1,11 +1,14 @@
 package server;
 
+import js.html.CanvasCaptureMediaStream;
+import js.html.CanvasRenderingContext2D;
 import tink.core.Promise;
 import server.externs.express.Static;
 import server.externs.express.Response;
 import server.externs.express.Request;
 import server.externs.express.Router;
 import tink.core.Future;
+import server.externs.ReactSSR;
 
 @:await class Routes {
   public static function apiRouter() {
@@ -32,14 +35,19 @@ import tink.core.Future;
     return router;
   }
 
-  @await public static function pagesRouter() {
+  @await public static function pagesRouter(ssr = false) {
     //TODO Macro-wrapped require that checks that the js / ts exists?
     var router = new Router();
     var getManifest = (js.Lib.require('./routes/manifest-manager') : {getManifest: () -> js.Promise<String>}).getManifest;
 
     router.get('/**', @await (_, res: Response) -> {
       var manifest = @await Future.ofJsPromise(getManifest());
-      res.render('page.ejs', {manifest: manifest});
+      
+      if(ssr) {
+        res.render('page.ejs', {manifest: manifest, content: new ReactSSR().render()});
+      } else {
+        res.render('page.ejs', {manifest: manifest, content: '<div id="app">Loading...</div>'});
+      }
     });
 
     return router;

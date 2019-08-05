@@ -14,13 +14,9 @@ class Main {
 
   public static function main() {
     var path = js.Lib.require('path');
+    var html = js.Lib.require('./html');
     
     app.set('view engine', 'ejs');
-    app.post('/ssr-sample', function(a: Request, b: Response ) {
-      b.set('Content-Type', 'text-html');
-      b.send(new js.node.Buffer('Worales'));
-    });
-
     app.use('/assets', new Static(Path.join(Node.__dirname, '..', '..', '..', 'assets')));
     app.use(Routes.apiRouter());
     app.use(Routes.staticRouter());

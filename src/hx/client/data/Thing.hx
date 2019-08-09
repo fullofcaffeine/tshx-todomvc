@@ -30,6 +30,12 @@ extern class ReactComponent extends ReactComponentOfPropsAndState<IThingProps, I
   public var foo: String;
 }
 
+// TODO Move it to its own exter
+@:jsRequire('class-autobind', 'default')
+extern class Autobind {
+  @:selfCall public function new(obj: Dynamic);
+}
+
 // Rename to viewModel, keep in this module for now
 @:expose
 class ThingController {
@@ -37,8 +43,6 @@ class ThingController {
  private var model: Thing = new Thing();
 
  public function new(reactComponent: ReactComponent) {
-   Browser.console.debug();
-   var autobind = js.Lib.require('class-autobind');
    this.reactComponent = reactComponent;
    model.observables.bar.bind((o: tink.state.Promised<ApiResult.Result>) -> {
      switch(o) {
@@ -47,7 +51,7 @@ class ThingController {
        case Failed(error): throw(error);
      };
    });
-  // autobind(this);
+   new Autobind(this);
  }
 
  public function clickBtn() {

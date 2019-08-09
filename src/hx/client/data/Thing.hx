@@ -33,11 +33,12 @@ extern class ReactComponent extends ReactComponentOfPropsAndState<IThingProps, I
 // Rename to viewModel, keep in this module for now
 @:expose
 class ThingController {
- public var bare(default, default): ApiResult.Result;
  private var reactComponent: ReactComponent;
  private var model: Thing = new Thing();
 
  public function new(reactComponent: ReactComponent) {
+   Browser.console.debug();
+   var autobind = js.Lib.require('class-autobind');
    this.reactComponent = reactComponent;
    model.observables.bar.bind((o: tink.state.Promised<ApiResult.Result>) -> {
      switch(o) {
@@ -46,6 +47,7 @@ class ThingController {
        case Failed(error): throw(error);
      };
    });
+  // autobind(this);
  }
 
  public function clickBtn() {

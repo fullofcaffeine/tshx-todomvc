@@ -17,14 +17,9 @@ export namespace client.data {
 	}
 }
 
-export type Result = {
-	slideshow: {author: string, date: string, slides: {items?: string[], title: string, type: string}[], title: string};
-}
-
 export namespace client.data {
 	export class ThingController {
 		constructor(reactComponent: client.data.ReactComponent);
-		bare: Result;
 		clickBtn(): void;
 	}
 }

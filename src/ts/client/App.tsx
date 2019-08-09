@@ -11,7 +11,6 @@ type IReactComponent = hx.client.data.IReactComponent;
 
 @observer class App extends Component<IProps, IState> implements IReactComponent {
   @observable public foo: string;
-
   private controller: hx.client.data.ThingController;
 
   constructor(props) {
@@ -19,19 +18,17 @@ type IReactComponent = hx.client.data.IReactComponent;
     this.state = {result: 'Default'};
     this.controller = new hx.client.data.ThingController(this);
   }
-
   public render() {
     return (
       <Grid container justify='center'>
         <Grid style={{ textAlign: 'center' }} item xs={12}>
           <h1>{this.state.result}FOO</h1>
           <h2>{this.foo}</h2>
-          <Button onClick={this.controller.clickBtn.bind(this.controller)}>Click me!</Button>
+          <Button onClick={this.controller.clickBtn}>Click me!</Button>
         </Grid>
       </Grid>
     );
   }
-
 }
 
 export default App;

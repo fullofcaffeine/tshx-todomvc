@@ -247,6 +247,8 @@ client_data_Thing.prototype = {
 var client_data_ThingController = $hx_exports["client"]["data"]["ThingController"] = function(reactComponent) {
 	this.model = new client_data_Thing();
 	var _gthis = this;
+	window.console.debug();
+	var autobind = require("class-autobind");
 	this.reactComponent = reactComponent;
 	tink_state__$Observable_Observable_$Impl_$.bind(this.model.observables.bar,null,function(o) {
 		switch(o._hx_index) {

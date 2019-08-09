@@ -14,7 +14,7 @@ class Main {
 
   public static function main() {
     var path = js.Lib.require('path');
-    var html = js.Lib.require('./html');
+   // var html = js.Lib.require('./html');
     
     app.set('view engine', 'ejs');
     app.use('/assets', new Static(Path.join(Node.__dirname, '..', '..', '..', 'assets')));

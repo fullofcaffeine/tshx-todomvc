@@ -5,10 +5,11 @@
     "@babel/typescript"
   ],
   "plugins": [
+    ["@babel/plugin-proposal-decorators", {"legacy": true}],
+    ["@babel/plugin-proposal-class-properties", {"loose": true}],
     "react-hot-loader/babel",
     "@babel/proposal-numeric-separator",
     "@babel/transform-runtime",
-    "@babel/proposal-class-properties",
-    "@babel/proposal-object-rest-spread"
+    "@babel/proposal-object-rest-spread",
   ]
 }

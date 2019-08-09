@@ -8,7 +8,7 @@ import server.externs.express.Response;
 import server.externs.express.Request;
 import server.externs.express.Router;
 import tink.core.Future;
-import server.externs.ReactSSR;
+//import server.externs.ReactSSR;
 
 @:await class Routes {
   public static function apiRouter() {
@@ -43,11 +43,11 @@ import server.externs.ReactSSR;
     router.get('/**', @await (_, res: Response) -> {
       var manifest = @await Future.ofJsPromise(getManifest());
       
-      if(ssr) {
-        res.render('page.ejs', {manifest: manifest, content: new ReactSSR().render()});
-      } else {
+ //     if(ssr) {
+//        res.render('page.ejs', {manifest: manifest, content: new ReactSSR().render()});
+//      } else {
         res.render('page.ejs', {manifest: manifest, content: '<div id="app">Loading...</div>'});
-      }
+//      }
     });
 
     return router;

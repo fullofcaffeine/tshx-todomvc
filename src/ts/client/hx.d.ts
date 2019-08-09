@@ -11,13 +11,19 @@ export namespace client.data {
 	}
 }
 
+export namespace client.data {
+	export interface IReactComponent {
+		foo: string;
+	}
+}
+
 export type Result = {
 	slideshow: {author: string, date: string, slides: {items?: string[], title: string, type: string}[], title: string};
 }
 
 export namespace client.data {
 	export class ThingController {
-		constructor(reactComponent: React.Component<client.data.IThingProps,client.data.IThingState,any>);
+		constructor(reactComponent: client.data.ReactComponent);
 		bare: Result;
 		clickBtn(): void;
 	}

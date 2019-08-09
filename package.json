@@ -71,6 +71,7 @@
     }
   },
   "dependencies": {
+    "@babel/plugin-proposal-decorators": "^7.4.4",
     "@babel/polyfill": "^7.2.5",
     "@material-ui/icons": "3.0.2",
     "body-parser": "^1.18.3",
@@ -78,6 +79,8 @@
     "cors": "^2.8.5",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
+    "mobx": "^5.13.0",
+    "mobx-react": "^6.1.2",
     "nodemon": "^1.19.0",
     "react-redux": "^7.0.2",
     "redux": "^4.0.1",
@@ -86,7 +89,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
-    "@babel/plugin-proposal-class-properties": "^7.2.3",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/plugin-proposal-numeric-separator": "^7.2.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.2.0",
     "@babel/plugin-transform-runtime": "^7.2.0",

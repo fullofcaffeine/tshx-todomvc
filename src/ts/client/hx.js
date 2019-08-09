@@ -245,10 +245,10 @@ client_data_Thing.prototype = {
 	__class__: client_data_Thing
 };
 var client_data_ThingController = $hx_exports["client"]["data"]["ThingController"] = function(reactComponent) {
+	this.model = new client_data_Thing();
 	var _gthis = this;
 	this.reactComponent = reactComponent;
-	var model = new client_data_Thing();
-	tink_state__$Observable_Observable_$Impl_$.bind(model.observables.bar,null,function(o) {
+	tink_state__$Observable_Observable_$Impl_$.bind(this.model.observables.bar,null,function(o) {
 		switch(o._hx_index) {
 		case 0:
 			break;
@@ -266,10 +266,12 @@ var client_data_ThingController = $hx_exports["client"]["data"]["ThingController
 client_data_ThingController.__name__ = true;
 client_data_ThingController.prototype = {
 	clickBtn: function() {
-		this.reactComponent.setState({ result : "Wowowowowo!"});
+		window.console.debug("foo");
+		this.reactComponent.state.result = "Wowowowowo!";
+		this.reactComponent.foo = "NOICE";
 	}
-	,setState: function(bare) {
-		this.reactComponent.setState({ result : bare.slideshow.author});
+	,setState: function(state) {
+		this.reactComponent.state.result = state.slideshow.author;
 	}
 	,__class__: client_data_ThingController
 };
@@ -3404,6 +3406,7 @@ if( String.fromCodePoint == null ) String.fromCodePoint = function(c) { return c
 String.prototype.__class__ = String;
 String.__name__ = true;
 Array.__name__ = true;
+var $$tre = (typeof Symbol === "function" && Symbol.for && Symbol.for("react.element")) || 0xeac7;
 haxe_ds_ObjectMap.count = 0;
 Object.defineProperty(js__$Boot_HaxeError.prototype,"message",{ get : function() {
 	return String(this.val);
@@ -3412,7 +3415,6 @@ js_Boot.__toStr = ({ }).toString;
 if(ArrayBuffer.prototype.slice == null) {
 	ArrayBuffer.prototype.slice = js_lib__$ArrayBuffer_ArrayBufferCompat.sliceImpl;
 }
-var $$tre = (typeof Symbol === "function" && Symbol.for && Symbol.for("react.element")) || 0xeac7;
 tink__$Chunk_EmptyChunk.EMPTY = new haxe_io_Bytes(new ArrayBuffer(0));
 tink__$Chunk_Chunk_$Impl_$.EMPTY = new tink__$Chunk_EmptyChunk();
 tink_core__$Callback_Callback_$Impl_$.depth = 0;

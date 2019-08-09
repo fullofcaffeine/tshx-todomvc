@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "esnext",
+    "experimentalDecorators": true,
     "moduleResolution": "node",
     "sourceMap": true,
     "noEmit": true,

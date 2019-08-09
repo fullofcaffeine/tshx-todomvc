@@ -1,13 +1,10 @@
 package client.data;
 
+import js.Browser;
 import coconut.data.Model;
 import react.ReactComponent;
 
-import react.ReactMacro.jsx;
-
-
 using tink.state.Promised.PromisedTools;
-
 
 class Thing implements Model {
     @:constant var foo: String = 'Hello from Coconut!';
@@ -25,19 +22,23 @@ class Thing implements Model {
   var result: String;
 }
 
-typedef ReactComponent = ReactComponentOfPropsAndState<IThingProps, IThingState>;
-
+// To be implemented by the TS react Comp
+@:expose interface IReactComponent {
+  var foo: String;
+}
+extern class ReactComponent extends ReactComponentOfPropsAndState<IThingProps, IThingState> implements IReactComponent {
+  public var foo: String;
+}
 
 // Rename to viewModel, keep in this module for now
 @:expose
 class ThingController {
  public var bare(default, default): ApiResult.Result;
  private var reactComponent: ReactComponent;
+ private var model: Thing = new Thing();
 
  public function new(reactComponent: ReactComponent) {
    this.reactComponent = reactComponent;
- 
-   var model = new Thing();
    model.observables.bar.bind((o: tink.state.Promised<ApiResult.Result>) -> {
      switch(o) {
        case Loading: 
@@ -48,11 +49,12 @@ class ThingController {
  }
 
  public function clickBtn() {
-   this.reactComponent.setState({result: 'Wowowowowo!'});
+   Browser.console.debug('foo');
+   this.reactComponent.state.result = 'Wowowowowo!';
+   this.reactComponent.foo = 'NOICE';
  }
 
-// consider typing it as a React component using the react externs
- private function setState(bare: ApiResult.Result) {
-   this.reactComponent.setState({result: bare.slideshow.author});
+ private function setState(state: ApiResult.Result) {
+   this.reactComponent.state.result = state.slideshow.author;
  }
 }

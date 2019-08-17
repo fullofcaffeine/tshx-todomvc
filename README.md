@@ -1,5 +1,8 @@
 ## Learning experiment. Not suitable for production use.
 
+
+SSR should only be used for static content!!
+
 ## TODO / SOMEDAY
 
 * Use webpack for the server bundling as well

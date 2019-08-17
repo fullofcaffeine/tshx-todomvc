@@ -1,8 +1,8 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import App from './App';
+import App from '../shared/App';
 
-ReactDOM.render(
+ReactDOM.hydrate(
   <App />,
   document.getElementById('app')
 );
@@ -12,3 +12,14 @@ ReactDOM.render(
     navigator.serviceWorker.register('/statics/service-worker.js');
   }
 })();
+
+// TODO Look into HMR
+/*if (process.env.NODE_ENV === 'development') {
+  if (module.hot) {
+      module.hot.accept();
+  }
+
+  if (!window.store) {
+      window.store = store;
+  }
+}*/

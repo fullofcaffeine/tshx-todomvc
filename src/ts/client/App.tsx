@@ -5,6 +5,9 @@ import * as hx from './hx';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 
+// ssr experiment, client-side rendering sample
+import Counter from '../Counter';
+
 type IProps = hx.client.data.IThingProps;
 type IState = hx.client.data.IThingState;
 type IReactComponent = hx.client.data.IReactComponent;
@@ -26,6 +29,7 @@ type IReactComponent = hx.client.data.IReactComponent;
           <h2>{this.foo}</h2>
           <Button onClick={this.controller.clickBtn}>Click me!</Button>
         </Grid>
+        <Counter/>
       </Grid>
     );
   }

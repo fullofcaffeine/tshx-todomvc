@@ -17,6 +17,9 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const config = require('./src/ts/server/config');
 const nodeModulesPath = path.resolve(__dirname, 'node_modules');
 
+// Easily exclude node modules in Webpack
+const nodeExternals = require('webpack-node-externals');
+
 const PUBLIC_PATH = "https://foo.bar"
 
 const plugins = [
@@ -62,87 +65,107 @@ if (!config.IS_PRODUCTION) {
   plugins.push(new OpenBrowserPlugin({ url: `http://localhost:${config.SERVER_PORT}` }));
 }
 
-module.exports = {
-  mode: config.IS_PRODUCTION ? 'production' : 'development',
-  devtool: config.IS_PRODUCTION ? '' : 'eval-source-map',
-  entry: ['@babel/polyfill', './src/ts/client/client'],
-  output: {
-    path: path.join(__dirname, 'dist', 'statics'),
-    filename: `[name]-[hash:8]-bundle.js`,
-    publicPath: '/statics/',
-  },
-  resolve: {
-    extensions: ['.js', '.ts', '.tsx'],
-  },
-  optimization: {
-    splitChunks: {
-      cacheGroups: {
-        commons: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'all',
+module.exports = function(env, argv) {
+  const base = {
+    mode: config.IS_PRODUCTION ? 'production' : 'development',
+    devtool: config.IS_PRODUCTION ? '' : 'eval-source-map',
+//    entry: ['@babel/polyfill', './src/ts/client/client'],
+    resolve: {
+      extensions: ['.js', '.ts', '.tsx'],
+    },
+    optimization: {
+      splitChunks: {
+        cacheGroups: {
+          commons: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+          },
         },
       },
     },
-  },
-  module: {
-    rules: [
-      {
-        test: /\.tsx?$/,
-        loaders: ['babel-loader'],
-        exclude: [/node_modules/, nodeModulesPath],
-      },
-     {
-        test: /\.sass$/,
-        use: [
-          {loader: "style-loader"}, 
-          {
-            loader: 'css-loader',
-            options: {
-              modules: true,
-              camelCase: true,
-              sourceMap: !config.IS_PRODUCTION,
+    module: {
+      rules: [
+        {
+          test: /\.tsx?$/,
+          loaders: ['babel-loader'],
+          exclude: [/node_modules/, nodeModulesPath],
+        },
+        {
+          test: /\.sass$/,
+          use: [
+            { loader: "style-loader" },
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+                camelCase: true,
+                sourceMap: !config.IS_PRODUCTION,
+              },
             },
-          },
-          { loader: "sass-loader" },
-        ]
-      },
-      {
-        test: /\.css$/,
-        use: [
-          {
-            loader: 'style-loader',
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              modules: true,
-              camelCase: true,
-              sourceMap: !config.IS_PRODUCTION,
+            { loader: "sass-loader" },
+          ]
+        },
+        {
+          test: /\.css$/,
+          use: [
+            {
+              loader: 'style-loader',
             },
-          },
-         {
-            loader: 'postcss-loader',
-            options: {
-              sourceMap: !config.IS_PRODUCTION,
-              plugins: config.IS_PRODUCTION ? [] : [cssnano()],
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+                camelCase: true,
+                sourceMap: !config.IS_PRODUCTION,
+              },
             },
-          },
-        ],
+/*            {
+              loader: 'postcss-loader',
+              options: {
+                sourceMap: !config.IS_PRODUCTION,
+                plugins: config.IS_PRODUCTION ? [] : [cssnano()],
+              },
+            },*/
+          ],
+        },
+        {
+          test: /.jpe?g$|.gif$|.png$|.svg$|.woff$|.woff2$|.ttf$|.eot$/,
+          use: 'url-loader?limit=10000',
+        },
+      ],
+    },
+    plugins
+    /*  externals: {
+        react: 'React',
+        'react-dom': 'ReactDOM',
       },
-     {
-        test: /.jpe?g$|.gif$|.png$|.svg$|.woff$|.woff2$|.ttf$|.eot$/,
-        use: 'url-loader?limit=10000',
-      },
-    ],
-  },
-  devServer: {
-    port: config.WEBPACK_PORT,
-  },
-  plugins
-/*  externals: {
-    react: 'React',
-    'react-dom': 'ReactDOM',
-  },
-*/
-};
+    */
+  };
+
+  if (env.platform == 'server') {
+    base.target = 'node';
+    base.externals = [nodeExternals()];
+    base.output = {
+      filename: 'server.js',
+      // path needs to be an ABSOLUTE file path
+      path: path.resolve(process.cwd(), 'dist', 'server-root', 'server'),
+      publicPath: '/',
+    }, 
+    base.entry = ['@babel/polyfill','./src/ts/server/hx.js']
+  };
+
+  if (env.platform == 'web') {
+    base.entry = ['@babel/polyfill', './src/ts/client/client'];
+    base.output = {
+      path: path.join(__dirname, 'dist', 'statics'),
+      filename: `[name]-[hash:8]-bundle.js`,
+      publicPath: '/statics/',
+    }
+    base.devServer = {
+      port: config.WEBPACK_PORT,
+    }
+  };
+
+  return base;
+}

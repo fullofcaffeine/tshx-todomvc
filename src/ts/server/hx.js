@@ -1171,6 +1171,7 @@ var js_node_http_Server = require("http").Server;
 var js_node_stream_PassThrough = require("stream").PassThrough;
 var server_Config = require("./config.js");
 var server_SetupFromTypescript = require("./setup-express-app").default;
+var server_externs_express_Express = require("express");
 var server_Main = function() { };
 server_Main.__name__ = true;
 server_Main.main = function() {
@@ -1179,7 +1180,7 @@ server_Main.main = function() {
 		server_TinkAPI.main(a,b);
 		return;
 	});
-	server_Main.app.listen(Std.parseInt(new js.node.Process().env["port"]),function() {
+	server_Main.app.listen(server_Config.SERVER_PORT,function() {
 		console.log("src/hx/server/Main.hx:41:","Express server listening on port " + server_Config.SERVER_PORT);
 		return;
 	});
@@ -8167,7 +8168,7 @@ httpstatus__$HttpStatusCode_HttpStatusCode_$Impl_$.InsufficientStorage = 507;
 httpstatus__$HttpStatusCode_HttpStatusCode_$Impl_$.LoopDetected = 508;
 httpstatus__$HttpStatusCode_HttpStatusCode_$Impl_$.NotExtended = 510;
 httpstatus__$HttpStatusCode_HttpStatusCode_$Impl_$.NetworkAuthenticationRequired = 511;
-server_Main.app = server_SetupFromTypescript(server_Main.app);
+server_Main.app = server_SetupFromTypescript(new server_externs_express_Express());
 tink__$Url_Url_$Impl_$.SCHEME = 2;
 tink__$Url_Url_$Impl_$.PAYLOAD = 3;
 tink__$Url_Url_$Impl_$.AUTH = 6;

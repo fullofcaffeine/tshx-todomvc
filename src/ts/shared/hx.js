@@ -22,7 +22,7 @@ EReg.prototype = {
 		this.r.s = s;
 		return this.r.m != null;
 	}
-	matched: function(n) {
+	,matched: function(n) {
 		if(this.r.m != null && n >= 0 && n < this.r.m.length) {
 			return this.r.m[n];
 		} else {
@@ -3437,5 +3437,3 @@ tink_state_ConstObservable.NEVER = (function($this) {
 	return $r;
 }(this));
 })(typeof exports != "undefined" ? exports : typeof window != "undefined" ? window : typeof self != "undefined" ? self : this, typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
-
-console.debug(exports);

@@ -1,7 +1,7 @@
 import 'typeface-roboto';
 import { Grid, Button } from '@material-ui/core';
 import React, { Component } from 'react';
-import * as hx from '../client/hx';
+import * as hx from '../shared/hx';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 
@@ -11,6 +11,8 @@ import Counter from '../Counter';
 type IProps = hx.client.data.IThingProps;
 type IState = hx.client.data.IThingState;
 type IReactComponent = hx.client.data.IReactComponent;
+
+console.log(hx.client);
 
 @observer class App extends Component<IProps, IState> implements IReactComponent {
   @observable public foo: string;

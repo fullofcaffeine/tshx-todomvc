@@ -20,7 +20,7 @@ extern class SetupFromTypescript {
 }
 
 class Main {
-  static var app = SetupFromTypescript.call(app);
+  static var app = SetupFromTypescript.call(new Express());
 
   public static function main() {
     var chalk = js.Lib.require('chalk');
@@ -36,7 +36,7 @@ class Main {
     app.use('/tink_api', (a: Request, b: Response, next) -> { TinkAPI.main(a, b); });
 
     app.listen(
-      Std.parseInt(new js.node.Process().env.get('port')),
+      Config.SERVER_PORT,
       () -> { 
         trace('Express server listening on port ${Config.SERVER_PORT}'); 
      });

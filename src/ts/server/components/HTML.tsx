@@ -5,10 +5,9 @@ interface IProps {
     children: any;
     css: string[];
     scripts: string[];
-    state: string;
 }
 
-const HTML = ({ children, css = [], scripts = [], state = '{}' }: IProps) => {
+const HTML = ({ children, css = [], scripts = [] }: IProps) => {
     const head = Helmet.renderStatic();
     return (
         <html lang=''>
@@ -28,14 +27,14 @@ const HTML = ({ children, css = [], scripts = [], state = '{}' }: IProps) => {
                     dangerouslySetInnerHTML={{
                         // TODO: Add jsesc/stringify here
                         // see: https://twitter.com/HenrikJoreteg/status/1143953338284703744
-                        __html: `window.__PRELOADED_STATE__ = ${state}`,
+                        __html: `window.__PRELOADED_STATE__ = 'foo';`,
                     }}
                 />
             </head>
             <body>
                 {/* eslint-disable-next-line react/no-danger */}
                 <div id='app' dangerouslySetInnerHTML={{ __html: children }} />
-                {scripts.filter(Boolean).map((src) => (
+                {scripts.filter(Boolean).map(src => (
                     <script key={src} src={src} />
                 ))}
             </body>

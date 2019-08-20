@@ -6,7 +6,8 @@
 -lib tink_web
 -lib tink_http
 -lib tink_await
--js src/ts/client/hx.js
+# It goes to shared because of SSR, but it's mainly client-specific
+-js src/ts/shared/hx.js
 -D  no-deprecation-warnings
 --macro include('client')
 --macro include('client.data')

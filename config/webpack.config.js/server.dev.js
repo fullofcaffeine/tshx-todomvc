@@ -7,7 +7,6 @@ const config = {
     plugins: [
         new WriteFileWebpackPlugin(),
         ...baseConfig.plugins,
-        new webpack.HotModuleReplacementPlugin(),
     ],
     mode: 'development',
     performance: {

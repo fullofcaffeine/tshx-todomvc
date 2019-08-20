@@ -14,7 +14,7 @@
     "types": [],
     "baseUrl": "./src",
     "paths": {
-      "*": ["ts/*"]
+      "*": ["ts/*", "ts/client/*", "ts/server/*"]
     }
   },
   "include": ["src"]

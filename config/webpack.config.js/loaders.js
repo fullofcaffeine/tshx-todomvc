@@ -40,7 +40,6 @@ const babelLoader = {
 const cssModuleLoaderClient = {
     test: cssModuleRegex,
     use: [
-        require.resolve('css-hot-loader'),
         MiniCssExtractPlugin.loader,
         {
             loader: require.resolve('css-loader'),
@@ -69,7 +68,6 @@ const cssLoaderClient = {
     test: cssRegex,
     exclude: cssModuleRegex,
     use: [
-        require.resolve('css-hot-loader'),
         MiniCssExtractPlugin.loader,
         require.resolve('css-loader'),
         {

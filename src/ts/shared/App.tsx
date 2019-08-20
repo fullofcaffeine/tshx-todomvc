@@ -12,8 +12,6 @@ type IProps = hx.client.data.IThingProps;
 type IState = hx.client.data.IThingState;
 type IReactComponent = hx.client.data.IReactComponent;
 
-console.log(hx.client);
-
 @observer class App extends Component<IProps, IState> implements IReactComponent {
   @observable public foo: string;
   private controller: hx.client.data.ThingController;
@@ -29,7 +27,7 @@ console.log(hx.client);
         <Grid style={{ textAlign: 'center' }} item xs={12}>
           <h1>{this.state.result}FOO</h1>
           <h2>{this.foo}</h2>
-          <Button onClick={this.controller.clickBtn}>Click me!</Button>
+          <Button variant='contained' onClick={this.controller.clickBtn}>Click me!</Button>
         </Grid>
         <Counter/>
       </Grid>

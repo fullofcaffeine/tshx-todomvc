@@ -15,7 +15,7 @@ const getLocalIdentWorkaround = (context, localIdentName, localName, options) =>
 };
 
 const babelLoader = {
-    test: /\.(js|jsx|ts|tsx|mjs)$/,
+    test: /\.(jsx|ts|tsx|mjs)$/,
     exclude: /node_modules/,
     loader: require.resolve('babel-loader'),
     options: {
@@ -106,7 +106,7 @@ const cssModuleLoaderServer = {
 const cssLoaderServer = {
     test: cssRegex,
     exclude: cssModuleRegex,
-    use: [require.resolve('css-loader')],
+    use:  [MiniCssExtractPlugin.loader, require.resolve('css-loader')],
 };
 
 const urlLoaderClient = {

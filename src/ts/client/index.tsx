@@ -1,9 +1,26 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import App from '../shared/App';
+import theme from '../shared/mui-theme';
+import { ThemeProvider } from '@material-ui/styles';
 
-ReactDOM.render(
-  <App />,
+function Main() {
+  React.useEffect(() => {
+    const jssStyles = document.querySelector('#jss-server-side');
+    if (jssStyles) {
+      jssStyles.parentNode.removeChild(jssStyles);
+    }
+  }, []);
+
+  return (
+    <ThemeProvider theme={theme}>
+      <App/>
+    </ThemeProvider>
+  );
+}
+
+ReactDOM.hydrate(
+  <Main/>,
   document.getElementById('app')
 );
 

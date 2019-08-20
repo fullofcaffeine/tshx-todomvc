@@ -4,10 +4,11 @@ import Helmet from 'react-helmet';
 interface IProps {
     children: any;
     css: string[];
+    inlineStyle: string;
     scripts: string[];
 }
 
-const HTML = ({ children, css = [], scripts = [] }: IProps) => {
+const HTML = ({ children, inlineStyle = '', css = [], scripts = [] }: IProps) => {
     const head = Helmet.renderStatic();
     return (
         <html lang=''>
@@ -19,9 +20,10 @@ const HTML = ({ children, css = [], scripts = [] }: IProps) => {
                 {head.meta.toComponent()}
                 {head.link.toComponent()}
                 {head.script.toComponent()}
-                {css.filter(Boolean).map((href) => (
+                {css.filter(Boolean).map(href => (
                     <link key={href} rel='stylesheet' href={href} />
                 ))}
+                <style id='jss-server-side'>{inlineStyle}</style>
                 <script
                     // eslint-disable-next-line react/no-danger
                     dangerouslySetInnerHTML={{

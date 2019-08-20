@@ -10,7 +10,7 @@ import js.node.Path;
 import js.Node;
 //import js.node.http.ServerResponse as Response;
 
-typedef ExpressApp = server.externs.express.Application;
+typedef ExpressApp = server.externs.express.Express;
 
 
 // Bridge to do the config heavylifting directly in js/ts and the more Haxey-specific one here (tink-related)
@@ -20,7 +20,7 @@ extern class SetupFromTypescript {
 }
 
 class Main {
-  static var app = SetupFromTypescript.call(new Express());
+  static var app = new Express();
 
   public static function main() {
     var chalk = js.Lib.require('chalk');
@@ -35,6 +35,9 @@ class Main {
     app.use(Routes.pagesRouter());*/
     app.use('/tink_api', (a: Request, b: Response, next) -> { TinkAPI.main(a, b); });
 
+    app = SetupFromTypescript.call(app);
+
+    js.Lib.debug();
     app.listen(
       Config.SERVER_PORT,
       () -> { 

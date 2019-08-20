@@ -1180,8 +1180,10 @@ server_Main.main = function() {
 		server_TinkAPI.main(a,b);
 		return;
 	});
+	server_Main.app = server_SetupFromTypescript(server_Main.app);
+	debugger;
 	server_Main.app.listen(server_Config.SERVER_PORT,function() {
-		console.log("src/hx/server/Main.hx:41:","Express server listening on port " + server_Config.SERVER_PORT);
+		console.log("src/hx/server/Main.hx:44:","Express server listening on port " + server_Config.SERVER_PORT);
 		return;
 	});
 };
@@ -8168,7 +8170,7 @@ httpstatus__$HttpStatusCode_HttpStatusCode_$Impl_$.InsufficientStorage = 507;
 httpstatus__$HttpStatusCode_HttpStatusCode_$Impl_$.LoopDetected = 508;
 httpstatus__$HttpStatusCode_HttpStatusCode_$Impl_$.NotExtended = 510;
 httpstatus__$HttpStatusCode_HttpStatusCode_$Impl_$.NetworkAuthenticationRequired = 511;
-server_Main.app = server_SetupFromTypescript(new server_externs_express_Express());
+server_Main.app = new server_externs_express_Express();
 tink__$Url_Url_$Impl_$.SCHEME = 2;
 tink__$Url_Url_$Impl_$.PAYLOAD = 3;
 tink__$Url_Url_$Impl_$.AUTH = 6;

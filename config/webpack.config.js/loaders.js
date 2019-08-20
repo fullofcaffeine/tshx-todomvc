@@ -107,26 +107,9 @@ const cssModuleLoaderServer = {
 
 const cssLoaderServer = {
     test: cssRegex,
-    use: [
-        {
-            loader: require.resolve('css-loader')
-        }
-      ]
-};
-
-
-
-/*const cssLoaderServer = {
-    test: cssRegex,
     exclude: cssModuleRegex,
-    use: [
-      {loader: MiniCssExtractPlugin.loader}, 
-      {
-        loader: require.resolve('css-loader'),
-        options: {onlyLocals: true}
-      }
-    ],
-};*/
+    use: [require.resolve('css-loader')],
+};
 
 const urlLoaderClient = {
     test: /\.(png|jpe?g|gif|svg)$/,
@@ -192,7 +175,6 @@ const server = [
         ],
     },
 ];
-
 
 module.exports = {
     client,

@@ -1,7 +1,7 @@
 import 'typeface-roboto';
 import { Grid, Button } from '@material-ui/core';
 import React, { Component } from 'react';
-import * as hx from './hx';
+import * as hx from '../client/hx';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 

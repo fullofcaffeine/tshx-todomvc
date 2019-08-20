@@ -1155,7 +1155,6 @@ js_lib__$ArrayBuffer_ArrayBufferCompat.sliceImpl = function(begin,end) {
 	return resultArray.buffer;
 };
 var js_node_Fs = require("fs");
-var js_node_Path = require("path");
 var js_node_buffer_Buffer = require("buffer").Buffer;
 var js_node_buffer__$Buffer_Helper = function() { };
 js_node_buffer__$Buffer_Helper.__name__ = true;
@@ -1171,76 +1170,19 @@ js_node_buffer__$Buffer_Helper.bytesOfBuffer = function(b) {
 var js_node_http_Server = require("http").Server;
 var js_node_stream_PassThrough = require("stream").PassThrough;
 var server_Config = require("./config.js");
-var server_externs_express_Express = require("express");
+var server_SetupFromTypescript = require("./setup-express-app").default;
 var server_Main = function() { };
 server_Main.__name__ = true;
 server_Main.main = function() {
-	var path = require("path");
-	server_Main.app.set("view engine","ejs");
-	server_Main.app.use("/assets",new server_externs_express_Static(js_node_Path.join(__dirname,"..","..","..","assets")));
-	server_Main.app.use(server_Routes.apiRouter());
-	server_Main.app.use(server_Routes.staticRouter());
+	var chalk = require("chalk");
 	server_Main.app.use("/tink_api",function(a,b,next) {
 		server_TinkAPI.main(a,b);
 		return;
 	});
-	server_Main.app.use(server_Routes.pagesRouter());
-	server_Main.app.listen(server_Config.SERVER_PORT,function() {
-		console.log("src/hx/server/Main.hx:25:","Express server listening on port " + server_Config.SERVER_PORT);
+	server_Main.app.listen(Std.parseInt(new js.node.Process().env["port"]),function() {
+		console.log("src/hx/server/Main.hx:41:","Express server listening on port " + server_Config.SERVER_PORT);
 		return;
 	});
-};
-var server_Routes = function() { };
-server_Routes.__name__ = true;
-server_Routes.apiRouter = function() {
-	var bodyParser = require("body-parser");
-	var router = server_externs_express_Router();
-	router.use(bodyParser.json());
-	return router;
-};
-server_Routes.pagesRouter = function(ssr) {
-	if(ssr == null) {
-		ssr = false;
-	}
-	var router = server_externs_express_Router();
-	var getManifest = require("./routes/manifest-manager").getManifest;
-	router.get("/**",function(_,res) {
-		tink_core__$Future_Future_$Impl_$.ofJsPromise(getManifest()).handle(function(__t0) {
-			var __t0_result;
-			var _g = tink_await_OutcomeTools.getOutcome(__t0);
-			switch(_g._hx_index) {
-			case 0:
-				var v = _g.data;
-				__t0_result = v;
-				break;
-			case 1:
-				var e = _g.failure;
-				throw new js__$Boot_HaxeError(e);
-			}
-			var manifest = __t0_result;
-			if(ssr) {
-				var tmp = new server_externs_ReactSSR()();
-				res.render("page.ejs",{ manifest : manifest, content : tmp});
-			} else {
-				res.render("page.ejs",{ manifest : manifest, content : "<div id=\"app\">Loading...</div>"});
-			}
-			return;
-		});
-	});
-	return router;
-};
-server_Routes.staticRouter = function() {
-	var router = server_externs_express_Router();
-	var path = require("path");
-	var proxy = require("http-proxy-middleware");
-	if(server_Config.IS_PRODUCTION) {
-		var staticsPath = path.join(__dirname,"..","..","..","statics");
-		router.use("/statics",new server_externs_express_Static(staticsPath));
-	} else {
-		console.log("src/hx/server/Routes.hx:66:",server_Config.WEBPACK_PORT);
-		router.use("/statics",proxy({ target : "http://localhost:" + server_Config.WEBPACK_PORT + "/"}));
-	}
-	return router;
 };
 var server_Root = function() {
 };
@@ -3956,14 +3898,11 @@ tink_http_SimpleHandler.prototype = {
 };
 var server_TinkAPI = function() { };
 server_TinkAPI.__name__ = true;
-var server_externs_ReactSSR = require("./react-ssr");
 var server_externs_express__$Route_Route_$Impl_$ = {};
 server_externs_express__$Route_Route_$Impl_$.__name__ = true;
 server_externs_express__$Route_Route_$Impl_$.fromEReg = function(e) {
 	return e.r;
 };
-var server_externs_express_Router = require("express").Router;
-var server_externs_express_Static = require("express").static;
 var tink__$Chunk_CompoundChunk = function(left,right) {
 	this.left = left;
 	this.right = right;
@@ -4127,45 +4066,6 @@ tink__$Stringly_Stringly_$Impl_$.ofDate = function(d) {
 		return "null";
 	} else {
 		return "" + f;
-	}
-};
-var tink_await__$Error_Error_$Impl_$ = {};
-tink_await__$Error_Error_$Impl_$.__name__ = true;
-tink_await__$Error_Error_$Impl_$.fromAny = function(any) {
-	if(((any) instanceof tink_core_TypedError)) {
-		return any;
-	} else {
-		return tink_core_TypedError.withData(0,"Unexpected Error",any,{ fileName : "tink/await/Error.hx", lineNumber : 12, className : "tink.await._Error.Error_Impl_", methodName : "fromAny"});
-	}
-};
-tink_await__$Error_Error_$Impl_$.unwrap = function(e) {
-	if(e.code == 0) {
-		return e.data;
-	} else {
-		return e;
-	}
-};
-var tink_await_OutcomeTools = function() { };
-tink_await_OutcomeTools.__name__ = true;
-tink_await_OutcomeTools.getOutcome = function(outcome,value) {
-	if(outcome == null) {
-		return tink_core_Outcome.Success(value);
-	} else {
-		switch(outcome._hx_index) {
-		case 0:
-			var v = outcome.data;
-			return outcome;
-		case 1:
-			var _g1 = outcome.failure;
-			var e = _g1;
-			if(((e) instanceof tink_core_TypedError)) {
-				return outcome;
-			} else {
-				var e1 = _g1;
-				return tink_core_Outcome.Failure(tink_await__$Error_Error_$Impl_$.fromAny(e1));
-			}
-			break;
-		}
 	}
 };
 var tink_chunk_ChunkCursor = function() {
@@ -8267,8 +8167,7 @@ httpstatus__$HttpStatusCode_HttpStatusCode_$Impl_$.InsufficientStorage = 507;
 httpstatus__$HttpStatusCode_HttpStatusCode_$Impl_$.LoopDetected = 508;
 httpstatus__$HttpStatusCode_HttpStatusCode_$Impl_$.NotExtended = 510;
 httpstatus__$HttpStatusCode_HttpStatusCode_$Impl_$.NetworkAuthenticationRequired = 511;
-server_Main.app = new server_externs_express_Express();
-server_Routes.__meta__ = { statics : { pagesRouter : { await : null}}};
+server_Main.app = server_SetupFromTypescript(server_Main.app);
 tink__$Url_Url_$Impl_$.SCHEME = 2;
 tink__$Url_Url_$Impl_$.PAYLOAD = 3;
 tink__$Url_Url_$Impl_$.AUTH = 6;

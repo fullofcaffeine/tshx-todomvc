@@ -14,7 +14,7 @@ typedef ExpressApp = server.externs.express.Application;
 
 
 // Bridge to do the config heavylifting directly in js/ts and the more Haxey-specific one here (tink-related)
-@:jsRequire('./setup-express-app')
+@:jsRequire('./setup-express-app', 'default')
 extern class SetupFromTypescript {
   @:selfCall static function call(app: ExpressApp): ExpressApp;
 }

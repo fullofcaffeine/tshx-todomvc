@@ -10,7 +10,7 @@ const paths = {
     serverBuild: resolveApp('build/server'),
     dotenv: resolveApp('.env'),
     src: resolveApp('src'),
-    srcClient: resolveApp('src/client'),
+    srcClient: resolveApp('src/ts/client'),
     srcServer: resolveApp('src/ts/server'),
     srcShared: resolveApp('src/ts/shared'),
     types: resolveApp('node_modules/@types'),

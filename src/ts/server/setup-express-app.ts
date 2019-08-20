@@ -24,20 +24,6 @@ export default function setupExpressApp(app: express.Application) {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
 
-  const addStore = (
-    _req: express.Request,
-    res: express.Response,
-    next: express.NextFunction | undefined
-  ): void => {
-    res.locals.store = configureStore({});
-    if (typeof next !== 'function') {
-      throw new Error('Next handler is missing');
-    }
-    next();
-  };
-
-  app.use(addStore);
-
   const manifestPath = path.join(paths.clientBuild, paths.publicPath);
 
   app.use(

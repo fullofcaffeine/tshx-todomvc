@@ -68,6 +68,20 @@ HxOverrides.iter = function(a) {
 	}};
 };
 Math.__name__ = true;
+var Reflect = function() { };
+Reflect.__name__ = true;
+Reflect.fields = function(o) {
+	var a = [];
+	if(o != null) {
+		var hasOwnProperty = Object.prototype.hasOwnProperty;
+		for( var f in o ) {
+		if(f != "__id__" && f != "hx__closures__" && hasOwnProperty.call(o,f)) {
+			a.push(f);
+		}
+		}
+	}
+	return a;
+};
 var Std = function() { };
 Std.__name__ = true;
 Std.parseInt = function(x) {
@@ -232,17 +246,57 @@ var client_data_Thing = function() {
 		var ret = client_Client.call().map(tink_core_Outcome.Success);
 		return ret.gather();
 	}));
-	var this1 = new tink_state__$State_SimpleState(0,null,null);
-	this.__coco_transitionCount = this1;
+	var this1 = new tink_state__$State_SimpleState("Nice",null,null);
+	this.__coco_title = this1;
+	var this2 = new tink_state__$State_SimpleState(0,null,null);
+	this.__coco_transitionCount = this2;
 	this.errorTrigger = tink_core__$Signal_Signal_$Impl_$.trigger();
 	this.transitionErrors = this.errorTrigger;
-	this.observables = { foo : tink_state__$Observable_Observable_$Impl_$.const(this.foo), bar : this.__coco_bar, isInTransition : tink_state__$Observable_Observable_$Impl_$.map(this.__coco_transitionCount,tink_state__$Observable_Transform_$Impl_$.plain(function(count) {
+	this.observables = { foo : tink_state__$Observable_Observable_$Impl_$.const(this.foo), bar : this.__coco_bar, title : this.__coco_title, isInTransition : tink_state__$Observable_Observable_$Impl_$.map(this.__coco_transitionCount,tink_state__$Observable_Transform_$Impl_$.plain(function(count) {
 		return count > 0;
 	}))};
 };
 client_data_Thing.__name__ = true;
 client_data_Thing.prototype = {
-	__class__: client_data_Thing
+	setTitle: function(to) {
+		return tink_core__$Promise_Promise_$Impl_$.next(this.__cocoupdate(new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success({ title : to})))),function(_) {
+			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(tink_core_Noise.Noise)));
+		});
+	}
+	,__cocoupdate: function(ret) {
+		var _gthis = this;
+		var sync = true;
+		var done = false;
+		ret.handle(function(o) {
+			done = true;
+			if(!sync) {
+				_gthis.__coco_transitionCount.set(tink_state__$State_State_$Impl_$.get_value(_gthis.__coco_transitionCount) - 1);
+			}
+			switch(o._hx_index) {
+			case 0:
+				var delta = o.data;
+				var delta1 = delta;
+				var existent = tink_Anon.getExistentFields(delta1);
+				if(Object.prototype.hasOwnProperty.call(existent,"title")) {
+					_gthis.__coco_title.set(delta1.title);
+				}
+				tink_core__$Callback_CallbackList_$Impl_$.invoke(_gthis._updatePerformed.handlers,delta1);
+				break;
+			case 1:
+				var e = o.failure;
+				tink_core__$Callback_CallbackList_$Impl_$.invoke(_gthis.errorTrigger.handlers,e);
+				break;
+			}
+		});
+		if(!done) {
+			sync = false;
+		}
+		if(!sync) {
+			this.__coco_transitionCount.set(tink_state__$State_State_$Impl_$.get_value(this.__coco_transitionCount) + 1);
+		}
+		return ret;
+	}
+	,__class__: client_data_Thing
 };
 var client_data_Autobind = require("class-autobind").default;
 var client_data_ThingController = $hx_exports["client"]["data"]["ThingController"] = function(reactComponent) {
@@ -264,18 +318,30 @@ var client_data_ThingController = $hx_exports["client"]["data"]["ThingController
 		return;
 	});
 	client_data_Autobind(this);
+	tink_state__$Observable_Observable_$Impl_$.bind(this.model.observables.title,{ direct : true},function(title) {
+		return _gthis.reactComponent.title = title;
+	});
 };
 client_data_ThingController.__name__ = true;
 client_data_ThingController.prototype = {
-	clickBtn: function() {
+	handleChange: function(e) {
+		this.model.setTitle(e.target.value);
+	}
+	,clickBtn: function() {
 		window.console.debug("foo");
 		this.reactComponent.state.result = "Wowowowowo!";
-		this.reactComponent.foo = "NOICE";
 	}
 	,setState: function(state) {
-		this.reactComponent.state.result = state.slideshow.author;
+		console.log("src/hx/client/data/Thing.hx:70:","WOARALES");
+		this.reactComponent.title = state.slideshow.author;
+		this.reactComponent.foo = "NOIPPP";
 	}
 	,__class__: client_data_ThingController
+};
+var client_data_TodoItem = function() { };
+client_data_TodoItem.__name__ = true;
+client_data_TodoItem.prototype = {
+	__class__: client_data_TodoItem
 };
 var haxe_StackItem = $hxEnums["haxe.StackItem"] = { __ename__ : true, __constructs__ : ["CFunction","Module","FilePos","Method","LocalFunction"]
 	,CFunction: {_hx_index:0,__enum__:"haxe.StackItem",toString:$estr}
@@ -774,6 +840,19 @@ js_node_buffer__$Buffer_Helper.bytesOfBuffer = function(b) {
 	b.hxBytes = o;
 	b.bytes = b;
 	return o;
+};
+var tink_Anon = function() { };
+tink_Anon.__name__ = true;
+tink_Anon.getExistentFields = function(o) {
+	var ret = { };
+	var _g = 0;
+	var _g1 = Reflect.fields(o);
+	while(_g < _g1.length) {
+		var f = _g1[_g];
+		++_g;
+		ret[f] = true;
+	}
+	return ret;
 };
 var tink_chunk_ChunkBase = function() { };
 tink_chunk_ChunkBase.__name__ = true;
@@ -1454,6 +1533,7 @@ tink_core__$Signal_Signal_$Impl_$.trigger = function() {
 	return new tink_core_SignalTrigger();
 };
 var tink_core_SignalTrigger = function() {
+	this.handlers = [];
 };
 tink_core_SignalTrigger.__name__ = true;
 tink_core_SignalTrigger.prototype = {
@@ -2736,6 +2816,8 @@ var tink_json_Value = $hxEnums["tink.json.Value"] = { __ename__ : true, __constr
 	,VArray: ($_=function(a) { return {_hx_index:4,a:a,__enum__:"tink.json.Value",toString:$estr}; },$_.__params__ = ["a"],$_)
 	,VObject: ($_=function(a) { return {_hx_index:5,a:a,__enum__:"tink.json.Value",toString:$estr}; },$_.__params__ = ["a"],$_)
 };
+var tink_pure__$List_Node = function() { };
+tink_pure__$List_Node.__name__ = true;
 var tink_state__$Observable_Observable_$Impl_$ = {};
 tink_state__$Observable_Observable_$Impl_$.__name__ = true;
 tink_state__$Observable_Observable_$Impl_$.get_value = function(this1) {
@@ -3086,6 +3168,11 @@ var tink_state_Promised = $hxEnums["tink.state.Promised"] = { __ename__ : true, 
 	,Done: ($_=function(result) { return {_hx_index:1,result:result,__enum__:"tink.state.Promised",toString:$estr}; },$_.__params__ = ["result"],$_)
 	,Failed: ($_=function(error) { return {_hx_index:2,error:error,__enum__:"tink.state.Promised",toString:$estr}; },$_.__params__ = ["error"],$_)
 };
+var tink_state__$State_State_$Impl_$ = {};
+tink_state__$State_State_$Impl_$.__name__ = true;
+tink_state__$State_State_$Impl_$.get_value = function(this1) {
+	return tink_state__$Observable_Observable_$Impl_$.get_value(this1);
+};
 var tink_state__$State_SimpleState = function(value,isEqual,guard) {
 	this.value = value;
 	this.isEqual = isEqual;
@@ -3102,6 +3189,18 @@ tink_state__$State_SimpleState.prototype = {
 		var this1 = new tink_core_MPair(this.value,this.trigger);
 		var this2 = this1;
 		this.next = this2;
+	}
+	,set: function(value) {
+		if(this.guard != null) {
+			value = this.guard(value,this.value);
+		}
+		var b = this.value;
+		if(this.isEqual == null ? value != b : !this.isEqual(value,b)) {
+			this.value = value;
+			var last = this.trigger;
+			this.arm();
+			last.trigger(tink_core_Noise.Noise);
+		}
 	}
 	,__class__: tink_state__$State_SimpleState
 };

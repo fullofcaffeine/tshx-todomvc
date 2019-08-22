@@ -6,20 +6,16 @@ export namespace client.data {
 }
 
 export namespace client.data {
-	export type IThingState = {
-		result: string;
-	}
-}
-
-export namespace client.data {
 	export interface IReactComponent {
 		foo: string;
+		title: string;
 	}
 }
 
 export namespace client.data {
 	export class ThingController {
 		constructor(reactComponent: client.data.ReactComponent);
+		handleChange(e: any): void;
 		clickBtn(): void;
 	}
 }

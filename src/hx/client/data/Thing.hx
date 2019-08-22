@@ -9,25 +9,24 @@ using tink.state.Promised.PromisedTools;
 class Thing implements Model {
     @:constant var foo: String = 'Hello from Coconut!';
     @:loaded var bar: ApiResult.Result = TinkProxy.Client.call();
-//  @:observable var someObsevableField: String = 'Original value';
-//  @:loaded var someFieldLoadedFromTheServer: String = {};
+    @:observable var title: String = 'Nice';
 
-//  @:transition function changeObservableField() {
-//    return {someObservableField: "Oh wow, I've got a new value!"};
-//  }
+    @:transition function setTitle(to: String) {
+      return {title: to};
+    }
 }
 
 @:expose typedef IThingProps = {}
-@:expose typedef IThingState = {
-  var result: String;
-}
 
 // To be implemented by the TS react Comp
 @:expose interface IReactComponent {
-  var foo: String;
-}
-extern class ReactComponent extends ReactComponentOfPropsAndState<IThingProps, IThingState> implements IReactComponent {
   public var foo: String;
+  public var title: String;
+}
+
+extern class ReactComponent extends ReactComponentOfProps<IThingProps> implements IReactComponent {
+  public var foo: String;
+  public var title: String;
 }
 
 // TODO Move it to its own exter
@@ -44,6 +43,8 @@ class ThingController {
 
  public function new(reactComponent: ReactComponent) {
    this.reactComponent = reactComponent;
+
+   // This should be automated with a macro?
    model.observables.bar.bind((o: tink.state.Promised<ApiResult.Result>) -> {
      switch(o) {
        case Loading: 
@@ -52,15 +53,22 @@ class ThingController {
      };
    });
    new Autobind(this);
+
+   model.observables.title.bind({direct: true}, (title) -> this.reactComponent.title = title);
+ }
+
+ public function handleChange(e: Dynamic) {
+   this.model.setTitle(e.target.value);
  }
 
  public function clickBtn() {
    Browser.console.debug('foo');
    this.reactComponent.state.result = 'Wowowowowo!';
-   this.reactComponent.foo = 'NOICE';
  }
 
- private function setState(state: ApiResult.Result) {
-   this.reactComponent.state.result = state.slideshow.author;
+ private function setState(state: ApiResult.Result)  {
+   trace('WOARALES');
+   this.reactComponent.title = state.slideshow.author;
+   this.reactComponent.foo = 'NOIPPP';
  }
 }

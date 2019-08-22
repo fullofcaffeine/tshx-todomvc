@@ -1,5 +1,5 @@
 import 'typeface-roboto';
-import { Grid, Button } from '@material-ui/core';
+import { Grid, Button, Input } from '@material-ui/core';
 import React, { Component } from 'react';
 import * as hx from '../shared/hx';
 import { observer } from 'mobx-react';
@@ -9,25 +9,27 @@ import { observable } from 'mobx';
 import Counter from '../Counter';
 
 type IProps = hx.client.data.IThingProps;
-type IState = hx.client.data.IThingState;
+//type IState = hx.client.data.IThingState;
 type IReactComponent = hx.client.data.IReactComponent;
 
-@observer class App extends Component<IProps, IState> implements IReactComponent {
+@observer class App extends Component<IProps, {}> implements IReactComponent {
+  @observable public title: string;
   @observable public foo: string;
+
   private controller: hx.client.data.ThingController;
 
   constructor(props) {
     super(props);
-    this.state = {result: 'Default'};
     this.controller = new hx.client.data.ThingController(this);
   }
   public render() {
     return (
       <Grid container justify='center'>
         <Grid style={{ textAlign: 'center' }} item xs={12}>
-          <h1>{this.state.result}FOO</h1>
+          <h1>{this.title}</h1>
           <h2>{this.foo}</h2>
           <Button variant='contained' onClick={this.controller.clickBtn}>Click me!</Button>
+          <Input type='text' onChange={this.controller.handleChange}></Input>
         </Grid>
         <Counter/>
       </Grid>

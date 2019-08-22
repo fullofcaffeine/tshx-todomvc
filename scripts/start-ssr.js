@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const nodemon = require('nodemon');
 const express = require('express');
 const webpackDevMiddleware = require('webpack-dev-middleware');
-//const webpackHotMiddleware = require('webpack-hot-middleware');
+const webpackHotMiddleware = require('webpack-hot-middleware');
 const webpackConfig = require('../config/webpack.config.js')(process.env.NODE_ENV || 'development');
 const paths = require('../config/paths');
 const { logMessage, compilerPromise } = require('./utils');
@@ -18,12 +18,12 @@ const DEVSERVER_HOST = process.env.DEVSERVER_HOST || 'http://localhost';
 const start = async () => {
     const [clientConfig, serverConfig] = webpackConfig;
     clientConfig.entry.bundle = [
-//        `webpack-hot-middleware/client?path=${DEVSERVER_HOST}:${WEBPACK_PORT}/__webpack_hmr`,
+        `webpack-hot-middleware/client?path=${DEVSERVER_HOST}:${WEBPACK_PORT}/__webpack_hmr`,
         ...clientConfig.entry.bundle,
     ];
 
-//    clientConfig.output.hotUpdateMainFilename = 'updates/[hash].hot-update.json';
-//    clientConfig.output.hotUpdateChunkFilename = 'updates/[id].[hash].hot-update.js';
+    clientConfig.output.hotUpdateMainFilename = 'updates/[hash].hot-update.json';
+    clientConfig.output.hotUpdateChunkFilename = 'updates/[id].[hash].hot-update.js';
 
     const publicPath = clientConfig.output.publicPath;
 
@@ -61,7 +61,7 @@ const start = async () => {
         })
     );
 
-//    app.use(webpackHotMiddleware(clientCompiler));
+    app.use(webpackHotMiddleware(clientCompiler));
 
     app.use('/static', express.static(paths.clientBuild));
 

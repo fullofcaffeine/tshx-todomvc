@@ -30,13 +30,15 @@ ReactDOM.hydrate(
   }
 })();
 
-// TODO Look into HMR
-/*if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development') {
+  console.log(module.hot);
   if (module.hot) {
+    debugger
+      console.log('HOT SHIT!');
       module.hot.accept();
   }
 
-  if (!window.store) {
+/*  if (!window.store) {
       window.store = store;
-  }
-}*/
+  }*/
+}

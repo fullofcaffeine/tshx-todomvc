@@ -17,7 +17,7 @@ const DEVSERVER_HOST = process.env.DEVSERVER_HOST || 'http://localhost';
 const start = async () => {
     const [clientConfig] = webpackConfig;
     clientConfig.entry.bundle = [
-//        `webpack-hot-middleware/client?path=${DEVSERVER_HOST}:${PORT}/__webpack_hmr`,
+        `webpack-hot-middleware/client?path=${DEVSERVER_HOST}:${PORT}/__webpack_hmr`,
         ...clientConfig.entry.bundle,
     ];
 
@@ -46,7 +46,7 @@ const start = async () => {
         })
     );
 
-//    app.use(webpackHotMiddleware(clientCompiler));
+    app.use(webpackHotMiddleware(clientCompiler));
 
     app.use('/', express.static(paths.clientBuild));
 

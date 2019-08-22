@@ -40,6 +40,7 @@ const babelLoader = {
 const cssLoader = {
     test: cssRegex,
     use: [
+        require.resolve('css-hot-loader'),
         MiniCssExtractPlugin.loader,
         require.resolve('css-modules-typescript-loader'),
         {loader: require.resolve('css-loader'), options: {modules: true}},

@@ -4,16 +4,13 @@ import React, { Component } from 'react';
 import * as hx from '../shared/hx';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
-//import style from 'App.sass';
+import style2 from 'App.sass';
 import style from 'Foo.module.css';
-
 
 // ssr experiment, client-side rendering sample
 import Counter from '../Counter';
 
 console.log(style);
-
-
 
 type IProps = hx.client.data.IThingProps;
 type IReactComponent = hx.client.data.IReactComponent;
@@ -30,9 +27,10 @@ type IReactComponent = hx.client.data.IReactComponent;
   }
   public render() {
     return (
-      <Grid container justify='center'>
+      <Grid container justify='center' className={style2.foo}>
         <Grid style={{ textAlign: 'center' }} item xs={12}>
           <h1>{this.title}</h1>
+          <h1>FOOO</h1>
           <h2>{this.foo}</h2>
           <Button variant='contained' onClick={this.controller.clickBtn}>Click me!</Button>
           <Input type='text' onChange={this.controller.handleChange}></Input>

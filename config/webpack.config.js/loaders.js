@@ -2,8 +2,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const generateSourceMap = process.env.OMIT_SOURCEMAP === 'true' ? false : true;
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 
-const cssRegex = /\.css$/;
-const cssModuleRegex = /\.module\.css$/;
+const cssRegex = /\.css|\.scss|\.sass$/;
+const cssModuleRegex = /\.module(\.css|\.scss|\.sass)$/;
 
 // temporary wrapper function around getCSSModuleLocalIdent until this issue is resolved:
 // https://github.com/webpack-contrib/css-loader/pull/965
@@ -37,38 +37,23 @@ const babelLoader = {
     },
 };
 
-const cssModuleLoaderClient = {
-    test: cssModuleRegex,
+const cssLoader = {
+    test: cssRegex,
     use: [
         MiniCssExtractPlugin.loader,
-        {
-            loader: require.resolve('css-loader'),
-            options: {
-                localsConvention: 'camelCase',
-                modules: {
-                    // getLocalIdent: getCSSModuleLocalIdent,
-                    getLocalIdent: getLocalIdentWorkaround,
-                },
-                importLoaders: 1,
-                sourceMap: generateSourceMap,
-                // localIdentName: '[name]__[local]--[hash:base64:5]',
-                // getLocalIdent: getCSSModuleLocalIdent,
-            },
-        },
-        {
-            loader: require.resolve('postcss-loader'),
-            options: {
-                sourceMap: generateSourceMap,
-            },
-        },
+        require.resolve('css-modules-typescript-loader'),
+        {loader: require.resolve('css-loader'), options: {modules: true}},
+        {loader: require.resolve('postcss-loader'), options: {sourceMap: generateSourceMap}},
+        require.resolve('sass-loader'),
     ],
 };
 
 const cssLoaderClient = {
-    test: cssRegex,
+    test: /\.css/,
     exclude: cssModuleRegex,
     use: [
         MiniCssExtractPlugin.loader,
+        require.resolve('css-modules-typescript-loader'),
         require.resolve('css-loader'),
         {
             loader: require.resolve('postcss-loader'),
@@ -76,37 +61,30 @@ const cssLoaderClient = {
                 sourceMap: generateSourceMap,
             },
         },
+        require.resolve('sass-loader'),
     ],
 };
 
 const cssModuleLoaderServer = {
     test: cssModuleRegex,
     use: [
-        {
-            loader: require.resolve('css-loader'),
-            options: {
-                onlyLocals: true,
-                localsConvention: 'camelCase',
-                importLoaders: 1,
-                modules: {
-                    // getLocalIdent: getCSSModuleLocalIdent,
-                    getLocalIdent: getLocalIdentWorkaround,
-                },
-            },
-        },
-        {
-            loader: require.resolve('postcss-loader'),
-            options: {
-                sourceMap: generateSourceMap,
-            },
-        },
+        MiniCssExtractPlugin.loader, 
+        require.resolve('css-modules-typescript-loader'),
+        require.resolve('css-loader'),
+        require.resolve('postcss-loader'),
+        require.resolve('sass-loader')
     ],
 };
 
 const cssLoaderServer = {
     test: cssRegex,
     exclude: cssModuleRegex,
-    use:  [MiniCssExtractPlugin.loader, require.resolve('css-loader')],
+    use:  [
+        MiniCssExtractPlugin.loader, 
+        require.resolve('css-modules-typescript-loader'),
+        require.resolve('css-loader'), 
+        require.resolve('sass-loader')
+    ],
 };
 
 const urlLoaderClient = {
@@ -155,8 +133,9 @@ const client = [
     {
         oneOf: [
             babelLoader,
-            cssModuleLoaderClient,
-            cssLoaderClient,
+        //    cssModuleLoaderClient,
+        //    cssLoaderClient,
+            cssLoader,
             urlLoaderClient,
             fileLoaderClient,
         ],
@@ -166,8 +145,9 @@ const server = [
     {
         oneOf: [
             babelLoader,
-            cssModuleLoaderServer,
-            cssLoaderServer,
+//            cssModuleLoaderServer,
+  //          cssLoaderServer,
+            cssLoader,
             urlLoaderServer,
             fileLoaderServer,
         ],

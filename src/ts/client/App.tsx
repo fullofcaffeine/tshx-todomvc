@@ -4,12 +4,18 @@ import React, { Component } from 'react';
 import * as hx from '../shared/hx';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
+//import style from 'App.sass';
+import style from 'Foo.module.css';
+
 
 // ssr experiment, client-side rendering sample
 import Counter from '../Counter';
 
+console.log(style);
+
+
+
 type IProps = hx.client.data.IThingProps;
-//type IState = hx.client.data.IThingState;
 type IReactComponent = hx.client.data.IReactComponent;
 
 @observer class App extends Component<IProps, {}> implements IReactComponent {

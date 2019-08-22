@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as express from 'express';
 import { renderToString } from 'react-dom/server';
 import { StaticRouter as Router } from 'react-router-dom';
-import App from '../../shared/App';
+import App from '../../client/App';
 import Html from '../components/HTML';
 import { ServerStyleSheets, ThemeProvider } from '@material-ui/styles';
 import theme from '../../shared/mui-theme';

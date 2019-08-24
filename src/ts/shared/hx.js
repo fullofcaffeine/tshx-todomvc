@@ -299,7 +299,7 @@ client_data_Thing.prototype = {
 	,__class__: client_data_Thing
 };
 var client_data_Autobind = require("class-autobind").default;
-var client_data_ThingController = $hx_exports["client"]["data"]["ThingController"] = function(reactComponent) {
+var client_data_ThingViewModel = $hx_exports["client"]["data"]["ThingViewModel"] = function(reactComponent) {
 	this.model = new client_data_Thing();
 	var _gthis = this;
 	this.reactComponent = reactComponent;
@@ -322,8 +322,8 @@ var client_data_ThingController = $hx_exports["client"]["data"]["ThingController
 		return _gthis.reactComponent.title = title;
 	});
 };
-client_data_ThingController.__name__ = true;
-client_data_ThingController.prototype = {
+client_data_ThingViewModel.__name__ = true;
+client_data_ThingViewModel.prototype = {
 	handleChange: function(e) {
 		this.model.setTitle(e.target.value);
 	}
@@ -336,7 +336,7 @@ client_data_ThingController.prototype = {
 		this.reactComponent.title = state.slideshow.author;
 		this.reactComponent.foo = "NOIPPP";
 	}
-	,__class__: client_data_ThingController
+	,__class__: client_data_ThingViewModel
 };
 var client_data_TodoItem = function() { };
 client_data_TodoItem.__name__ = true;

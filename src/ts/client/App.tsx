@@ -15,6 +15,8 @@ console.log(style);
 type IProps = hx.client.data.IThingProps;
 type IReactComponent = hx.client.data.IReactComponent;
 
+const StoreProvider = React.createContext('foo');
+
 @observer class App extends Component<IProps, {}> implements IReactComponent {
   @observable public title: string;
   @observable public foo: string;

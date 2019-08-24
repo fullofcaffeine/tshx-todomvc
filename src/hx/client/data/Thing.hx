@@ -37,7 +37,7 @@ extern class Autobind {
 
 // Rename to viewModel, keep in this module for now
 @:expose
-class ThingController {
+class ThingViewModel {
  private var reactComponent: ReactComponent;
  private var model: Thing = new Thing();
 

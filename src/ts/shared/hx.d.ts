@@ -13,7 +13,7 @@ export namespace client.data {
 }
 
 export namespace client.data {
-	export class ThingViewModel {
+	export class ThingStore {
 		constructor(reactComponent: client.data.ReactComponent);
 		handleChange(e: any): void;
 		clickBtn(): void;

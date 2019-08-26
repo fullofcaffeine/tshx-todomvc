@@ -33,8 +33,6 @@ ReactDOM.hydrate(
 if (process.env.NODE_ENV === 'development') {
   console.log(module.hot);
   if (module.hot) {
-    debugger
-      console.log('HOT SHIT!');
       module.hot.accept();
   }
 

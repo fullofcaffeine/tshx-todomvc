@@ -3,7 +3,6 @@ ol {
 }
 
 .todo-item {
-
   display: flex;
   align-items: center;
   position: relative;
@@ -57,7 +56,6 @@ ol {
   }
 
   button.delete {
-    
     flex-basis: 60px;
     align-self: stretch;
     opacity: 0;

@@ -34,7 +34,7 @@ export default function setupExpressApp(app: express.Application) {
 
   app.use(serverRenderer());
 
-  app.use(errorHandler);
+//  app.use(errorHandler);
 
   app.listen(process.env.PORT || 8500, () => {
     console.log(

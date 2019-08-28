@@ -3,270 +3,79 @@
 $hx_exports["client"] = $hx_exports["client"] || {};
 $hx_exports["client"]["data"] = $hx_exports["client"]["data"] || {};
 var $estr = function() { return js_Boot.__string_rec(this,''); },$hxEnums = $hxEnums || {},$_;
-function $extend(from, fields) {
-	var proto = Object.create(from);
-	for (var name in fields) proto[name] = fields[name];
-	if( fields.toString !== Object.prototype.toString ) proto.toString = fields.toString;
-	return proto;
-}
-var EReg = function(r,opt) {
-	this.r = new RegExp(r,opt.split("u").join(""));
-};
-EReg.__name__ = true;
-EReg.prototype = {
-	match: function(s) {
-		if(this.r.global) {
-			this.r.lastIndex = 0;
+class HxOverrides {
+	static remove(a,obj) {
+		var i = a.indexOf(obj);
+		if(i == -1) {
+			return false;
 		}
-		this.r.m = this.r.exec(s);
-		this.r.s = s;
-		return this.r.m != null;
-	}
-	,matched: function(n) {
-		if(this.r.m != null && n >= 0 && n < this.r.m.length) {
-			return this.r.m[n];
-		} else {
-			throw new js__$Boot_HaxeError("EReg::matched");
-		}
-	}
-	,__class__: EReg
-};
-var HxOverrides = function() { };
-HxOverrides.__name__ = true;
-HxOverrides.cca = function(s,index) {
-	var x = s.charCodeAt(index);
-	if(x != x) {
-		return undefined;
-	}
-	return x;
-};
-HxOverrides.substr = function(s,pos,len) {
-	if(len == null) {
-		len = s.length;
-	} else if(len < 0) {
-		if(pos == 0) {
-			len = s.length + len;
-		} else {
-			return "";
-		}
-	}
-	return s.substr(pos,len);
-};
-HxOverrides.remove = function(a,obj) {
-	var i = a.indexOf(obj);
-	if(i == -1) {
-		return false;
-	}
-	a.splice(i,1);
-	return true;
-};
-HxOverrides.iter = function(a) {
-	return { cur : 0, arr : a, hasNext : function() {
-		return this.cur < this.arr.length;
-	}, next : function() {
-		return this.arr[this.cur++];
-	}};
-};
-Math.__name__ = true;
-var Reflect = function() { };
-Reflect.__name__ = true;
-Reflect.fields = function(o) {
-	var a = [];
-	if(o != null) {
-		var hasOwnProperty = Object.prototype.hasOwnProperty;
-		for( var f in o ) {
-		if(f != "__id__" && f != "hx__closures__" && hasOwnProperty.call(o,f)) {
-			a.push(f);
-		}
-		}
-	}
-	return a;
-};
-var Std = function() { };
-Std.__name__ = true;
-Std.parseInt = function(x) {
-	var v = parseInt(x, x && x[0]=="0" && (x[1]=="x" || x[1]=="X") ? 16 : 10);
-	if(isNaN(v)) {
-		return null;
-	}
-	return v;
-};
-var StringTools = function() { };
-StringTools.__name__ = true;
-StringTools.startsWith = function(s,start) {
-	if(s.length >= start.length) {
-		return s.lastIndexOf(start,0) == 0;
-	} else {
-		return false;
-	}
-};
-StringTools.endsWith = function(s,end) {
-	var elen = end.length;
-	var slen = s.length;
-	if(slen >= elen) {
-		return s.indexOf(end,slen - elen) == slen - elen;
-	} else {
-		return false;
-	}
-};
-StringTools.isSpace = function(s,pos) {
-	var c = HxOverrides.cca(s,pos);
-	if(!(c > 8 && c < 14)) {
-		return c == 32;
-	} else {
+		a.splice(i,1);
 		return true;
 	}
-};
-StringTools.ltrim = function(s) {
-	var l = s.length;
-	var r = 0;
-	while(r < l && StringTools.isSpace(s,r)) ++r;
-	if(r > 0) {
-		return HxOverrides.substr(s,r,l - r);
-	} else {
-		return s;
+	static iter(a) {
+		return { cur : 0, arr : a, hasNext : function() {
+			return this.cur < this.arr.length;
+		}, next : function() {
+			return this.arr[this.cur++];
+		}};
 	}
-};
-StringTools.rtrim = function(s) {
-	var l = s.length;
-	var r = 0;
-	while(r < l && StringTools.isSpace(s,l - r - 1)) ++r;
-	if(r > 0) {
-		return HxOverrides.substr(s,0,l - r);
-	} else {
-		return s;
-	}
-};
-StringTools.trim = function(s) {
-	return StringTools.ltrim(StringTools.rtrim(s));
-};
-StringTools.replace = function(s,sub,by) {
-	return s.split(sub).join(by);
-};
-StringTools.hex = function(n,digits) {
-	var s = "";
-	var hexChars = "0123456789ABCDEF";
-	while(true) {
-		s = hexChars.charAt(n & 15) + s;
-		n >>>= 4;
-		if(!(n > 0)) {
-			break;
-		}
-	}
-	if(digits != null) {
-		while(s.length < digits) s = "0" + s;
-	}
-	return s;
-};
-var tink_url__$Host_Host_$Impl_$ = {};
-tink_url__$Host_Host_$Impl_$.__name__ = true;
-tink_url__$Host_Host_$Impl_$._new = function(name,port) {
-	var this1;
-	if(port == null) {
-		this1 = name;
-	} else if(port > 65535 || port <= 0) {
-		throw new js__$Boot_HaxeError("Invalid port");
-	} else {
-		this1 = "" + name + ":" + port;
-	}
-	return this1;
-};
-tink_url__$Host_Host_$Impl_$.get_name = function(this1) {
-	if(this1 == null) {
-		return null;
-	} else {
-		var _g = this1.split("]");
-		switch(_g.length) {
-		case 1:
-			var v = _g[0];
-			return v.split(":")[0];
-		case 2:
-			var _g3 = _g[1];
-			var v1 = _g[0];
-			return v1 + "]";
-		default:
-			throw new js__$Boot_HaxeError("assert");
-		}
-	}
-};
-tink_url__$Host_Host_$Impl_$.get_port = function(this1) {
-	if(this1 == null) {
-		return null;
-	} else {
-		var _g = this1.split("]");
-		switch(_g.length) {
-		case 1:
-			var v = _g[0];
-			var _g1 = v.split(":")[1];
-			if(_g1 == null) {
-				return null;
-			} else {
-				var p = _g1;
-				return Std.parseInt(p);
+}
+HxOverrides.__name__ = true;
+Math.__name__ = true;
+class Reflect {
+	static fields(o) {
+		var a = [];
+		if(o != null) {
+			var hasOwnProperty = Object.prototype.hasOwnProperty;
+			for( var f in o ) {
+			if(f != "__id__" && f != "hx__closures__" && hasOwnProperty.call(o,f)) {
+				a.push(f);
 			}
-			break;
-		case 2:
-			var _g2 = _g[0];
-			var v1 = _g[1];
-			var _g3 = v1.split(":")[1];
-			if(_g3 == null) {
-				return null;
-			} else {
-				var p1 = _g3;
-				return Std.parseInt(p1);
 			}
-			break;
-		default:
-			throw new js__$Boot_HaxeError("assert");
 		}
+		return a;
 	}
-};
-var client_Client = function() { };
-client_Client.__name__ = true;
-client_Client.call = function() {
-	var remote = new tink_web_proxy_Remote0(new tink_http_clients_NodeClient(),tink_web_proxy__$Remote_RemoteEndpoint_$Impl_$._new(tink_url__$Host_Host_$Impl_$._new("localhost",3000)));
-	var ret = remote.json().flatMap(function(o) {
-		switch(o._hx_index) {
-		case 0:
-			var e = o.data;
-			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(e));
-		case 1:
-			var e1 = o.failure;
-			throw new js__$Boot_HaxeError(e1);
-		}
-	});
-	var ret1 = ret.gather();
-	return ret1;
-};
-var client_data_Thing = function() {
-	this._updatePerformed = new tink_core_SignalTrigger();
-	this.updatePerformed = this._updatePerformed;
-	this.foo = "Hello from Coconut!";
-	this.__coco_bar = tink_state__$Observable_Observable_$Impl_$.auto(tink_state__$Observable_Computation_$Impl_$.async(function() {
-		var ret = client_Client.call().map(tink_core_Outcome.Success);
-		return ret.gather();
-	}));
-	var this1 = new tink_state__$State_SimpleState("Nice",null,null);
-	this.__coco_title = this1;
-	var this2 = new tink_state__$State_SimpleState(0,null,null);
-	this.__coco_transitionCount = this2;
-	this.errorTrigger = tink_core__$Signal_Signal_$Impl_$.trigger();
-	this.transitionErrors = this.errorTrigger;
-	this.observables = { foo : tink_state__$Observable_Observable_$Impl_$.const(this.foo), bar : this.__coco_bar, title : this.__coco_title, isInTransition : tink_state__$Observable_Observable_$Impl_$.map(this.__coco_transitionCount,tink_state__$Observable_Transform_$Impl_$.plain(function(count) {
-		return count > 0;
-	}))};
-};
-client_data_Thing.__name__ = true;
-client_data_Thing.prototype = {
-	setTitle: function(to) {
-		return tink_core__$Promise_Promise_$Impl_$.next(this.__cocoupdate(new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success({ title : to})))),function(_) {
+}
+Reflect.__name__ = true;
+class client_data_TodoFilterModel {
+	constructor() {
+		this._updatePerformed = new tink_core_SignalTrigger();
+		this.updatePerformed = this._updatePerformed;
+		this.options = tink_pure__$List_List_$Impl_$.fromArray([new tink_core_NamedWith("All",function(_) {
+			return true;
+		}),new tink_core_NamedWith("Active",client_data_TodoItemModel.isActive),new tink_core_NamedWith("Completed",client_data_TodoItemModel.isCompleted)]);
+		var this1 = new tink_state__$State_SimpleState(new tink_pure_NodeIterator(this.options).next().value,null,null);
+		this.__coco_currentFilter = this1;
+		var this2 = new tink_state__$State_SimpleState(0,null,null);
+		this.__coco_transitionCount = this2;
+		this.errorTrigger = tink_core__$Signal_Signal_$Impl_$.trigger();
+		this.transitionErrors = this.errorTrigger;
+		this.observables = { options : tink_state__$Observable_Observable_$Impl_$.const(this.options), currentFilter : this.__coco_currentFilter, isInTransition : tink_state__$Observable_Observable_$Impl_$.map(this.__coco_transitionCount,tink_state__$Observable_Transform_$Impl_$.plain(function(count) {
+			return count > 0;
+		}))};
+	}
+	toggle(filter) {
+		var _gthis = this;
+		return tink_core__$Promise_Promise_$Impl_$.next(this.__cocoupdate((function() {
+			var _g = new tink_pure_NodeIterator(_gthis.options);
+			while(_g.list.length > 0) {
+				var o = _g.next();
+				if(o.value == filter) {
+					return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success({ currentFilter : filter})));
+				}
+			}
+			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success({ })));
+		})()),function(_) {
 			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(tink_core_Noise.Noise)));
 		});
 	}
-	,__cocoupdate: function(ret) {
-		var _gthis = this;
+	isActive(filter) {
+		return filter == tink_state__$State_State_$Impl_$.get_value(this.__coco_currentFilter);
+	}
+	__cocoupdate(ret) {
 		var sync = true;
 		var done = false;
+		var _gthis = this;
 		ret.handle(function(o) {
 			done = true;
 			if(!sync) {
@@ -277,8 +86,8 @@ client_data_Thing.prototype = {
 				var delta = o.data;
 				var delta1 = delta;
 				var existent = tink_Anon.getExistentFields(delta1);
-				if(Object.prototype.hasOwnProperty.call(existent,"title")) {
-					_gthis.__coco_title.set(delta1.title);
+				if(Object.prototype.hasOwnProperty.call(existent,"currentFilter")) {
+					_gthis.__coco_currentFilter.set(delta1.currentFilter);
 				}
 				tink_core__$Callback_CallbackList_$Impl_$.invoke(_gthis._updatePerformed.handlers,delta1);
 				break;
@@ -296,190 +105,294 @@ client_data_Thing.prototype = {
 		}
 		return ret;
 	}
-	,__class__: client_data_Thing
-};
-var client_data_Autobind = require("class-autobind").default;
-var client_data_ThingStore = $hx_exports["client"]["data"]["ThingStore"] = function(reactComponent) {
-	this.model = new client_data_Thing();
-	var _gthis = this;
-	this.reactComponent = reactComponent;
-	tink_state__$Observable_Observable_$Impl_$.bind(this.model.observables.bar,null,function(o) {
-		switch(o._hx_index) {
-		case 0:
-			break;
-		case 1:
-			var result = o.result;
-			_gthis.setState(result);
-			break;
-		case 2:
-			var error = o.error;
-			throw new js__$Boot_HaxeError(error);
-		}
-		return;
-	});
-	client_data_Autobind(this);
-	tink_state__$Observable_Observable_$Impl_$.bind(this.model.observables.title,{ direct : true},function(title) {
-		return _gthis.reactComponent.title = title;
-	});
-};
-client_data_ThingStore.__name__ = true;
-client_data_ThingStore.prototype = {
-	handleChange: function(e) {
-		this.model.setTitle(e.target.value);
+}
+client_data_TodoFilterModel.__name__ = true;
+Object.assign(client_data_TodoFilterModel.prototype, {
+	__class__: client_data_TodoFilterModel
+});
+var client_externs_Mobx = require("mobx");
+class client_data_TodoFilterStore {
+	constructor() {
+		this.filter = new client_data_TodoFilterModel();
+		var _gthis = this;
+		tink_state__$Observable_Observable_$Impl_$.bind(this.filter.observables.currentFilter,{ },function(f) {
+			return _gthis.currentFilter = f;
+		});
 	}
-	,clickBtn: function() {
-		window.console.debug("foo");
-		this.reactComponent.state.result = "Wowowowowo!";
+	mapOptions(cb) {
+		return tink_pure__$List_List_$Impl_$.toArray(tink_pure__$List_List_$Impl_$.map(this.filter.options,cb));
 	}
-	,setState: function(state) {
-		console.log("src/hx/client/data/Thing.hx:70:","WOARALES");
-		this.reactComponent.title = state.slideshow.author;
-		this.reactComponent.foo = "NOIPPP";
+	toggle(filter) {
+		return this.filter.toggle(filter);
 	}
-	,__class__: client_data_ThingStore
-};
-var client_data_TodoItem = function() { };
-client_data_TodoItem.__name__ = true;
-client_data_TodoItem.prototype = {
-	__class__: client_data_TodoItem
-};
-var haxe_StackItem = $hxEnums["haxe.StackItem"] = { __ename__ : true, __constructs__ : ["CFunction","Module","FilePos","Method","LocalFunction"]
-	,CFunction: {_hx_index:0,__enum__:"haxe.StackItem",toString:$estr}
-	,Module: ($_=function(m) { return {_hx_index:1,m:m,__enum__:"haxe.StackItem",toString:$estr}; },$_.__params__ = ["m"],$_)
-	,FilePos: ($_=function(s,file,line,column) { return {_hx_index:2,s:s,file:file,line:line,column:column,__enum__:"haxe.StackItem",toString:$estr}; },$_.__params__ = ["s","file","line","column"],$_)
-	,Method: ($_=function(classname,method) { return {_hx_index:3,classname:classname,method:method,__enum__:"haxe.StackItem",toString:$estr}; },$_.__params__ = ["classname","method"],$_)
-	,LocalFunction: ($_=function(v) { return {_hx_index:4,v:v,__enum__:"haxe.StackItem",toString:$estr}; },$_.__params__ = ["v"],$_)
-};
-var haxe_io_Bytes = function(data) {
-	this.length = data.byteLength;
-	this.b = new Uint8Array(data);
-	this.b.bufferValue = data;
-	data.hxBytes = this;
-	data.bytes = this.b;
-};
-haxe_io_Bytes.__name__ = true;
-haxe_io_Bytes.ofString = function(s,encoding) {
-	if(encoding == haxe_io_Encoding.RawNative) {
-		var buf = new Uint8Array(s.length << 1);
-		var _g = 0;
-		var _g1 = s.length;
-		while(_g < _g1) {
-			var i = _g++;
-			var c = s.charCodeAt(i);
-			buf[i << 1] = c & 255;
-			buf[i << 1 | 1] = c >> 8;
-		}
-		return new haxe_io_Bytes(buf.buffer);
+	isActive(filter) {
+		return this.filter.isActive(filter);
 	}
-	var a = [];
-	var i1 = 0;
-	while(i1 < s.length) {
-		var c1 = s.charCodeAt(i1++);
-		if(55296 <= c1 && c1 <= 56319) {
-			c1 = c1 - 55232 << 10 | s.charCodeAt(i1++) & 1023;
-		}
-		if(c1 <= 127) {
-			a.push(c1);
-		} else if(c1 <= 2047) {
-			a.push(192 | c1 >> 6);
-			a.push(128 | c1 & 63);
-		} else if(c1 <= 65535) {
-			a.push(224 | c1 >> 12);
-			a.push(128 | c1 >> 6 & 63);
-			a.push(128 | c1 & 63);
+	matches(store) {
+		return this.currentFilter(store.item);
+	}
+}
+$hx_exports["client"]["data"]["TodoFilterStore"] = client_data_TodoFilterStore;
+client_data_TodoFilterStore.__name__ = true;
+Object.assign(client_data_TodoFilterStore.prototype, {
+	__class__: client_data_TodoFilterStore
+});
+class client_data_TodoItemModel {
+	constructor(init) {
+		this._updatePerformed = new tink_core_SignalTrigger();
+		this.updatePerformed = this._updatePerformed;
+		var value;
+		var _g = init.completed;
+		if(_g == null) {
+			value = false;
 		} else {
-			a.push(240 | c1 >> 18);
-			a.push(128 | c1 >> 12 & 63);
-			a.push(128 | c1 >> 6 & 63);
-			a.push(128 | c1 & 63);
+			var v = _g;
+			value = v;
 		}
-	}
-	return new haxe_io_Bytes(new Uint8Array(a).buffer);
-};
-haxe_io_Bytes.ofData = function(b) {
-	var hb = b.hxBytes;
-	if(hb != null) {
-		return hb;
-	}
-	return new haxe_io_Bytes(b);
-};
-haxe_io_Bytes.prototype = {
-	blit: function(pos,src,srcpos,len) {
-		if(pos < 0 || srcpos < 0 || len < 0 || pos + len > this.length || srcpos + len > src.length) {
-			throw new js__$Boot_HaxeError(haxe_io_Error.OutsideBounds);
-		}
-		if(srcpos == 0 && len == src.b.byteLength) {
-			this.b.set(src.b,pos);
+		var this1 = new tink_state__$State_SimpleState(value,null,null);
+		this.__coco_completed = this1;
+		var this2 = new tink_state__$State_SimpleState(init.description,null,null);
+		this.__coco_description = this2;
+		var _g1 = init.created;
+		var tmp;
+		if(_g1 == null) {
+			tmp = new Date();
 		} else {
-			this.b.set(src.b.subarray(srcpos,srcpos + len),pos);
+			var v1 = _g1;
+			tmp = v1;
 		}
+		this.created = tmp;
+		var this3 = new tink_state__$State_SimpleState(0,null,null);
+		this.__coco_transitionCount = this3;
+		this.errorTrigger = tink_core__$Signal_Signal_$Impl_$.trigger();
+		this.transitionErrors = this.errorTrigger;
+		this.observables = { completed : this.__coco_completed, description : this.__coco_description, created : tink_state__$Observable_Observable_$Impl_$.const(this.created), isInTransition : tink_state__$Observable_Observable_$Impl_$.map(this.__coco_transitionCount,tink_state__$Observable_Transform_$Impl_$.plain(function(count) {
+			return count > 0;
+		}))};
 	}
-	,sub: function(pos,len) {
-		if(pos < 0 || len < 0 || pos + len > this.length) {
-			throw new js__$Boot_HaxeError(haxe_io_Error.OutsideBounds);
-		}
-		return new haxe_io_Bytes(this.b.buffer.slice(pos + this.b.byteOffset,pos + this.b.byteOffset + len));
+	static isActive(item) {
+		return !tink_state__$State_State_$Impl_$.get_value(item.__coco_completed);
 	}
-	,getString: function(pos,len,encoding) {
-		if(pos < 0 || len < 0 || pos + len > this.length) {
-			throw new js__$Boot_HaxeError(haxe_io_Error.OutsideBounds);
+	static isCompleted(item) {
+		return tink_state__$State_State_$Impl_$.get_value(item.__coco_completed);
+	}
+	static create(description) {
+		return new client_data_TodoItemModel({ description : description});
+	}
+}
+client_data_TodoItemModel.__name__ = true;
+Object.assign(client_data_TodoItemModel.prototype, {
+	__class__: client_data_TodoItemModel
+});
+class client_data_TodoItemStore {
+	constructor(item) {
+		this.item = item;
+		this.description = tink_state__$State_State_$Impl_$.get_value(item.__coco_description);
+		this.created = item.created;
+		this.completed = tink_state__$State_State_$Impl_$.get_value(item.__coco_completed);
+	}
+	setCompleted(val) {
+		this.completed = val;
+	}
+	setDescription(val) {
+		this.description = val;
+	}
+	isActive() {
+		return client_data_TodoItemModel.isActive(this.item);
+	}
+	isCompleted() {
+		return client_data_TodoItemModel.isCompleted(this.item);
+	}
+	static create(description) {
+		var item = client_data_TodoItemModel.create(description);
+		var store = new client_data_TodoItemStore(item);
+		return store;
+	}
+	static wrap(item) {
+		var store = new client_data_TodoItemStore(item);
+		return store;
+	}
+}
+$hx_exports["client"]["data"]["TodoItemStore"] = client_data_TodoItemStore;
+client_data_TodoItemStore.__name__ = true;
+Object.assign(client_data_TodoItemStore.prototype, {
+	__class__: client_data_TodoItemStore
+});
+class client_data_TodoListModel {
+	constructor(init) {
+		this._updatePerformed = new tink_core_SignalTrigger();
+		this.updatePerformed = this._updatePerformed;
+		var _gthis = this;
+		if(init == null) {
+			init = { };
 		}
-		if(encoding == null) {
-			encoding = haxe_io_Encoding.UTF8;
+		var value;
+		var _g = init.items;
+		if(_g == null) {
+			value = null;
+		} else {
+			var v = _g;
+			value = v;
 		}
-		var s = "";
-		var b = this.b;
-		var i = pos;
-		var max = pos + len;
-		switch(encoding._hx_index) {
-		case 0:
-			var debug = pos > 0;
-			while(i < max) {
-				var c = b[i++];
-				if(c < 128) {
-					if(c == 0) {
-						break;
-					}
-					s += String.fromCodePoint(c);
-				} else if(c < 224) {
-					var code = (c & 63) << 6 | b[i++] & 127;
-					s += String.fromCodePoint(code);
-				} else if(c < 240) {
-					var c2 = b[i++];
-					var code1 = (c & 31) << 12 | (c2 & 127) << 6 | b[i++] & 127;
-					s += String.fromCodePoint(code1);
-				} else {
-					var c21 = b[i++];
-					var c3 = b[i++];
-					var u = (c & 15) << 18 | (c21 & 127) << 12 | (c3 & 127) << 6 | b[i++] & 127;
-					s += String.fromCodePoint(u);
+		var this1 = new tink_state__$State_SimpleState(value,null,null);
+		this.__coco_items = this1;
+		var this2 = { f : function() {
+			var predicate = client_data_TodoItemModel.isActive;
+			var ret = 0;
+			var _g1 = new tink_pure_NodeIterator(tink_state__$State_State_$Impl_$.get_value(_gthis.__coco_items));
+			while(_g1.list.length > 0) {
+				var x = _g1.next();
+				if(predicate(x)) {
+					++ret;
 				}
 			}
-			break;
-		case 1:
-			while(i < max) {
-				var c1 = b[i++] | b[i++] << 8;
-				s += String.fromCodePoint(c1);
+			return ret;
+		}};
+		this.__coco_unfinished = tink_state__$Observable_Observable_$Impl_$.auto(this2);
+		var this3 = { f : function() {
+			var this4 = tink_state__$Observable_Observable_$Impl_$.get_value(_gthis.__coco_unfinished);
+			var this5 = tink_state__$State_State_$Impl_$.get_value(_gthis.__coco_items);
+			return this4 < (this5 == null ? 0 : this5.length);
+		}};
+		this.__coco_hasAnyCompleted = tink_state__$Observable_Observable_$Impl_$.auto(this3);
+		var this6 = new tink_state__$State_SimpleState(0,null,null);
+		this.__coco_transitionCount = this6;
+		this.errorTrigger = tink_core__$Signal_Signal_$Impl_$.trigger();
+		this.transitionErrors = this.errorTrigger;
+		this.observables = { items : this.__coco_items, unfinished : this.__coco_unfinished, hasAnyCompleted : this.__coco_hasAnyCompleted, isInTransition : tink_state__$Observable_Observable_$Impl_$.map(this.__coco_transitionCount,tink_state__$Observable_Transform_$Impl_$.plain(function(count) {
+			return count > 0;
+		}))};
+	}
+	add(description) {
+		return tink_core__$Promise_Promise_$Impl_$.next(this.__cocoupdate(new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success({ items : tink_pure__$List_List_$Impl_$.prepend(tink_state__$State_State_$Impl_$.get_value(this.__coco_items),client_data_TodoItemModel.create(description))})))),function(_) {
+			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(tink_core_Noise.Noise)));
+		});
+	}
+	delete(item) {
+		return tink_core__$Promise_Promise_$Impl_$.next(this.__cocoupdate(new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success({ items : tink_pure__$List_List_$Impl_$.filter(tink_state__$State_State_$Impl_$.get_value(this.__coco_items),function(i) {
+			if(i != item) {
+				return 1;
+			} else {
+				return 0;
 			}
-			break;
+		})})))),function(_) {
+			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(tink_core_Noise.Noise)));
+		});
+	}
+	clearCompleted() {
+		return tink_core__$Promise_Promise_$Impl_$.next(this.__cocoupdate(new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success({ items : tink_pure__$List_List_$Impl_$.filter(tink_state__$State_State_$Impl_$.get_value(this.__coco_items),function(i) {
+			if(!tink_state__$State_State_$Impl_$.get_value(i.__coco_completed)) {
+				return 1;
+			} else {
+				return 0;
+			}
+		})})))),function(_) {
+			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(tink_core_Noise.Noise)));
+		});
+	}
+	get_items() {
+		return tink_state__$State_State_$Impl_$.get_value(this.__coco_items);
+	}
+	get_unfinished() {
+		return tink_state__$Observable_Observable_$Impl_$.get_value(this.__coco_unfinished);
+	}
+	get_hasAnyCompleted() {
+		return tink_state__$Observable_Observable_$Impl_$.get_value(this.__coco_hasAnyCompleted);
+	}
+	__cocoupdate(ret) {
+		var sync = true;
+		var done = false;
+		var _gthis = this;
+		ret.handle(function(o) {
+			done = true;
+			if(!sync) {
+				_gthis.__coco_transitionCount.set(tink_state__$State_State_$Impl_$.get_value(_gthis.__coco_transitionCount) - 1);
+			}
+			switch(o._hx_index) {
+			case 0:
+				var delta = o.data;
+				var delta1 = delta;
+				var existent = tink_Anon.getExistentFields(delta1);
+				if(Object.prototype.hasOwnProperty.call(existent,"items")) {
+					_gthis.__coco_items.set(delta1.items);
+				}
+				tink_core__$Callback_CallbackList_$Impl_$.invoke(_gthis._updatePerformed.handlers,delta1);
+				break;
+			case 1:
+				var e = o.failure;
+				tink_core__$Callback_CallbackList_$Impl_$.invoke(_gthis.errorTrigger.handlers,e);
+				break;
+			}
+		});
+		if(!done) {
+			sync = false;
 		}
-		return s;
+		if(!sync) {
+			this.__coco_transitionCount.set(tink_state__$State_State_$Impl_$.get_value(this.__coco_transitionCount) + 1);
+		}
+		return ret;
 	}
-	,toString: function() {
-		return this.getString(0,this.length);
+	get_isInTransition() {
+		return tink_state__$State_State_$Impl_$.get_value(this.__coco_transitionCount) > 0;
 	}
-	,__class__: haxe_io_Bytes
-};
-var haxe_io_Encoding = $hxEnums["haxe.io.Encoding"] = { __ename__ : true, __constructs__ : ["UTF8","RawNative"]
-	,UTF8: {_hx_index:0,__enum__:"haxe.io.Encoding",toString:$estr}
-	,RawNative: {_hx_index:1,__enum__:"haxe.io.Encoding",toString:$estr}
-};
-var haxe_ds_List = function() {
-	this.length = 0;
-};
-haxe_ds_List.__name__ = true;
-haxe_ds_List.prototype = {
-	push: function(item) {
+	get_updatePerformed() {
+		return this.updatePerformed;
+	}
+}
+$hx_exports["client"]["data"]["TodoListModel"] = client_data_TodoListModel;
+client_data_TodoListModel.__name__ = true;
+Object.assign(client_data_TodoListModel.prototype, {
+	__class__: client_data_TodoListModel
+});
+class client_data_TodoListStore {
+	constructor() {
+		this.hasAnyCompleted = false;
+		this.unfinished = 0;
+		this.length = 0;
+		this.items = [];
+		this.todoList = new client_data_TodoListModel();
+		this.setupObservables();
+	}
+	setupObservables() {
+		var _gthis = this;
+		this.items = tink_pure__$List_List_$Impl_$.toArray(tink_pure__$List_List_$Impl_$.map(tink_state__$State_State_$Impl_$.get_value(this.todoList.__coco_items),function(item) {
+			return client_data_TodoItemStore.wrap(item);
+		}));
+		tink_state__$Observable_Observable_$Impl_$.bind(this.todoList.observables.items,{ },function(items) {
+			var tmp = tink_pure__$List_List_$Impl_$.map(items,function(item1) {
+				return client_data_TodoItemStore.wrap(item1);
+			});
+			_gthis.items = tink_pure__$List_List_$Impl_$.toArray(tmp);
+			_gthis.length = _gthis.items.length;
+			var tmp1 = tink_state__$Observable_Observable_$Impl_$.get_value(_gthis.todoList.__coco_unfinished);
+			_gthis.unfinished = tmp1;
+			var tmp2 = tink_state__$Observable_Observable_$Impl_$.get_value(_gthis.todoList.__coco_hasAnyCompleted);
+			return _gthis.hasAnyCompleted = tmp2;
+		});
+	}
+	get_items() {
+		return this.items;
+	}
+	add(description) {
+		this.todoList.add(description);
+	}
+	delete(store) {
+		this.todoList.delete(store.item);
+	}
+	clearCompleted() {
+		this.todoList.clearCompleted();
+	}
+}
+$hx_exports["client"]["data"]["TodoListStore"] = client_data_TodoListStore;
+client_data_TodoListStore.__name__ = true;
+Object.assign(client_data_TodoListStore.prototype, {
+	__class__: client_data_TodoListStore
+});
+class haxe_ds_List {
+	constructor() {
+		this.length = 0;
+	}
+	push(item) {
 		var x = new haxe_ds__$List_ListNode(item,this.h);
 		this.h = x;
 		if(this.q == null) {
@@ -487,14 +400,14 @@ haxe_ds_List.prototype = {
 		}
 		this.length++;
 	}
-	,first: function() {
+	first() {
 		if(this.h == null) {
 			return null;
 		} else {
 			return this.h.item;
 		}
 	}
-	,pop: function() {
+	pop() {
 		if(this.h == null) {
 			return null;
 		}
@@ -506,598 +419,253 @@ haxe_ds_List.prototype = {
 		this.length--;
 		return x;
 	}
-	,__class__: haxe_ds_List
-};
-var haxe_ds__$List_ListNode = function(item,next) {
-	this.item = item;
-	this.next = next;
-};
+}
+haxe_ds_List.__name__ = true;
+Object.assign(haxe_ds_List.prototype, {
+	__class__: haxe_ds_List
+});
+class haxe_ds__$List_ListNode {
+	constructor(item,next) {
+		this.item = item;
+		this.next = next;
+	}
+}
 haxe_ds__$List_ListNode.__name__ = true;
-haxe_ds__$List_ListNode.prototype = {
+Object.assign(haxe_ds__$List_ListNode.prototype, {
 	__class__: haxe_ds__$List_ListNode
-};
-var haxe_ds_ObjectMap = function() {
-	this.h = { __keys__ : { }};
-};
-haxe_ds_ObjectMap.__name__ = true;
-haxe_ds_ObjectMap.prototype = {
-	set: function(key,value) {
+});
+class haxe_ds_ObjectMap {
+	constructor() {
+		this.h = { __keys__ : { }};
+	}
+	set(key,value) {
 		var id = key.__id__ || (key.__id__ = $global.$haxeUID++);
 		this.h[id] = value;
 		this.h.__keys__[id] = key;
 	}
-	,__class__: haxe_ds_ObjectMap
-};
+}
+haxe_ds_ObjectMap.__name__ = true;
+Object.assign(haxe_ds_ObjectMap.prototype, {
+	__class__: haxe_ds_ObjectMap
+});
 var haxe_ds_Option = $hxEnums["haxe.ds.Option"] = { __ename__ : true, __constructs__ : ["Some","None"]
 	,Some: ($_=function(v) { return {_hx_index:0,v:v,__enum__:"haxe.ds.Option",toString:$estr}; },$_.__params__ = ["v"],$_)
 	,None: {_hx_index:1,__enum__:"haxe.ds.Option",toString:$estr}
 };
-var haxe_io_Error = $hxEnums["haxe.io.Error"] = { __ename__ : true, __constructs__ : ["Blocked","Overflow","OutsideBounds","Custom"]
-	,Blocked: {_hx_index:0,__enum__:"haxe.io.Error",toString:$estr}
-	,Overflow: {_hx_index:1,__enum__:"haxe.io.Error",toString:$estr}
-	,OutsideBounds: {_hx_index:2,__enum__:"haxe.io.Error",toString:$estr}
-	,Custom: ($_=function(e) { return {_hx_index:3,e:e,__enum__:"haxe.io.Error",toString:$estr}; },$_.__params__ = ["e"],$_)
-};
-var httpstatus__$HttpStatusMessage_HttpStatusMessage_$Impl_$ = {};
-httpstatus__$HttpStatusMessage_HttpStatusMessage_$Impl_$.__name__ = true;
-httpstatus__$HttpStatusMessage_HttpStatusMessage_$Impl_$.fromCode = function(statusCode) {
-	switch(statusCode) {
-	case 100:
-		return "Continue";
-	case 101:
-		return "Switching Protocols";
-	case 102:
-		return "Processing";
-	case 200:
-		return "OK";
-	case 201:
-		return "Created";
-	case 202:
-		return "Accepted";
-	case 203:
-		return "Non-Authoritative Information";
-	case 204:
-		return "No Content";
-	case 205:
-		return "Reset Content";
-	case 206:
-		return "Partial Content";
-	case 207:
-		return "Multi-Status";
-	case 208:
-		return "Already Reported";
-	case 226:
-		return "IM Used";
-	case 300:
-		return "Multiple Choices";
-	case 301:
-		return "Moved Permanently";
-	case 302:
-		return "Found";
-	case 303:
-		return "See Other";
-	case 304:
-		return "Not Modified";
-	case 305:
-		return "Use Proxy";
-	case 306:
-		return "Switch Proxy";
-	case 307:
-		return "Temporary Redirect";
-	case 308:
-		return "Permanent Redirect";
-	case 400:
-		return "Bad Request";
-	case 401:
-		return "Unauthorized";
-	case 402:
-		return "Payment Required";
-	case 403:
-		return "Forbidden";
-	case 404:
-		return "Not Found";
-	case 405:
-		return "Method Not Allowed";
-	case 406:
-		return "Not Acceptable";
-	case 407:
-		return "Proxy Authentication Required";
-	case 408:
-		return "Request Timeout";
-	case 409:
-		return "Conflict";
-	case 410:
-		return "Gone";
-	case 411:
-		return "Length Required";
-	case 412:
-		return "Precondition Failed";
-	case 413:
-		return "Payload Too Large";
-	case 414:
-		return "URI Too Long";
-	case 415:
-		return "Unsupported Media Type";
-	case 416:
-		return "Range Not Satisfiable";
-	case 417:
-		return "Expectation Failed";
-	case 418:
-		return "I'm a teapot";
-	case 421:
-		return "Misdirected Request";
-	case 422:
-		return "Unprocessable Entity";
-	case 423:
-		return "Locked";
-	case 424:
-		return "Failed Dependency";
-	case 426:
-		return "Upgrade Required";
-	case 428:
-		return "Precondition Required";
-	case 429:
-		return "Too Many Requests";
-	case 431:
-		return "Request Header Fields Too Large";
-	case 451:
-		return "Unavailable For Legal Reasons";
-	case 500:
-		return "Internal Server Error";
-	case 501:
-		return "Not Implemented";
-	case 502:
-		return "Bad Gateway";
-	case 503:
-		return "Service Unavailable";
-	case 504:
-		return "Gateway Timeout";
-	case 505:
-		return "HTTP Version Not Supported";
-	case 506:
-		return "Variant Also Negotiates";
-	case 507:
-		return "Insufficient Storage";
-	case 508:
-		return "Loop Detected";
-	case 510:
-		return "Not Extended";
-	case 511:
-		return "Network Authentication Required";
-	default:
-		return "Unknown Status";
+class js__$Boot_HaxeError extends Error {
+	constructor(val) {
+		super();
+		this.val = val;
+		if(Error.captureStackTrace) {
+			Error.captureStackTrace(this,js__$Boot_HaxeError);
+		}
 	}
-};
-var js__$Boot_HaxeError = function(val) {
-	Error.call(this);
-	this.val = val;
-	if(Error.captureStackTrace) {
-		Error.captureStackTrace(this,js__$Boot_HaxeError);
-	}
-};
+}
 js__$Boot_HaxeError.__name__ = true;
-js__$Boot_HaxeError.wrap = function(val) {
-	if(((val) instanceof Error)) {
-		return val;
-	} else {
-		return new js__$Boot_HaxeError(val);
-	}
-};
-js__$Boot_HaxeError.__super__ = Error;
-js__$Boot_HaxeError.prototype = $extend(Error.prototype,{
+Object.assign(js__$Boot_HaxeError.prototype, {
 	__class__: js__$Boot_HaxeError
 });
-var js_Boot = function() { };
-js_Boot.__name__ = true;
-js_Boot.getClass = function(o) {
-	if(((o) instanceof Array) && o.__enum__ == null) {
-		return Array;
-	} else {
-		var cl = o.__class__;
-		if(cl != null) {
-			return cl;
+class js_Boot {
+	static getClass(o) {
+		if(((o) instanceof Array) && o.__enum__ == null) {
+			return Array;
+		} else {
+			var cl = o.__class__;
+			if(cl != null) {
+				return cl;
+			}
+			var name = js_Boot.__nativeClassName(o);
+			if(name != null) {
+				return js_Boot.__resolveNativeClass(name);
+			}
+			return null;
 		}
-		var name = js_Boot.__nativeClassName(o);
-		if(name != null) {
-			return js_Boot.__resolveNativeClass(name);
+	}
+	static __string_rec(o,s) {
+		if(o == null) {
+			return "null";
 		}
-		return null;
-	}
-};
-js_Boot.__string_rec = function(o,s) {
-	if(o == null) {
-		return "null";
-	}
-	if(s.length >= 5) {
-		return "<...>";
-	}
-	var t = typeof(o);
-	if(t == "function" && (o.__name__ || o.__ename__)) {
-		t = "object";
-	}
-	switch(t) {
-	case "function":
-		return "<function>";
-	case "object":
-		if(o.__enum__) {
-			var e = $hxEnums[o.__enum__];
-			var n = e.__constructs__[o._hx_index];
-			var con = e[n];
-			if(con.__params__) {
-				s += "\t";
-				var tmp = n + "(";
-				var _g = [];
-				var _g1 = 0;
-				var _g2 = con.__params__;
-				while(_g1 < _g2.length) {
-					var p = _g2[_g1];
-					++_g1;
-					_g.push(js_Boot.__string_rec(o[p],s));
+		if(s.length >= 5) {
+			return "<...>";
+		}
+		var t = typeof(o);
+		if(t == "function" && (o.__name__ || o.__ename__)) {
+			t = "object";
+		}
+		switch(t) {
+		case "function":
+			return "<function>";
+		case "object":
+			if(o.__enum__) {
+				var e = $hxEnums[o.__enum__];
+				var n = e.__constructs__[o._hx_index];
+				var con = e[n];
+				if(con.__params__) {
+					s += "\t";
+					var tmp = n + "(";
+					var _g = [];
+					var _g1 = 0;
+					var _g2 = con.__params__;
+					while(_g1 < _g2.length) {
+						var p = _g2[_g1];
+						++_g1;
+						_g.push(js_Boot.__string_rec(o[p],s));
+					}
+					return tmp + _g.join(",") + ")";
+				} else {
+					return n;
 				}
-				return tmp + _g.join(",") + ")";
-			} else {
-				return n;
 			}
-		}
-		if(((o) instanceof Array)) {
-			var str = "[";
+			if(((o) instanceof Array)) {
+				var str = "[";
+				s += "\t";
+				var _g3 = 0;
+				var _g11 = o.length;
+				while(_g3 < _g11) {
+					var i = _g3++;
+					str += (i > 0 ? "," : "") + js_Boot.__string_rec(o[i],s);
+				}
+				str += "]";
+				return str;
+			}
+			var tostr;
+			try {
+				tostr = o.toString;
+			} catch( e1 ) {
+				var e2 = ((e1) instanceof js__$Boot_HaxeError) ? e1.val : e1;
+				return "???";
+			}
+			if(tostr != null && tostr != Object.toString && typeof(tostr) == "function") {
+				var s2 = o.toString();
+				if(s2 != "[object Object]") {
+					return s2;
+				}
+			}
+			var str1 = "{\n";
 			s += "\t";
-			var _g3 = 0;
-			var _g11 = o.length;
-			while(_g3 < _g11) {
-				var i = _g3++;
-				str += (i > 0 ? "," : "") + js_Boot.__string_rec(o[i],s);
+			var hasp = o.hasOwnProperty != null;
+			var k = null;
+			for( k in o ) {
+			if(hasp && !o.hasOwnProperty(k)) {
+				continue;
 			}
-			str += "]";
-			return str;
+			if(k == "prototype" || k == "__class__" || k == "__super__" || k == "__interfaces__" || k == "__properties__") {
+				continue;
+			}
+			if(str1.length != 2) {
+				str1 += ", \n";
+			}
+			str1 += s + k + " : " + js_Boot.__string_rec(o[k],s);
+			}
+			s = s.substring(1);
+			str1 += "\n" + s + "}";
+			return str1;
+		case "string":
+			return o;
+		default:
+			return String(o);
 		}
-		var tostr;
-		try {
-			tostr = o.toString;
-		} catch( e1 ) {
-			var e2 = ((e1) instanceof js__$Boot_HaxeError) ? e1.val : e1;
-			return "???";
+	}
+	static __interfLoop(cc,cl) {
+		if(cc == null) {
+			return false;
 		}
-		if(tostr != null && tostr != Object.toString && typeof(tostr) == "function") {
-			var s2 = o.toString();
-			if(s2 != "[object Object]") {
-				return s2;
+		if(cc == cl) {
+			return true;
+		}
+		if(Object.prototype.hasOwnProperty.call(cc,"__interfaces__")) {
+			var intf = cc.__interfaces__;
+			var _g = 0;
+			var _g1 = intf.length;
+			while(_g < _g1) {
+				var i = _g++;
+				var i1 = intf[i];
+				if(i1 == cl || js_Boot.__interfLoop(i1,cl)) {
+					return true;
+				}
 			}
 		}
-		var str1 = "{\n";
-		s += "\t";
-		var hasp = o.hasOwnProperty != null;
-		var k = null;
-		for( k in o ) {
-		if(hasp && !o.hasOwnProperty(k)) {
-			continue;
-		}
-		if(k == "prototype" || k == "__class__" || k == "__super__" || k == "__interfaces__" || k == "__properties__") {
-			continue;
-		}
-		if(str1.length != 2) {
-			str1 += ", \n";
-		}
-		str1 += s + k + " : " + js_Boot.__string_rec(o[k],s);
-		}
-		s = s.substring(1);
-		str1 += "\n" + s + "}";
-		return str1;
-	case "string":
-		return o;
-	default:
-		return String(o);
+		return js_Boot.__interfLoop(cc.__super__,cl);
 	}
-};
-js_Boot.__interfLoop = function(cc,cl) {
-	if(cc == null) {
-		return false;
+	static __nativeClassName(o) {
+		var name = js_Boot.__toStr.call(o).slice(8,-1);
+		if(name == "Object" || name == "Function" || name == "Math" || name == "JSON") {
+			return null;
+		}
+		return name;
 	}
-	if(cc == cl) {
-		return true;
+	static __resolveNativeClass(name) {
+		return $global[name];
 	}
-	if(Object.prototype.hasOwnProperty.call(cc,"__interfaces__")) {
-		var intf = cc.__interfaces__;
+}
+js_Boot.__name__ = true;
+class tink_Anon {
+	static getExistentFields(o) {
+		var ret = { };
 		var _g = 0;
-		var _g1 = intf.length;
-		while(_g < _g1) {
-			var i = _g++;
-			var i1 = intf[i];
-			if(i1 == cl || js_Boot.__interfLoop(i1,cl)) {
-				return true;
-			}
+		var _g1 = Reflect.fields(o);
+		while(_g < _g1.length) {
+			var f = _g1[_g];
+			++_g;
+			ret[f] = true;
 		}
-	}
-	return js_Boot.__interfLoop(cc.__super__,cl);
-};
-js_Boot.__nativeClassName = function(o) {
-	var name = js_Boot.__toStr.call(o).slice(8,-1);
-	if(name == "Object" || name == "Function" || name == "Math" || name == "JSON") {
-		return null;
-	}
-	return name;
-};
-js_Boot.__resolveNativeClass = function(name) {
-	return $global[name];
-};
-var js_lib__$ArrayBuffer_ArrayBufferCompat = function() { };
-js_lib__$ArrayBuffer_ArrayBufferCompat.__name__ = true;
-js_lib__$ArrayBuffer_ArrayBufferCompat.sliceImpl = function(begin,end) {
-	var u = new Uint8Array(this,begin,end == null ? null : end - begin);
-	var resultArray = new Uint8Array(u.byteLength);
-	resultArray.set(u);
-	return resultArray.buffer;
-};
-var js_node_Http = require("http");
-var js_node_buffer_Buffer = require("buffer").Buffer;
-var js_node_buffer__$Buffer_Helper = function() { };
-js_node_buffer__$Buffer_Helper.__name__ = true;
-js_node_buffer__$Buffer_Helper.bytesOfBuffer = function(b) {
-	var o = Object.create(haxe_io_Bytes.prototype);
-	o.length = b.byteLength;
-	o.b = b;
-	b.bufferValue = b;
-	b.hxBytes = o;
-	b.bytes = b;
-	return o;
-};
-var tink_Anon = function() { };
-tink_Anon.__name__ = true;
-tink_Anon.getExistentFields = function(o) {
-	var ret = { };
-	var _g = 0;
-	var _g1 = Reflect.fields(o);
-	while(_g < _g1.length) {
-		var f = _g1[_g];
-		++_g;
-		ret[f] = true;
-	}
-	return ret;
-};
-var tink_chunk_ChunkBase = function() { };
-tink_chunk_ChunkBase.__name__ = true;
-var tink__$Chunk_EmptyChunk = function() {
-};
-tink__$Chunk_EmptyChunk.__name__ = true;
-tink__$Chunk_EmptyChunk.__super__ = tink_chunk_ChunkBase;
-tink__$Chunk_EmptyChunk.prototype = $extend(tink_chunk_ChunkBase.prototype,{
-	getLength: function() {
-		return 0;
-	}
-	,blitTo: function(target,offset) {
-	}
-	,toString: function() {
-		return "";
-	}
-	,toBytes: function() {
-		return tink__$Chunk_EmptyChunk.EMPTY;
-	}
-	,__class__: tink__$Chunk_EmptyChunk
-});
-var tink__$Chunk_CompoundChunk = function(left,right) {
-	this.left = left;
-	this.right = right;
-	this.split = left.getLength();
-	this.length = this.split + right.getLength();
-};
-tink__$Chunk_CompoundChunk.__name__ = true;
-tink__$Chunk_CompoundChunk.__super__ = tink_chunk_ChunkBase;
-tink__$Chunk_CompoundChunk.prototype = $extend(tink_chunk_ChunkBase.prototype,{
-	getLength: function() {
-		return this.length;
-	}
-	,blitTo: function(target,offset) {
-		this.left.blitTo(target,offset);
-		this.right.blitTo(target,offset + this.split);
-	}
-	,toString: function() {
-		return this.toBytes().toString();
-	}
-	,toBytes: function() {
-		var ret = new haxe_io_Bytes(new ArrayBuffer(this.length));
-		this.blitTo(ret,0);
 		return ret;
 	}
-	,__class__: tink__$Chunk_CompoundChunk
-});
-var tink__$Chunk_Chunk_$Impl_$ = {};
-tink__$Chunk_Chunk_$Impl_$.__name__ = true;
-tink__$Chunk_Chunk_$Impl_$.concat = function(this1,that) {
-	var _g = that.getLength();
-	if(this1.getLength() == 0) {
-		if(_g == 0) {
-			return tink__$Chunk_Chunk_$Impl_$.EMPTY;
+}
+tink_Anon.__name__ = true;
+class tink_core__$Callback_Callback_$Impl_$ {
+	static invoke(this1,data) {
+		if(tink_core__$Callback_Callback_$Impl_$.depth < 500) {
+			tink_core__$Callback_Callback_$Impl_$.depth++;
+			this1(data);
+			tink_core__$Callback_Callback_$Impl_$.depth--;
 		} else {
-			return that;
+			var _e = this1;
+			var f = function(data1) {
+				tink_core__$Callback_Callback_$Impl_$.invoke(_e,data1);
+			};
+			var data2 = data;
+			tink_core__$Callback_Callback_$Impl_$.defer(function() {
+				f(data2);
+			});
 		}
-	} else if(_g == 0) {
-		return this1;
-	} else {
-		return new tink__$Chunk_CompoundChunk(this1,that);
 	}
-};
-tink__$Chunk_Chunk_$Impl_$.catChunk = function(a,b) {
-	return tink__$Chunk_Chunk_$Impl_$.concat(a,b);
-};
-var tink__$Url_Url_$Impl_$ = {};
-tink__$Url_Url_$Impl_$.__name__ = true;
-tink__$Url_Url_$Impl_$.toString = function(this1) {
-	if(this1.scheme == null) {
-		return this1.payload;
-	} else {
-		return "" + this1.scheme + ":" + this1.payload;
+	static fromNiladic(f) {
+		return f;
 	}
-};
-tink__$Url_Url_$Impl_$.fromString = function(s) {
-	return tink__$Url_Url_$Impl_$.parse(s);
-};
-tink__$Url_Url_$Impl_$.noop = function(_) {
-};
-tink__$Url_Url_$Impl_$.parse = function(s,onError) {
-	if(s == null) {
-		return tink__$Url_Url_$Impl_$.parse("");
+	static defer(f) {
+		process.nextTick(f);
 	}
-	if(onError == null) {
-		onError = tink__$Url_Url_$Impl_$.noop;
-	}
-	s = StringTools.trim(s);
-	if(StringTools.startsWith(s,"data:")) {
-		var this1 = { scheme : "data", payload : HxOverrides.substr(s,5,null)};
-		return this1;
-	}
-	var FORMAT = new EReg("^(([a-zA-Z][a-zA-Z0-9\\-+.]*):)?((//(([^@/]+)@)?([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?)$","");
-	var HOST = new EReg("^(\\[(.*)\\]|([^:]*))(:(.*))?$","");
-	FORMAT.match(s);
-	var hosts;
-	var _g = FORMAT.matched(7);
-	if(_g == null) {
-		hosts = [];
-	} else {
-		var v = _g;
-		var _g1 = [];
-		var _g11 = 0;
-		var _g2 = v.split(",");
-		while(_g11 < _g2.length) {
-			var host = _g2[_g11];
-			++_g11;
-			HOST.match(host);
-			var host1;
-			var _g12 = HOST.matched(2);
-			var _g21 = HOST.matched(3);
-			if(_g12 == null) {
-				var ipv4 = _g21;
-				host1 = ipv4;
-			} else if(_g21 == null) {
-				var ipv6 = _g12;
-				host1 = "[" + ipv6 + "]";
-			} else {
-				onError("invalid host " + host);
-				host1 = null;
-			}
-			var port;
-			var _g3 = HOST.matched(5);
-			if(_g3 == null) {
-				port = null;
-			} else {
-				var v1 = _g3;
-				var _g31 = Std.parseInt(v1);
-				if(_g31 == null) {
-					onError("invalid port " + v1);
-					port = null;
-				} else {
-					var p = _g31;
-					port = p;
-				}
-			}
-			_g1.push(tink_url__$Host_Host_$Impl_$._new(host1,port));
-		}
-		hosts = _g1;
-	}
-	var path = FORMAT.matched(8);
-	if(hosts.length > 0 && path.charAt(0) != "/") {
-		path = "/" + path;
-	}
-	var this2 = { scheme : FORMAT.matched(2), payload : FORMAT.matched(3), host : hosts[0], hosts : hosts, auth : FORMAT.matched(6), path : tink_url__$Path_Path_$Impl_$.ofString(path), query : FORMAT.matched(10), hash : FORMAT.matched(12)};
-	return this2;
-};
-var tink_chunk_ByteChunk = function(data,from,to) {
-	this.data = data;
-	this.from = from;
-	this.to = to;
-};
-tink_chunk_ByteChunk.__name__ = true;
-tink_chunk_ByteChunk.of = function(b) {
-	if(b.length == 0) {
-		return tink__$Chunk_Chunk_$Impl_$.EMPTY;
-	}
-	var ret = new tink_chunk_ByteChunk(b.b.bufferValue,0,b.length);
-	ret.wrapped = b;
-	return ret;
-};
-tink_chunk_ByteChunk.__super__ = tink_chunk_ChunkBase;
-tink_chunk_ByteChunk.prototype = $extend(tink_chunk_ChunkBase.prototype,{
-	getLength: function() {
-		return this.to - this.from;
-	}
-	,blitTo: function(target,offset) {
-		if(this.wrapped == null) {
-			this.wrapped = haxe_io_Bytes.ofData(this.data);
-		}
-		target.blit(offset,this.wrapped,this.from,this.to - this.from);
-	}
-	,toBytes: function() {
-		if(this.wrapped == null) {
-			this.wrapped = haxe_io_Bytes.ofData(this.data);
-		}
-		return this.wrapped.sub(this.from,this.to - this.from);
-	}
-	,toString: function() {
-		if(this.wrapped == null) {
-			this.wrapped = haxe_io_Bytes.ofData(this.data);
-		}
-		return this.wrapped.getString(this.from,this.to - this.from);
-	}
-	,__class__: tink_chunk_ByteChunk
-});
-var tink_core_Annex = function(target) {
-	this.target = target;
-	this.registry = new haxe_ds_ObjectMap();
-};
-tink_core_Annex.__name__ = true;
-tink_core_Annex.prototype = {
-	__class__: tink_core_Annex
-};
-var tink_core__$Callback_Callback_$Impl_$ = {};
+}
 tink_core__$Callback_Callback_$Impl_$.__name__ = true;
-tink_core__$Callback_Callback_$Impl_$.invoke = function(this1,data) {
-	if(tink_core__$Callback_Callback_$Impl_$.depth < 500) {
-		tink_core__$Callback_Callback_$Impl_$.depth++;
-		this1(data);
-		tink_core__$Callback_Callback_$Impl_$.depth--;
-	} else {
-		var _e = this1;
-		var f = function(data1) {
-			tink_core__$Callback_Callback_$Impl_$.invoke(_e,data1);
-		};
-		var data2 = data;
-		tink_core__$Callback_Callback_$Impl_$.defer(function() {
-			f(data2);
-		});
+class tink_core__$Callback_SimpleLink {
+	constructor(f) {
+		this.f = f;
 	}
-};
-tink_core__$Callback_Callback_$Impl_$.fromNiladic = function(f) {
-	return f;
-};
-tink_core__$Callback_Callback_$Impl_$.defer = function(f) {
-	process.nextTick(f);
-};
-var tink_core__$Callback_SimpleLink = function(f) {
-	this.f = f;
-};
-tink_core__$Callback_SimpleLink.__name__ = true;
-tink_core__$Callback_SimpleLink.prototype = {
-	cancel: function() {
+	cancel() {
 		if(this.f != null) {
 			this.f();
 			this.f = null;
 		}
 	}
-	,__class__: tink_core__$Callback_SimpleLink
-};
-var tink_core__$Callback_ListCell = function(cb,list) {
-	if(cb == null) {
-		throw new js__$Boot_HaxeError("callback expected but null received");
+}
+tink_core__$Callback_SimpleLink.__name__ = true;
+Object.assign(tink_core__$Callback_SimpleLink.prototype, {
+	__class__: tink_core__$Callback_SimpleLink
+});
+class tink_core__$Callback_ListCell {
+	constructor(cb,list) {
+		if(cb == null) {
+			throw new js__$Boot_HaxeError("callback expected but null received");
+		}
+		this.cb = cb;
+		this.list = list;
 	}
-	this.cb = cb;
-	this.list = list;
-};
-tink_core__$Callback_ListCell.__name__ = true;
-tink_core__$Callback_ListCell.prototype = {
-	clear: function() {
+	clear() {
 		this.list = null;
 		this.cb = null;
 	}
-	,cancel: function() {
+	cancel() {
 		var _g = this.list;
 		if(_g != null) {
 			var v = _g;
@@ -1105,192 +673,99 @@ tink_core__$Callback_ListCell.prototype = {
 			HxOverrides.remove(v,this);
 		}
 	}
-	,__class__: tink_core__$Callback_ListCell
-};
-var tink_core__$Callback_CallbackList_$Impl_$ = {};
+}
+tink_core__$Callback_ListCell.__name__ = true;
+Object.assign(tink_core__$Callback_ListCell.prototype, {
+	__class__: tink_core__$Callback_ListCell
+});
+class tink_core__$Callback_CallbackList_$Impl_$ {
+	static add(this1,cb) {
+		var node = new tink_core__$Callback_ListCell(cb,this1);
+		this1.push(node);
+		return node;
+	}
+	static invoke(this1,data) {
+		var _g = 0;
+		var _g1 = this1.slice();
+		while(_g < _g1.length) {
+			var cell = _g1[_g];
+			++_g;
+			if(cell.cb != null) {
+				tink_core__$Callback_Callback_$Impl_$.invoke(cell.cb,data);
+			}
+		}
+	}
+	static clear(this1) {
+		var _g = 0;
+		var _g1 = this1.splice(0,this1.length);
+		while(_g < _g1.length) {
+			var cell = _g1[_g];
+			++_g;
+			cell.clear();
+		}
+	}
+}
 tink_core__$Callback_CallbackList_$Impl_$.__name__ = true;
-tink_core__$Callback_CallbackList_$Impl_$.add = function(this1,cb) {
-	var node = new tink_core__$Callback_ListCell(cb,this1);
-	this1.push(node);
-	return node;
-};
-tink_core__$Callback_CallbackList_$Impl_$.invoke = function(this1,data) {
-	var _g = 0;
-	var _g1 = this1.slice();
-	while(_g < _g1.length) {
-		var cell = _g1[_g];
-		++_g;
-		if(cell.cb != null) {
-			tink_core__$Callback_Callback_$Impl_$.invoke(cell.cb,data);
-		}
-	}
-};
-tink_core__$Callback_CallbackList_$Impl_$.clear = function(this1) {
-	var _g = 0;
-	var _g1 = this1.splice(0,this1.length);
-	while(_g < _g1.length) {
-		var cell = _g1[_g];
-		++_g;
-		cell.clear();
-	}
-};
-var tink_core_TypedError = function(code,message,pos) {
-	if(code == null) {
-		code = 500;
-	}
-	this.isTinkError = true;
-	this.code = code;
-	this.message = message;
-	this.pos = pos;
-	this.exceptionStack = [];
-	this.callStack = [];
-};
+class tink_core_TypedError {
+}
 tink_core_TypedError.__name__ = true;
-tink_core_TypedError.withData = function(code,message,data,pos) {
-	return tink_core_TypedError.typed(code,message,data,pos);
-};
-tink_core_TypedError.typed = function(code,message,data,pos) {
-	var ret = new tink_core_TypedError(code,message,pos);
-	ret.data = data;
-	return ret;
-};
-tink_core_TypedError.asError = function(v) {
-	if(v != null && v.isTinkError) {
-		return v;
-	} else {
-		return null;
-	}
-};
-tink_core_TypedError.catchExceptions = function(f,report,pos) {
-	try {
-		return tink_core_Outcome.Success(f());
-	} catch( e ) {
-		var e1 = ((e) instanceof js__$Boot_HaxeError) ? e.val : e;
-		var _g = tink_core_TypedError.asError(e1);
-		var tmp;
-		if(_g == null) {
-			tmp = report == null ? tink_core_TypedError.withData(null,"Unexpected Error",e1,pos) : report(e1);
-		} else {
-			var e2 = _g;
-			tmp = e2;
-		}
-		return tink_core_Outcome.Failure(tmp);
-	}
-};
-tink_core_TypedError.prototype = {
-	printPos: function() {
-		return this.pos.className + "." + this.pos.methodName + ":" + this.pos.lineNumber;
-	}
-	,toString: function() {
-		var ret = "Error#" + this.code + ": " + this.message;
-		if(this.pos != null) {
-			ret += " @ " + this.printPos();
-		}
-		return ret;
-	}
-	,throwSelf: function() {
-		var any = this;
-		throw js__$Boot_HaxeError.wrap(any);
-	}
-	,__class__: tink_core_TypedError
-};
 var tink_core_Noise = $hxEnums["tink.core.Noise"] = { __ename__ : true, __constructs__ : ["Noise"]
 	,Noise: {_hx_index:0,__enum__:"tink.core.Noise",toString:$estr}
 };
-var tink_core__$Lazy_LazyConst = function(value) {
-	this.value = value;
-};
-tink_core__$Lazy_LazyConst.__name__ = true;
-tink_core__$Lazy_LazyConst.prototype = {
-	get: function() {
+class tink_core__$Lazy_LazyConst {
+	constructor(value) {
+		this.value = value;
+	}
+	get() {
 		return this.value;
 	}
-	,map: function(f) {
+	map(f) {
 		var _gthis = this;
 		return new tink_core__$Lazy_LazyFunc(function() {
 			return f(_gthis.value);
 		});
 	}
-	,__class__: tink_core__$Lazy_LazyConst
-};
-var tink_core__$Future_SyncFuture = function(value) {
-	this.value = value;
-};
-tink_core__$Future_SyncFuture.__name__ = true;
-tink_core__$Future_SyncFuture.prototype = {
-	map: function(f) {
-		return new tink_core__$Future_SyncFuture(this.value.map(f));
+}
+tink_core__$Lazy_LazyConst.__name__ = true;
+Object.assign(tink_core__$Lazy_LazyConst.prototype, {
+	__class__: tink_core__$Lazy_LazyConst
+});
+class tink_core__$Future_SyncFuture {
+	constructor(value) {
+		this.value = value;
 	}
-	,flatMap: function(f) {
+	flatMap(f) {
 		var l = this.value.map(f);
 		return new tink_core__$Future_SimpleFuture(function(cb) {
 			return l.get().handle(cb);
 		});
 	}
-	,handle: function(cb) {
+	handle(cb) {
 		tink_core__$Callback_Callback_$Impl_$.invoke(cb,this.value.get());
 		return null;
 	}
-	,gather: function() {
+	gather() {
 		return this;
 	}
-	,__class__: tink_core__$Future_SyncFuture
-};
-var tink_core__$Future_Future_$Impl_$ = {};
+}
+tink_core__$Future_SyncFuture.__name__ = true;
+Object.assign(tink_core__$Future_SyncFuture.prototype, {
+	__class__: tink_core__$Future_SyncFuture
+});
+class tink_core__$Future_Future_$Impl_$ {
+	static flatten(f) {
+		return new tink_core__$Future_NestedFuture(f);
+	}
+}
 tink_core__$Future_Future_$Impl_$.__name__ = true;
-tink_core__$Future_Future_$Impl_$.first = function(this1,other) {
-	var ret = new tink_core_FutureTrigger();
-	var l1 = this1.handle($bind(ret,ret.trigger));
-	var l2 = other.handle($bind(ret,ret.trigger));
-	var ret1 = ret;
-	if(l1 != null) {
-		var this2 = l1;
-		ret1.handle(function(_) {
-			this2.cancel();
-		});
+class tink_core__$Future_SimpleFuture {
+	constructor(f) {
+		this.f = f;
 	}
-	if(l2 != null) {
-		var this3 = l2;
-		ret1.handle(function(_1) {
-			this3.cancel();
-		});
-	}
-	return ret1;
-};
-tink_core__$Future_Future_$Impl_$.flatten = function(f) {
-	return new tink_core__$Future_NestedFuture(f);
-};
-tink_core__$Future_Future_$Impl_$.async = function(f,lazy) {
-	if(lazy == null) {
-		lazy = false;
-	}
-	if(lazy) {
-		return new tink_core__$Future_LazyTrigger(f);
-	} else {
-		var op = new tink_core_FutureTrigger();
-		var wrapped = f;
-		tink_core__$Callback_Callback_$Impl_$.invoke(wrapped,$bind(op,op.trigger));
-		return op;
-	}
-};
-var tink_core__$Future_SimpleFuture = function(f) {
-	this.f = f;
-};
-tink_core__$Future_SimpleFuture.__name__ = true;
-tink_core__$Future_SimpleFuture.prototype = {
-	handle: function(callback) {
+	handle(callback) {
 		return this.f(callback);
 	}
-	,map: function(f) {
-		var _gthis = this;
-		return new tink_core__$Future_SimpleFuture(function(cb) {
-			return _gthis.f(function(v) {
-				var tmp = f(v);
-				tink_core__$Callback_Callback_$Impl_$.invoke(cb,tmp);
-			});
-		});
-	}
-	,flatMap: function(f) {
+	flatMap(f) {
 		var f1 = f;
 		var _gthis = this;
 		return tink_core__$Future_Future_$Impl_$.flatten(new tink_core__$Future_SimpleFuture(function(cb) {
@@ -1300,42 +775,37 @@ tink_core__$Future_SimpleFuture.prototype = {
 			});
 		}));
 	}
-	,gather: function() {
+	gather() {
 		if(this.gathered != null) {
 			return this.gathered;
 		} else {
 			return this.gathered = tink_core_FutureTrigger.gatherFuture(this);
 		}
 	}
-	,__class__: tink_core__$Future_SimpleFuture
-};
-var tink_core__$Future_NestedFuture = function(outer) {
-	this.outer = outer;
-};
-tink_core__$Future_NestedFuture.__name__ = true;
-tink_core__$Future_NestedFuture.prototype = {
-	map: function(f) {
-		var ret = this.outer.flatMap(function(inner) {
-			var ret1 = inner.map(f);
-			return ret1.gather();
-		});
-		return ret.gather();
+}
+tink_core__$Future_SimpleFuture.__name__ = true;
+Object.assign(tink_core__$Future_SimpleFuture.prototype, {
+	__class__: tink_core__$Future_SimpleFuture
+});
+class tink_core__$Future_NestedFuture {
+	constructor(outer) {
+		this.outer = outer;
 	}
-	,flatMap: function(f) {
+	flatMap(f) {
 		var ret = this.outer.flatMap(function(inner) {
 			var ret1 = inner.flatMap(f);
 			return ret1.gather();
 		});
 		return ret.gather();
 	}
-	,gather: function() {
+	gather() {
 		if(this.gathered != null) {
 			return this.gathered;
 		} else {
 			return this.gathered = tink_core_FutureTrigger.gatherFuture(this);
 		}
 	}
-	,handle: function(cb) {
+	handle(cb) {
 		var ret = null;
 		ret = this.outer.handle(function(inner) {
 			ret = inner.handle(function(result) {
@@ -1344,27 +814,17 @@ tink_core__$Future_NestedFuture.prototype = {
 		});
 		return ret;
 	}
-	,__class__: tink_core__$Future_NestedFuture
-};
-var tink_core_FutureTrigger = function() {
-	var this1 = [];
-	this.list = this1;
-};
-tink_core_FutureTrigger.__name__ = true;
-tink_core_FutureTrigger.gatherFuture = function(f) {
-	var op = null;
-	var this1 = new tink_core__$Future_SimpleFuture(function(cb) {
-		if(op == null) {
-			op = new tink_core_FutureTrigger();
-			f.handle($bind(op,op.trigger));
-			f = null;
-		}
-		return op.handle(cb);
-	});
-	return this1;
-};
-tink_core_FutureTrigger.prototype = {
-	handle: function(callback) {
+}
+tink_core__$Future_NestedFuture.__name__ = true;
+Object.assign(tink_core__$Future_NestedFuture.prototype, {
+	__class__: tink_core__$Future_NestedFuture
+});
+class tink_core_FutureTrigger {
+	constructor() {
+		var this1 = [];
+		this.list = this1;
+	}
+	handle(callback) {
 		var _g = this.list;
 		if(_g == null) {
 			tink_core__$Callback_Callback_$Impl_$.invoke(callback,this.result);
@@ -1374,21 +834,7 @@ tink_core_FutureTrigger.prototype = {
 			return tink_core__$Callback_CallbackList_$Impl_$.add(v,callback);
 		}
 	}
-	,map: function(f) {
-		var _g = this.list;
-		if(_g == null) {
-			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(f(this.result)));
-		} else {
-			var v = _g;
-			var ret = new tink_core_FutureTrigger();
-			tink_core__$Callback_CallbackList_$Impl_$.add(this.list,function(v1) {
-				var tmp = f(v1);
-				ret.trigger(tmp);
-			});
-			return ret;
-		}
-	}
-	,flatMap: function(f) {
+	flatMap(f) {
 		var _g = this.list;
 		if(_g == null) {
 			return f(this.result);
@@ -1401,10 +847,10 @@ tink_core_FutureTrigger.prototype = {
 			return ret;
 		}
 	}
-	,gather: function() {
+	gather() {
 		return this;
 	}
-	,trigger: function(result) {
+	trigger(result) {
 		if(this.list == null) {
 			return false;
 		} else {
@@ -1416,1695 +862,452 @@ tink_core_FutureTrigger.prototype = {
 			return true;
 		}
 	}
-	,__class__: tink_core_FutureTrigger
-};
-var tink_core__$Future_LazyTrigger = function(op) {
-	this.op = op;
-	tink_core_FutureTrigger.call(this);
-};
-tink_core__$Future_LazyTrigger.__name__ = true;
-tink_core__$Future_LazyTrigger.__super__ = tink_core_FutureTrigger;
-tink_core__$Future_LazyTrigger.prototype = $extend(tink_core_FutureTrigger.prototype,{
-	eager: function() {
-		if(this.op != null) {
-			var op = this.op;
-			this.op = null;
-			tink_core__$Callback_Callback_$Impl_$.invoke(op,$bind(this,this.trigger));
-		}
-		return this;
+	static gatherFuture(f) {
+		var op = null;
+		var this1 = new tink_core__$Future_SimpleFuture(function(cb) {
+			if(op == null) {
+				op = new tink_core_FutureTrigger();
+				f.handle($bind(op,op.trigger));
+				f = null;
+			}
+			return op.handle(cb);
+		});
+		return this1;
 	}
-	,map: function(f) {
-		var _gthis = this;
-		if(this.op == null) {
-			return tink_core_FutureTrigger.prototype.map.call(this,f);
-		} else {
-			return tink_core__$Future_Future_$Impl_$.async(function(cb) {
-				_gthis.handle(function(v) {
-					var tmp = f(v);
-					cb(tmp);
-				});
-			},true);
-		}
-	}
-	,flatMap: function(f) {
-		var _gthis = this;
-		if(this.op == null) {
-			return tink_core_FutureTrigger.prototype.flatMap.call(this,f);
-		} else {
-			return tink_core__$Future_Future_$Impl_$.async(function(cb) {
-				_gthis.handle(function(v) {
-					f(v).handle(cb);
-				});
-			},true);
-		}
-	}
-	,handle: function(cb) {
-		this.eager();
-		return tink_core_FutureTrigger.prototype.handle.call(this,cb);
-	}
-	,__class__: tink_core__$Future_LazyTrigger
+}
+tink_core_FutureTrigger.__name__ = true;
+Object.assign(tink_core_FutureTrigger.prototype, {
+	__class__: tink_core_FutureTrigger
 });
-var tink_core__$Lazy_LazyFunc = function(f) {
-	this.f = f;
-};
-tink_core__$Lazy_LazyFunc.__name__ = true;
-tink_core__$Lazy_LazyFunc.prototype = {
-	get: function() {
+class tink_core__$Lazy_LazyFunc {
+	constructor(f) {
+		this.f = f;
+	}
+	get() {
 		if(this.f != null) {
 			this.result = this.f();
 			this.f = null;
 		}
 		return this.result;
 	}
-	,map: function(f) {
+	map(f) {
 		var _gthis = this;
 		return new tink_core__$Lazy_LazyFunc(function() {
 			var tmp = _gthis.get();
 			return f(tmp);
 		});
 	}
-	,__class__: tink_core__$Lazy_LazyFunc
-};
-var tink_core_NamedWith = function(name,value) {
-	this.name = name;
-	this.value = value;
-};
+}
+tink_core__$Lazy_LazyFunc.__name__ = true;
+Object.assign(tink_core__$Lazy_LazyFunc.prototype, {
+	__class__: tink_core__$Lazy_LazyFunc
+});
+class tink_core_NamedWith {
+	constructor(name,value) {
+		this.name = name;
+		this.value = value;
+	}
+}
 tink_core_NamedWith.__name__ = true;
-tink_core_NamedWith.prototype = {
+Object.assign(tink_core_NamedWith.prototype, {
 	__class__: tink_core_NamedWith
-};
+});
 var tink_core_Outcome = $hxEnums["tink.core.Outcome"] = { __ename__ : true, __constructs__ : ["Success","Failure"]
 	,Success: ($_=function(data) { return {_hx_index:0,data:data,__enum__:"tink.core.Outcome",toString:$estr}; },$_.__params__ = ["data"],$_)
 	,Failure: ($_=function(failure) { return {_hx_index:1,failure:failure,__enum__:"tink.core.Outcome",toString:$estr}; },$_.__params__ = ["failure"],$_)
 };
-var tink_core_MPair = function(a,b) {
-	this.a = a;
-	this.b = b;
-};
+class tink_core_MPair {
+	constructor(a,b) {
+		this.a = a;
+		this.b = b;
+	}
+}
 tink_core_MPair.__name__ = true;
-tink_core_MPair.prototype = {
+Object.assign(tink_core_MPair.prototype, {
 	__class__: tink_core_MPair
-};
-var tink_core__$Promise_Promise_$Impl_$ = {};
-tink_core__$Promise_Promise_$Impl_$.__name__ = true;
-tink_core__$Promise_Promise_$Impl_$.next = function(this1,f,gather) {
-	if(gather == null) {
-		gather = true;
-	}
-	var ret = this1.flatMap(function(o) {
-		switch(o._hx_index) {
-		case 0:
-			var d = o.data;
-			return f(d);
-		case 1:
-			var f1 = o.failure;
-			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Failure(f1)));
+});
+class tink_core__$Promise_Promise_$Impl_$ {
+	static next(this1,f,gather) {
+		if(gather == null) {
+			gather = true;
 		}
-	});
-	if(gather) {
-		return ret.gather();
-	} else {
-		return ret;
-	}
-};
-var tink_core__$Signal_Signal_$Impl_$ = {};
-tink_core__$Signal_Signal_$Impl_$.__name__ = true;
-tink_core__$Signal_Signal_$Impl_$.trigger = function() {
-	return new tink_core_SignalTrigger();
-};
-var tink_core_SignalTrigger = function() {
-	this.handlers = [];
-};
-tink_core_SignalTrigger.__name__ = true;
-tink_core_SignalTrigger.prototype = {
-	__class__: tink_core_SignalTrigger
-};
-var tink_http_Header = function(fields) {
-	var tmp;
-	if(fields == null) {
-		tmp = [];
-	} else {
-		var v = fields;
-		tmp = v;
-	}
-	this.fields = tmp;
-};
-tink_http_Header.__name__ = true;
-tink_http_Header.prototype = {
-	__class__: tink_http_Header
-};
-var tink_http_HeaderField = function(name,value) {
-	tink_core_NamedWith.call(this,name,value);
-};
-tink_http_HeaderField.__name__ = true;
-tink_http_HeaderField.__super__ = tink_core_NamedWith;
-tink_http_HeaderField.prototype = $extend(tink_core_NamedWith.prototype,{
-	__class__: tink_http_HeaderField
-});
-var tink_http_Message = function(header,body) {
-	this.header = header;
-	this.body = body;
-};
-tink_http_Message.__name__ = true;
-tink_http_Message.prototype = {
-	__class__: tink_http_Message
-};
-var tink_http_RequestHeader = function(method,url,protocol,fields) {
-	if(protocol == null) {
-		protocol = "HTTP/1.1";
-	}
-	this.method = method;
-	this.url = url;
-	this.protocol = protocol;
-	tink_http_Header.call(this,fields);
-};
-tink_http_RequestHeader.__name__ = true;
-tink_http_RequestHeader.__super__ = tink_http_Header;
-tink_http_RequestHeader.prototype = $extend(tink_http_Header.prototype,{
-	__class__: tink_http_RequestHeader
-});
-var tink_http_OutgoingRequestHeader = function(method,url,protocol,fields) {
-	tink_http_RequestHeader.call(this,method,url,protocol,fields);
-};
-tink_http_OutgoingRequestHeader.__name__ = true;
-tink_http_OutgoingRequestHeader.__super__ = tink_http_RequestHeader;
-tink_http_OutgoingRequestHeader.prototype = $extend(tink_http_RequestHeader.prototype,{
-	__class__: tink_http_OutgoingRequestHeader
-});
-var tink_http_OutgoingRequest = function(header,body) {
-	tink_http_Message.call(this,header,body);
-};
-tink_http_OutgoingRequest.__name__ = true;
-tink_http_OutgoingRequest.__super__ = tink_http_Message;
-tink_http_OutgoingRequest.prototype = $extend(tink_http_Message.prototype,{
-	__class__: tink_http_OutgoingRequest
-});
-var tink_http_ResponseHeaderBase = function(statusCode,reason,fields,protocol) {
-	if(protocol == null) {
-		protocol = "HTTP/1.1";
-	}
-	this.statusCode = statusCode;
-	var tmp;
-	if(reason == null) {
-		var this1 = httpstatus__$HttpStatusMessage_HttpStatusMessage_$Impl_$.fromCode(statusCode);
-		tmp = this1;
-	} else {
-		tmp = reason;
-	}
-	this.reason = tmp;
-	this.protocol = protocol;
-	tink_http_Header.call(this,fields);
-};
-tink_http_ResponseHeaderBase.__name__ = true;
-tink_http_ResponseHeaderBase.__super__ = tink_http_Header;
-tink_http_ResponseHeaderBase.prototype = $extend(tink_http_Header.prototype,{
-	__class__: tink_http_ResponseHeaderBase
-});
-var tink_http_IncomingResponse = function(header,body) {
-	tink_http_Message.call(this,header,body);
-};
-tink_http_IncomingResponse.__name__ = true;
-tink_http_IncomingResponse.__super__ = tink_http_Message;
-tink_http_IncomingResponse.prototype = $extend(tink_http_Message.prototype,{
-	__class__: tink_http_IncomingResponse
-});
-var tink_http_clients_NodeClient = function() {
-};
-tink_http_clients_NodeClient.__name__ = true;
-tink_http_clients_NodeClient.prototype = {
-	request: function(req) {
-		var req1 = req.header.method;
-		var this1 = req.header.url;
-		var options = this1.query == null ? this1.path : this1.path + "?" + this1.query;
-		var options1 = tink_url__$Host_Host_$Impl_$.get_name(req.header.url.host);
-		var options2 = tink_url__$Host_Host_$Impl_$.get_port(req.header.url.host);
-		var this2 = { };
-		var map = this2;
-		var h = HxOverrides.iter(req.header.fields);
-		while(h.hasNext()) {
-			var h1 = h.next();
-			map[h1.name] = h1.value;
-		}
-		var options3 = { method : req1, path : options, host : options1, port : options2, headers : map, agent : false};
-		return this.nodeRequest(js_node_Http,options3,req);
-	}
-	,nodeRequest: function(agent,options,req) {
-		return tink_core__$Future_Future_$Impl_$.async(function(cb) {
-			var fwd = agent.request(options,function(msg) {
-				var statusCode = msg.statusCode;
-				var reason = msg.statusMessage;
-				var _g = [];
-				var _g1 = 0;
-				var _g2 = msg.rawHeaders.length >> 1;
-				while(_g1 < _g2) {
-					var i = _g1++;
-					var this1 = msg.rawHeaders[2 * i].toLowerCase();
-					_g.push(new tink_http_HeaderField(this1,msg.rawHeaders[2 * i + 1]));
-				}
-				var this2 = new tink_http_ResponseHeaderBase(statusCode,reason,_g,"HTTP/1.1");
-				var name = "Response from " + tink__$Url_Url_$Impl_$.toString(req.header.url);
-				var options1 = null;
-				if(options1 == null) {
-					options1 = { };
-				}
-				var fwd1 = tink_core_Outcome.Success(new tink_http_IncomingResponse(this2,tink_io_nodejs_NodejsSource.wrap(name,msg,options1.chunkSize,options1.onEnd)));
-				cb(fwd1);
-			});
-			var fail = function(e) {
-				cb(tink_core_Outcome.Failure(e));
-			};
-			fwd.on("error",function(e1) {
-				var tmp = tink_core_TypedError.withData(null,e1.message,e1,{ fileName : "tink/http/clients/NodeClient.hx", lineNumber : 58, className : "tink.http.clients.NodeClient", methodName : "nodeRequest"});
-				fail(tmp);
-			});
-			tink_io__$Source_Source_$Impl_$.pipeTo(req.body,tink_io_nodejs_NodejsSink.wrap("Request to " + tink__$Url_Url_$Impl_$.toString(req.header.url),fwd)).handle(function(res) {
-				fwd.end();
-				switch(res._hx_index) {
-				case 0:
-					break;
-				case 1:
-					var _g3 = res.rest;
-					var _g21 = res.result;
-					fail(new tink_core_TypedError(502,"Gateway Error",{ fileName : "tink/http/clients/NodeClient.hx", lineNumber : 67, className : "tink.http.clients.NodeClient", methodName : "nodeRequest"}));
-					break;
-				case 2:
-					var _g11 = res.rest;
-					var e2 = res.e;
-					fail(e2);
-					break;
-				}
-			});
-		});
-	}
-	,__class__: tink_http_clients_NodeClient
-};
-var tink_io_PipeResult = $hxEnums["tink.io.PipeResult"] = { __ename__ : true, __constructs__ : ["AllWritten","SinkEnded","SinkFailed","SourceFailed"]
-	,AllWritten: {_hx_index:0,__enum__:"tink.io.PipeResult",toString:$estr}
-	,SinkEnded: ($_=function(result,rest) { return {_hx_index:1,result:result,rest:rest,__enum__:"tink.io.PipeResult",toString:$estr}; },$_.__params__ = ["result","rest"],$_)
-	,SinkFailed: ($_=function(e,rest) { return {_hx_index:2,e:e,rest:rest,__enum__:"tink.io.PipeResult",toString:$estr}; },$_.__params__ = ["e","rest"],$_)
-	,SourceFailed: ($_=function(e) { return {_hx_index:3,e:e,__enum__:"tink.io.PipeResult",toString:$estr}; },$_.__params__ = ["e"],$_)
-};
-var tink_io_PipeResultTools = function() { };
-tink_io_PipeResultTools.__name__ = true;
-tink_io_PipeResultTools.toResult = function(c,result,buffered) {
-	var mk = function(s) {
-		if(buffered == null) {
-			return s;
-		} else {
-			var v = buffered;
-			return s.prepend(new tink_streams_Single(new tink_core__$Lazy_LazyConst(v)));
-		}
-	};
-	switch(c._hx_index) {
-	case 0:
-		var rest = c.rest;
-		return tink_io_PipeResult.SinkEnded(result,mk(rest));
-	case 1:
-		var rest1 = c.at;
-		var e = c.error;
-		return tink_io_PipeResult.SinkFailed(e,mk(rest1));
-	case 2:
-		var e1 = c.error;
-		return tink_io_PipeResult.SourceFailed(e1);
-	case 3:
-		return tink_io_PipeResult.AllWritten;
-	}
-};
-var tink_io_SinkBase = function() { };
-tink_io_SinkBase.__name__ = true;
-tink_io_SinkBase.prototype = {
-	consume: function(source,options) {
-		throw new js__$Boot_HaxeError("not implemented");
-	}
-	,__class__: tink_io_SinkBase
-};
-var tink_streams_StreamBase = function() {
-};
-tink_streams_StreamBase.__name__ = true;
-tink_streams_StreamBase.prototype = {
-	get_depleted: function() {
-		return false;
-	}
-	,prepend: function(other) {
-		if(this.get_depleted()) {
-			return other;
-		} else {
-			return tink_streams__$Stream_CompoundStream.of([other,this]);
-		}
-	}
-	,decompose: function(into) {
-		if(!this.get_depleted()) {
-			into.push(this);
-		}
-	}
-	,reduce: function(initial,reducer) {
-		var _gthis = this;
-		return tink_core__$Future_Future_$Impl_$.async(function(cb) {
-			_gthis.forEach(tink_streams__$Stream_Handler_$Impl_$.ofUnknown(function(item) {
-				var ret = reducer(initial,item).map(function(o) {
-					switch(o._hx_index) {
-					case 0:
-						var v = o.result;
-						initial = v;
-						return tink_streams_Handled.Resume;
-					case 1:
-						var e = o.e;
-						return tink_streams_Handled.Clog(e);
-					}
-				});
-				return ret.gather();
-			})).handle(function(c) {
-				switch(c._hx_index) {
-				case 0:
-					var _g3 = c.rest;
-					throw new js__$Boot_HaxeError("assert");
-				case 1:
-					var rest = c.at;
-					var e1 = c.error;
-					cb(tink_streams_Reduction.Crashed(e1,rest));
-					break;
-				case 2:
-					var e2 = c.error;
-					cb(tink_streams_Reduction.Failed(e2));
-					break;
-				case 3:
-					cb(tink_streams_Reduction.Reduced(initial));
-					break;
-				}
-			});
-		},true);
-	}
-	,forEach: function(handler) {
-		throw new js__$Boot_HaxeError("not implemented");
-	}
-	,__class__: tink_streams_StreamBase
-};
-var tink_streams_Empty = function() {
-	tink_streams_StreamBase.call(this);
-};
-tink_streams_Empty.__name__ = true;
-tink_streams_Empty.__super__ = tink_streams_StreamBase;
-tink_streams_Empty.prototype = $extend(tink_streams_StreamBase.prototype,{
-	get_depleted: function() {
-		return true;
-	}
-	,forEach: function(handler) {
-		return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_streams_Conclusion.Depleted));
-	}
-	,__class__: tink_streams_Empty
-});
-var tink_io__$Source_Source_$Impl_$ = {};
-tink_io__$Source_Source_$Impl_$.__name__ = true;
-tink_io__$Source_Source_$Impl_$.concatAll = function(s) {
-	return s.reduce(tink__$Chunk_Chunk_$Impl_$.EMPTY,tink_streams__$Stream_Reducer_$Impl_$.ofSafe(function(res,cur) {
-		return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_streams_ReductionStep.Progress(tink__$Chunk_Chunk_$Impl_$.catChunk(res,cur))));
-	}));
-};
-tink_io__$Source_Source_$Impl_$.pipeTo = function(this1,target,options) {
-	return target.consume(this1,options);
-};
-var tink_io_RealSourceTools = function() { };
-tink_io_RealSourceTools.__name__ = true;
-tink_io_RealSourceTools.all = function(s) {
-	var ret = tink_io__$Source_Source_$Impl_$.concatAll(s).map(function(o) {
-		switch(o._hx_index) {
-		case 1:
-			var e = o.error;
-			return tink_core_Outcome.Failure(e);
-		case 2:
-			var c = o.result;
-			return tink_core_Outcome.Success(c);
-		}
-	});
-	return ret.gather();
-};
-var tink_streams_Generator = function(upcoming) {
-	tink_streams_StreamBase.call(this);
-	this.upcoming = upcoming;
-};
-tink_streams_Generator.__name__ = true;
-tink_streams_Generator.__super__ = tink_streams_StreamBase;
-tink_streams_Generator.prototype = $extend(tink_streams_StreamBase.prototype,{
-	forEach: function(handler) {
-		var _gthis = this;
-		return tink_core__$Future_Future_$Impl_$.async(function(cb) {
-			_gthis.upcoming.handle(function(e) {
-				switch(e._hx_index) {
-				case 0:
-					var then = e.next;
-					var v = e.value;
-					handler(v).handle(function(s) {
-						switch(s._hx_index) {
-						case 0:
-							cb(tink_streams_Conclusion.Halted(_gthis));
-							break;
-						case 1:
-							cb(tink_streams_Conclusion.Halted(then));
-							break;
-						case 2:
-							then.forEach(handler).handle(cb);
-							break;
-						case 3:
-							var e1 = s.e;
-							cb(tink_streams_Conclusion.Clogged(e1,_gthis));
-							break;
-						}
-					});
-					break;
-				case 1:
-					var e2 = e.e;
-					cb(tink_streams_Conclusion.Failed(e2));
-					break;
-				case 2:
-					cb(tink_streams_Conclusion.Depleted);
-					break;
-				}
-			});
-		},true);
-	}
-	,__class__: tink_streams_Generator
-});
-var tink_io_nodejs_NodejsSink = function(target) {
-	this.target = target;
-};
-tink_io_nodejs_NodejsSink.__name__ = true;
-tink_io_nodejs_NodejsSink.wrap = function(name,native) {
-	return new tink_io_nodejs_NodejsSink(new tink_io_nodejs_WrappedWritable(name,native));
-};
-tink_io_nodejs_NodejsSink.__super__ = tink_io_SinkBase;
-tink_io_nodejs_NodejsSink.prototype = $extend(tink_io_SinkBase.prototype,{
-	consume: function(source,options) {
-		var _gthis = this;
-		var ret = source.forEach(tink_streams__$Stream_Handler_$Impl_$.ofUnknown(function(c) {
-			var ret1 = _gthis.target.write(c).map(function(w) {
-				switch(w._hx_index) {
-				case 0:
-					switch(w.data) {
-					case false:
-						return tink_streams_Handled.BackOff;
-					case true:
-						return tink_streams_Handled.Resume;
-					}
-					break;
-				case 1:
-					var e = w.failure;
-					return tink_streams_Handled.Clog(e);
-				}
-			});
-			return ret1.gather();
-		}));
-		if(options != null && options.end) {
-			ret.handle(function(end) {
-				_gthis.target.end();
-			});
-		}
-		var ret2 = ret.map(function(c1) {
-			return tink_io_PipeResultTools.toResult(c1,tink_core_Noise.Noise);
-		});
-		return ret2.gather();
-	}
-	,__class__: tink_io_nodejs_NodejsSink
-});
-var tink_io_nodejs_NodejsSource = function(target) {
-	tink_streams_Generator.call(this,tink_core__$Future_Future_$Impl_$.async(function(cb) {
-		target.read().handle(function(o) {
-			var tmp;
+		var ret = this1.flatMap(function(o) {
 			switch(o._hx_index) {
 			case 0:
-				var _g = o.data;
-				if(_g == null) {
-					tmp = tink_streams_Step.End;
-				} else {
-					var chunk = _g;
-					tmp = tink_streams_Step.Link(chunk,new tink_io_nodejs_NodejsSource(target));
-				}
-				break;
+				var d = o.data;
+				return f(d);
 			case 1:
-				var e = o.failure;
-				tmp = tink_streams_Step.Fail(e);
-				break;
+				var f1 = o.failure;
+				return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Failure(f1)));
 			}
-			cb(tmp);
 		});
-	},true));
-};
-tink_io_nodejs_NodejsSource.__name__ = true;
-tink_io_nodejs_NodejsSource.wrap = function(name,native,chunkSize,onEnd) {
-	return new tink_io_nodejs_NodejsSource(new tink_io_nodejs_WrappedReadable(name,native,chunkSize,onEnd));
-};
-tink_io_nodejs_NodejsSource.__super__ = tink_streams_Generator;
-tink_io_nodejs_NodejsSource.prototype = $extend(tink_streams_Generator.prototype,{
-	__class__: tink_io_nodejs_NodejsSource
+		if(gather) {
+			return ret.gather();
+		} else {
+			return ret;
+		}
+	}
+}
+tink_core__$Promise_Promise_$Impl_$.__name__ = true;
+class tink_core__$Signal_Signal_$Impl_$ {
+	static trigger() {
+		return new tink_core_SignalTrigger();
+	}
+}
+tink_core__$Signal_Signal_$Impl_$.__name__ = true;
+class tink_core_SignalTrigger {
+	constructor() {
+		this.handlers = [];
+	}
+}
+tink_core_SignalTrigger.__name__ = true;
+Object.assign(tink_core_SignalTrigger.prototype, {
+	__class__: tink_core_SignalTrigger
 });
-var tink_io_nodejs_WrappedBuffer = function(buffer) {
-	this.buffer = buffer;
-};
-tink_io_nodejs_WrappedBuffer.__name__ = true;
-tink_io_nodejs_WrappedBuffer.prototype = {
-	getLength: function() {
-		return this.buffer.length;
-	}
-	,toString: function() {
-		return this.buffer.toString();
-	}
-	,toBytes: function() {
-		var copy = tink_io_nodejs_WrappedBuffer.alloc(this.buffer.length);
-		this.buffer.copy(copy);
-		return js_node_buffer__$Buffer_Helper.bytesOfBuffer(copy);
-	}
-	,blitTo: function(target,offset) {
-		var data = target.b;
-		this.buffer.copy(js_node_buffer_Buffer.from(data.buffer,data.byteOffset,target.length),offset);
-		return;
-	}
-	,__class__: tink_io_nodejs_WrappedBuffer
-};
-var tink_io_nodejs_WrappedReadable = function(name,native,chunkSize,onEnd) {
-	this.name = name;
-	this.native = native;
-	this.chunkSize = chunkSize;
-	this.end = tink_core__$Future_Future_$Impl_$.async(function(cb) {
-		native.once("end",function() {
-			cb(tink_core_Outcome.Success(null));
-		});
-		native.once("error",function(e) {
-			var tmp = tink_core_Outcome.Failure(new tink_core_TypedError(null,"" + e.code + " - Failed reading from " + name + " because " + e.message,{ fileName : "tink/io/nodejs/WrappedReadable.hx", lineNumber : 21, className : "tink.io.nodejs.WrappedReadable", methodName : "new"}));
-			cb(tmp);
-		});
-	});
-	if(onEnd != null) {
-		this.end.handle(tink_core__$Callback_Callback_$Impl_$.fromNiladic(function() {
-			process.nextTick(onEnd);
-		}));
-	}
-};
-tink_io_nodejs_WrappedReadable.__name__ = true;
-tink_io_nodejs_WrappedReadable.prototype = {
-	read: function() {
-		var _gthis = this;
-		return tink_core__$Future_Future_$Impl_$.first(tink_core__$Future_Future_$Impl_$.async(function(cb) {
-			var attempt = null;
-			attempt = function() {
-				try {
-					var _g = _gthis.native.read(_gthis.chunkSize);
-					if(_g == null) {
-						_gthis.native.once("readable",attempt);
-					} else {
-						var chunk = _g;
-						var buf = typeof(chunk) == "string" ? new js_node_buffer_Buffer(chunk) : chunk;
-						var attempt1 = tink_core_Outcome.Success(new tink_io_nodejs_WrappedBuffer(buf));
-						cb(attempt1);
-					}
-				} catch( e ) {
-					var attempt2 = tink_core_Outcome.Failure(tink_core_TypedError.withData(null,"Error while reading from " + _gthis.name,((e) instanceof js__$Boot_HaxeError) ? e.val : e,{ fileName : "tink/io/nodejs/WrappedReadable.hx", lineNumber : 46, className : "tink.io.nodejs.WrappedReadable", methodName : "read"}));
-					cb(attempt2);
-				}
-			};
-			attempt();
-		}),this.end);
-	}
-	,__class__: tink_io_nodejs_WrappedReadable
-};
-var tink_io_nodejs_WrappedWritable = function(name,native) {
-	this.name = name;
-	this.native = native;
-	this.ended = tink_core__$Future_Future_$Impl_$.async(function(cb) {
-		native.once("end",function() {
-			cb(tink_core_Outcome.Success(false));
-		});
-		native.once("finish",function() {
-			cb(tink_core_Outcome.Success(false));
-		});
-		native.once("close",function() {
-			cb(tink_core_Outcome.Success(false));
-		});
-		native.on("error",function(e) {
-			var tmp = tink_core_Outcome.Failure(new tink_core_TypedError(null,"" + e.code + ": " + e.message,{ fileName : "tink/io/nodejs/WrappedWritable.hx", lineNumber : 22, className : "tink.io.nodejs.WrappedWritable", methodName : "new"}));
-			cb(tmp);
-		});
-	});
-};
-tink_io_nodejs_WrappedWritable.__name__ = true;
-tink_io_nodejs_WrappedWritable.prototype = {
-	end: function() {
-		var didEnd = false;
-		var this1 = this.ended.handle(tink_core__$Callback_Callback_$Impl_$.fromNiladic(function() {
-			didEnd = true;
-		}));
-		if(this1 != null) {
-			this1.cancel();
-		}
-		if(didEnd) {
-			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(false)));
-		}
-		this.native.end();
-		return tink_core__$Promise_Promise_$Impl_$.next(this.ended,function(_) {
-			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(true)));
-		});
-	}
-	,write: function(chunk) {
-		var _gthis = this;
-		return tink_core__$Future_Future_$Impl_$.first(tink_core__$Future_Future_$Impl_$.async(function(cb) {
-			if(chunk.getLength() == 0) {
-				cb(tink_core_Outcome.Success(true));
-				return;
-			}
-			var buf;
-			if(js_node_buffer_Buffer.isBuffer(chunk.buffer)) {
-				buf = chunk.buffer;
-			} else {
-				var b = chunk.toBytes();
-				var data = b.b;
-				buf = js_node_buffer_Buffer.from(data.buffer,data.byteOffset,b.length);
-			}
-			var f = cb;
-			var a1 = tink_core_Outcome.Success(true);
-			var tmp = function() {
-				f(a1);
-			};
-			_gthis.native.write(buf,tmp);
-		}),this.ended);
-	}
-	,__class__: tink_io_nodejs_WrappedWritable
-};
-var tink_json__$Parser_SliceData = function(source,min,max) {
-	this.source = source;
-	this.min = min;
-	this.max = max;
-};
-tink_json__$Parser_SliceData.__name__ = true;
-tink_json__$Parser_SliceData.prototype = {
-	__class__: tink_json__$Parser_SliceData
-};
-var tink_json__$Parser_JsonString_$Impl_$ = {};
-tink_json__$Parser_JsonString_$Impl_$.__name__ = true;
-tink_json__$Parser_JsonString_$Impl_$.contains = function(this1,s) {
-	var _g = this1.source.indexOf(s,this1.min);
-	if(_g == -1) {
-		return false;
-	} else {
-		var outside = _g;
-		if(outside > this1.max) {
-			return false;
+class tink_pure__$List_List_$Impl_$ {
+	static prepend(this1,value) {
+		if(this1 == null) {
+			return new tink_pure__$List_Node(1,value);
 		} else {
-			var v = _g;
-			return true;
+			return new tink_pure__$List_Node(this1.length + 1,value,[this1]);
 		}
 	}
-};
-tink_json__$Parser_JsonString_$Impl_$.toString = function(this1) {
-	if(tink_json__$Parser_JsonString_$Impl_$.contains(this1,"\\")) {
-		return JSON.parse(this1.source.substring(this1.min - 1,this1.max + 1));
-	} else {
-		return this1.source.substring(this1.min,this1.max);
-	}
-};
-var tink_json_BasicParser = function() {
-	this.plugins = new tink_core_Annex(this);
-};
-tink_json_BasicParser.__name__ = true;
-tink_json_BasicParser.prototype = {
-	init: function(source) {
-		this.source = source;
-		this.pos = 0;
-		this.max = source.length;
-		while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-	}
-	,parseString: function() {
-		while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-		var e;
-		if(this.max > this.pos && this.source.charCodeAt(this.pos) == 34) {
-			this.pos += 1;
-			e = true;
+	static filter(this1,f) {
+		if(this1 == null) {
+			return null;
 		} else {
-			e = false;
+			return this1.filter(f);
 		}
-		var e1 = !e ? this.die("Expected string") : null;
-		return this.parseRestOfString();
 	}
-	,parseRestOfString: function() {
-		return this.slice(this.skipString(),this.pos - 1);
-	}
-	,skipString: function() {
-		var start = this.pos;
-		while(true) {
-			var _g = this.source.indexOf("\"",this.pos);
-			if(_g == -1) {
-				this.die("unterminated string",start);
-			} else {
-				var v = _g;
-				this.pos = v + 1;
-				var p = this.pos - 2;
-				while(this.source.charCodeAt(p) == 92) --p;
-				if((p - this.pos & 1) == 0) {
-					break;
-				}
-			}
+	static map(this1,f) {
+		var _g = [];
+		var _g1 = new tink_pure_NodeIterator(this1);
+		while(_g1.list.length > 0) {
+			var i = _g1.next();
+			_g.push(f(i));
 		}
-		return start;
+		return tink_pure__$List_List_$Impl_$.fromArray(_g);
 	}
-	,invalidNumber: function(start) {
-		return this.die("Invalid number " + this.source.substring(start,this.pos),start);
+	static toArray(this1) {
+		var _g = [];
+		var _g1 = new tink_pure_NodeIterator(this1);
+		while(_g1.list.length > 0) {
+			var v = _g1.next();
+			_g.push(v);
+		}
+		return _g;
 	}
-	,skipNumber: function(c) {
-		var start = this.pos - 1;
-		var minus = c == 45;
-		var digit = !minus;
-		var zero = c == 48;
-		var point = false;
-		var e = false;
-		var pm = false;
-		var end = false;
-		while(true) {
-			c = this.source.charCodeAt(this.pos++);
-			switch(c) {
-			case 43:case 45:
-				if(!e || pm) {
-					this.invalidNumber(start);
-				}
-				digit = false;
-				pm = true;
-				break;
-			case 46:
-				if(minus || point) {
-					this.invalidNumber(start);
-				}
-				digit = false;
-				point = true;
-				break;
-			case 48:
-				if(zero && !point) {
-					this.invalidNumber(start);
-				}
-				if(minus) {
-					minus = false;
-					zero = true;
-				}
-				digit = true;
-				break;
-			case 49:case 50:case 51:case 52:case 53:case 54:case 55:case 56:case 57:
-				if(zero && !point) {
-					this.invalidNumber(start);
-				}
-				if(minus) {
-					minus = false;
-				}
-				digit = true;
-				zero = false;
-				break;
-			case 69:case 101:
-				if(minus || zero || e) {
-					this.invalidNumber(start);
-				}
-				digit = false;
-				e = true;
-				break;
-			default:
-				if(!digit) {
-					this.invalidNumber(start);
-				}
-				this.pos--;
-				end = true;
+	static fromArray(i) {
+		var ret = null;
+		var len = 0;
+		var pos = i.length;
+		while(pos-- > 0) ret = new tink_pure__$List_Node(++len,i[pos],ret == null ? tink_pure__$List_Node.EMPTY : [ret]);
+		return ret;
+	}
+}
+tink_pure__$List_List_$Impl_$.__name__ = true;
+class tink_pure__$List_Node {
+	constructor(length,value,tails) {
+		this.value = value;
+		this.length = length;
+		this.tails = tails == null ? tink_pure__$List_Node.EMPTY : tails;
+	}
+	filter(f) {
+		var iter = new tink_pure_NodeIterator(this);
+		var ret = [];
+		while(iter.list.length > 0) {
+			var value = iter.next();
+			var res = f(value);
+			if(res > 0) {
+				ret.push(value);
 			}
-			if(end) {
+			if((res & 3) == 3) {
 				break;
 			}
 		}
-		return start;
+		return tink_pure__$List_List_$Impl_$.fromArray(ret);
 	}
-	,slice: function(from,to) {
-		return new tink_json__$Parser_SliceData(this.source,from,to);
-	}
-	,skipArray: function() {
-		while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-		var tmp;
-		if(this.max > this.pos && this.source.charCodeAt(this.pos) == 93) {
-			this.pos += 1;
-			while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-			tmp = true;
-		} else {
-			tmp = false;
-		}
-		if(tmp) {
-			return;
-		}
-		while(true) {
-			this.skipValue();
-			while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-			var tmp1;
-			if(this.max > this.pos && this.source.charCodeAt(this.pos) == 44) {
-				this.pos += 1;
-				while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-				tmp1 = true;
-			} else {
-				tmp1 = false;
-			}
-			if(!tmp1) {
-				break;
-			}
-		}
-		while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-		var tmp2;
-		if(this.max > this.pos && this.source.charCodeAt(this.pos) == 93) {
-			this.pos += 1;
-			tmp2 = true;
-		} else {
-			tmp2 = false;
-		}
-		if(!tmp2) {
-			this.die("Expected ]");
-		}
-	}
-	,skipValue: function() {
-		var _gthis = this;
-		var _g = this.source.charCodeAt(this.pos++);
-		switch(_g) {
-		case 34:
-			this.skipString();
-			break;
-		case 91:
-			this.skipArray();
-			break;
-		case 102:
-			var tmp;
-			if(this.max > this.pos + 3 && this.source.charCodeAt(this.pos) == 97 && this.source.charCodeAt(this.pos + 1) == 108 && this.source.charCodeAt(this.pos + 2) == 115 && this.source.charCodeAt(this.pos + 3) == 101) {
-				this.pos += 4;
-				tmp = true;
-			} else {
-				tmp = false;
-			}
-			if(!tmp) {
-				this.die("Expected alse");
-			}
-			break;
-		case 110:
-			var tmp1;
-			if(this.max > this.pos + 2 && this.source.charCodeAt(this.pos) == 117 && this.source.charCodeAt(this.pos + 1) == 108 && this.source.charCodeAt(this.pos + 2) == 108) {
-				this.pos += 3;
-				tmp1 = true;
-			} else {
-				tmp1 = false;
-			}
-			if(!tmp1) {
-				this.die("Expected ull");
-			}
-			break;
-		case 116:
-			var tmp2;
-			if(this.max > this.pos + 2 && this.source.charCodeAt(this.pos) == 114 && this.source.charCodeAt(this.pos + 1) == 117 && this.source.charCodeAt(this.pos + 2) == 101) {
-				this.pos += 3;
-				tmp2 = true;
-			} else {
-				tmp2 = false;
-			}
-			if(!tmp2) {
-				this.die("Expected rue");
-			}
-			break;
-		case 123:
-			while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-			var tmp3;
-			if(this.max > this.pos && this.source.charCodeAt(this.pos) == 125) {
-				this.pos += 1;
-				while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-				tmp3 = true;
-			} else {
-				tmp3 = false;
-			}
-			if(tmp3) {
-				return;
-			}
-			while(true) {
-				if(_gthis.source.charCodeAt(_gthis.pos++) != 34) {
-					_gthis.die("expected string",_gthis.pos - 1);
-				}
-				_gthis.skipString();
-				while(_gthis.pos < _gthis.max && _gthis.source.charCodeAt(_gthis.pos) < 33) _gthis.pos++;
-				var tmp4;
-				if(_gthis.max > _gthis.pos && _gthis.source.charCodeAt(_gthis.pos) == 58) {
-					_gthis.pos += 1;
-					while(_gthis.pos < _gthis.max && _gthis.source.charCodeAt(_gthis.pos) < 33) _gthis.pos++;
-					tmp4 = true;
-				} else {
-					tmp4 = false;
-				}
-				if(!tmp4) {
-					_gthis.die("Expected :");
-				}
-				_gthis.skipValue();
-				while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-				var tmp5;
-				if(this.max > this.pos && this.source.charCodeAt(this.pos) == 44) {
-					this.pos += 1;
-					while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-					tmp5 = true;
-				} else {
-					tmp5 = false;
-				}
-				if(!tmp5) {
-					break;
-				}
-			}
-			while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-			var tmp6;
-			if(this.max > this.pos && this.source.charCodeAt(this.pos) == 125) {
-				this.pos += 1;
-				tmp6 = true;
-			} else {
-				tmp6 = false;
-			}
-			if(!tmp6) {
-				this.die("Expected }");
-			}
-			break;
-		default:
-			var char = _g;
-			if(char == 46 || char == 45 || char < 58 && char > 47) {
-				this.skipNumber(char);
-			} else {
-				this.invalidChar(char);
-			}
-		}
-	}
-	,invalidChar: function(c) {
-		return this.die("invalid char " + StringTools.hex(c,2),this.pos - 1);
-	}
-	,die: function(s,pos,end) {
-		if(pos == null) {
-			pos = this.pos;
-			end = pos;
-		} else if(end == null) {
-			end = this.pos;
-		}
-		if(end <= pos) {
-			end = pos + 1;
-		}
-		var range = end > pos + 1 ? "characters " + pos + " - " + end : "character " + pos;
-		var clip = function(s1,maxLength,left) {
-			if(s1.length > maxLength) {
-				if(left) {
-					return "... " + HxOverrides.substr(s1,s1.length - maxLength,null);
-				} else {
-					return HxOverrides.substr(s1,0,maxLength) + " ...";
-				}
-			} else {
-				return s1;
-			}
-		};
-		var p = pos + end;
-		var center = p >> 1;
-		var context = clip(this.source.substring(0,pos),20,true) + "  ---->  " + clip(this.source.substring(pos,center),20,false) + clip(this.source.substring(center,end),20,true) + "  <----  " + clip(this.source.substring(end),20,false);
-		return tink_core_TypedError.withData(422,s + (" at " + range + " in " + context),{ source : this.source, start : pos, end : end},{ fileName : "tink/json/Parser.hx", lineNumber : 347, className : "tink.json.BasicParser", methodName : "die"}).throwSelf();
-	}
-	,__class__: tink_json_BasicParser
-};
-var tink_json_Parser0 = function() {
-	tink_json_BasicParser.call(this);
-};
-tink_json_Parser0.__name__ = true;
-tink_json_Parser0.__super__ = tink_json_BasicParser;
-tink_json_Parser0.prototype = $extend(tink_json_BasicParser.prototype,{
-	parse0: function() {
-		var _gthis = this;
-		var v_slideshow = null;
-		var hasv_slideshow = false;
-		var __start__ = this.pos;
-		while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-		var tmp;
-		if(this.max > this.pos && this.source.charCodeAt(this.pos) == 123) {
-			this.pos += 1;
-			while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-			tmp = true;
-		} else {
-			tmp = false;
-		}
-		if(!tmp) {
-			this.die("Expected {");
-		}
-		while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-		var tmp1;
-		if(this.max > this.pos && this.source.charCodeAt(this.pos) == 125) {
-			this.pos += 1;
-			while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-			tmp1 = true;
-		} else {
-			tmp1 = false;
-		}
-		if(!tmp1) {
-			while(true) {
-				var __name__ = this.parseString();
-				while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-				var tmp2;
-				if(this.max > this.pos && this.source.charCodeAt(this.pos) == 58) {
-					this.pos += 1;
-					while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-					tmp2 = true;
-				} else {
-					tmp2 = false;
-				}
-				if(!tmp2) {
-					this.die("Expected :");
-				}
-				if("slideshow".length == __name__.max - __name__.min && __name__.source.startsWith("slideshow",__name__.min)) {
-					v_slideshow = this.parse1();
-					hasv_slideshow = true;
-				} else {
-					this.skipValue();
-				}
-				while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-				var tmp3;
-				if(this.max > this.pos && this.source.charCodeAt(this.pos) == 44) {
-					this.pos += 1;
-					while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-					tmp3 = true;
-				} else {
-					tmp3 = false;
-				}
-				if(!tmp3) {
-					break;
-				}
-			}
-			while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-			var tmp4;
-			if(this.max > this.pos && this.source.charCodeAt(this.pos) == 125) {
-				this.pos += 1;
-				while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-				tmp4 = true;
-			} else {
-				tmp4 = false;
-			}
-			if(!tmp4) {
-				this.die("Expected }");
-			}
-		}
-		var __missing__ = function(field) {
-			return _gthis.die("missing field \"" + field + "\"",__start__);
-		};
-		return { slideshow : hasv_slideshow ? v_slideshow : __missing__("slideshow")};
-	}
-	,parse1: function() {
-		var _gthis = this;
-		var v_author = null;
-		var hasv_author = false;
-		var v_date = null;
-		var hasv_date = false;
-		var v_slides = null;
-		var hasv_slides = false;
-		var v_title = null;
-		var hasv_title = false;
-		var __start__ = this.pos;
-		while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-		var tmp;
-		if(this.max > this.pos && this.source.charCodeAt(this.pos) == 123) {
-			this.pos += 1;
-			while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-			tmp = true;
-		} else {
-			tmp = false;
-		}
-		if(!tmp) {
-			this.die("Expected {");
-		}
-		while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-		var tmp1;
-		if(this.max > this.pos && this.source.charCodeAt(this.pos) == 125) {
-			this.pos += 1;
-			while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-			tmp1 = true;
-		} else {
-			tmp1 = false;
-		}
-		if(!tmp1) {
-			while(true) {
-				var __name__ = this.parseString();
-				while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-				var tmp2;
-				if(this.max > this.pos && this.source.charCodeAt(this.pos) == 58) {
-					this.pos += 1;
-					while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-					tmp2 = true;
-				} else {
-					tmp2 = false;
-				}
-				if(!tmp2) {
-					this.die("Expected :");
-				}
-				if("title".length == __name__.max - __name__.min && __name__.source.startsWith("title",__name__.min)) {
-					v_title = tink_json__$Parser_JsonString_$Impl_$.toString(this.parseString());
-					hasv_title = true;
-				} else if("slides".length == __name__.max - __name__.min && __name__.source.startsWith("slides",__name__.min)) {
-					while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-					var v_slides1;
-					if(this.max > this.pos && this.source.charCodeAt(this.pos) == 91) {
-						this.pos += 1;
-						while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-						v_slides1 = true;
-					} else {
-						v_slides1 = false;
-					}
-					if(!v_slides1) {
-						this.die("Expected [");
-					}
-					var __ret = [];
-					while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-					var v_slides2;
-					if(this.max > this.pos && this.source.charCodeAt(this.pos) == 93) {
-						this.pos += 1;
-						while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-						v_slides2 = true;
-					} else {
-						v_slides2 = false;
-					}
-					if(!v_slides2) {
-						while(true) {
-							__ret.push(this.parse2());
-							while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-							var v_slides3;
-							if(this.max > this.pos && this.source.charCodeAt(this.pos) == 44) {
-								this.pos += 1;
-								while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-								v_slides3 = true;
-							} else {
-								v_slides3 = false;
-							}
-							if(!v_slides3) {
-								break;
-							}
-						}
-						while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-						var v_slides4;
-						if(this.max > this.pos && this.source.charCodeAt(this.pos) == 93) {
-							this.pos += 1;
-							while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-							v_slides4 = true;
-						} else {
-							v_slides4 = false;
-						}
-						if(!v_slides4) {
-							this.die("Expected ]");
-						}
-					}
-					v_slides = __ret;
-					hasv_slides = true;
-				} else if("date".length == __name__.max - __name__.min && __name__.source.startsWith("date",__name__.min)) {
-					v_date = tink_json__$Parser_JsonString_$Impl_$.toString(this.parseString());
-					hasv_date = true;
-				} else if("author".length == __name__.max - __name__.min && __name__.source.startsWith("author",__name__.min)) {
-					v_author = tink_json__$Parser_JsonString_$Impl_$.toString(this.parseString());
-					hasv_author = true;
-				} else {
-					this.skipValue();
-				}
-				while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-				var tmp3;
-				if(this.max > this.pos && this.source.charCodeAt(this.pos) == 44) {
-					this.pos += 1;
-					while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-					tmp3 = true;
-				} else {
-					tmp3 = false;
-				}
-				if(!tmp3) {
-					break;
-				}
-			}
-			while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-			var tmp4;
-			if(this.max > this.pos && this.source.charCodeAt(this.pos) == 125) {
-				this.pos += 1;
-				while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-				tmp4 = true;
-			} else {
-				tmp4 = false;
-			}
-			if(!tmp4) {
-				this.die("Expected }");
-			}
-		}
-		var __missing__ = function(field) {
-			return _gthis.die("missing field \"" + field + "\"",__start__);
-		};
-		return { author : hasv_author ? v_author : __missing__("author"), date : hasv_date ? v_date : __missing__("date"), slides : hasv_slides ? v_slides : __missing__("slides"), title : hasv_title ? v_title : __missing__("title")};
-	}
-	,parse2: function() {
-		var _gthis = this;
-		var v_items = null;
-		var v_title = null;
-		var hasv_title = false;
-		var v_type = null;
-		var hasv_type = false;
-		var __start__ = this.pos;
-		while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-		var tmp;
-		if(this.max > this.pos && this.source.charCodeAt(this.pos) == 123) {
-			this.pos += 1;
-			while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-			tmp = true;
-		} else {
-			tmp = false;
-		}
-		if(!tmp) {
-			this.die("Expected {");
-		}
-		while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-		var tmp1;
-		if(this.max > this.pos && this.source.charCodeAt(this.pos) == 125) {
-			this.pos += 1;
-			while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-			tmp1 = true;
-		} else {
-			tmp1 = false;
-		}
-		if(!tmp1) {
-			while(true) {
-				var __name__ = this.parseString();
-				while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-				var tmp2;
-				if(this.max > this.pos && this.source.charCodeAt(this.pos) == 58) {
-					this.pos += 1;
-					while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-					tmp2 = true;
-				} else {
-					tmp2 = false;
-				}
-				if(!tmp2) {
-					this.die("Expected :");
-				}
-				if("type".length == __name__.max - __name__.min && __name__.source.startsWith("type",__name__.min)) {
-					v_type = tink_json__$Parser_JsonString_$Impl_$.toString(this.parseString());
-					hasv_type = true;
-				} else if("title".length == __name__.max - __name__.min && __name__.source.startsWith("title",__name__.min)) {
-					v_title = tink_json__$Parser_JsonString_$Impl_$.toString(this.parseString());
-					hasv_title = true;
-				} else if("items".length == __name__.max - __name__.min && __name__.source.startsWith("items",__name__.min)) {
-					while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-					var v_items1;
-					if(this.max > this.pos + 3 && this.source.charCodeAt(this.pos) == 110 && this.source.charCodeAt(this.pos + 1) == 117 && this.source.charCodeAt(this.pos + 2) == 108 && this.source.charCodeAt(this.pos + 3) == 108) {
-						this.pos += 4;
-						while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-						v_items1 = true;
-					} else {
-						v_items1 = false;
-					}
-					if(v_items1) {
-						v_items = null;
-					} else {
-						while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-						var v_items2;
-						if(this.max > this.pos && this.source.charCodeAt(this.pos) == 91) {
-							this.pos += 1;
-							while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-							v_items2 = true;
-						} else {
-							v_items2 = false;
-						}
-						if(!v_items2) {
-							this.die("Expected [");
-						}
-						var __ret = [];
-						while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-						var v_items3;
-						if(this.max > this.pos && this.source.charCodeAt(this.pos) == 93) {
-							this.pos += 1;
-							while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-							v_items3 = true;
-						} else {
-							v_items3 = false;
-						}
-						if(!v_items3) {
-							while(true) {
-								__ret.push(tink_json__$Parser_JsonString_$Impl_$.toString(this.parseString()));
-								while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-								var v_items4;
-								if(this.max > this.pos && this.source.charCodeAt(this.pos) == 44) {
-									this.pos += 1;
-									while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-									v_items4 = true;
-								} else {
-									v_items4 = false;
-								}
-								if(!v_items4) {
-									break;
-								}
-							}
-							while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-							var v_items5;
-							if(this.max > this.pos && this.source.charCodeAt(this.pos) == 93) {
-								this.pos += 1;
-								while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-								v_items5 = true;
-							} else {
-								v_items5 = false;
-							}
-							if(!v_items5) {
-								this.die("Expected ]");
-							}
-						}
-						v_items = __ret;
-					}
-				} else {
-					this.skipValue();
-				}
-				while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-				var tmp3;
-				if(this.max > this.pos && this.source.charCodeAt(this.pos) == 44) {
-					this.pos += 1;
-					while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-					tmp3 = true;
-				} else {
-					tmp3 = false;
-				}
-				if(!tmp3) {
-					break;
-				}
-			}
-			while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-			var tmp4;
-			if(this.max > this.pos && this.source.charCodeAt(this.pos) == 125) {
-				this.pos += 1;
-				while(this.pos < this.max && this.source.charCodeAt(this.pos) < 33) this.pos++;
-				tmp4 = true;
-			} else {
-				tmp4 = false;
-			}
-			if(!tmp4) {
-				this.die("Expected }");
-			}
-		}
-		var __missing__ = function(field) {
-			return _gthis.die("missing field \"" + field + "\"",__start__);
-		};
-		return { items : v_items, title : hasv_title ? v_title : __missing__("title"), type : hasv_type ? v_type : __missing__("type")};
-	}
-	,parse: function(source) {
-		this.init(source);
-		return this.parse0();
-	}
-	,tryParse: function(source) {
-		var _gthis = this;
-		return tink_core_TypedError.catchExceptions(function() {
-			return _gthis.parse(source);
-		},null,{ fileName : "tink/json/macros/Macro.hx", lineNumber : 91, className : "tink.json.Parser0", methodName : "tryParse"});
-	}
-	,__class__: tink_json_Parser0
-});
-var tink_json_Value = $hxEnums["tink.json.Value"] = { __ename__ : true, __constructs__ : ["VNumber","VString","VNull","VBool","VArray","VObject"]
-	,VNumber: ($_=function(f) { return {_hx_index:0,f:f,__enum__:"tink.json.Value",toString:$estr}; },$_.__params__ = ["f"],$_)
-	,VString: ($_=function(s) { return {_hx_index:1,s:s,__enum__:"tink.json.Value",toString:$estr}; },$_.__params__ = ["s"],$_)
-	,VNull: {_hx_index:2,__enum__:"tink.json.Value",toString:$estr}
-	,VBool: ($_=function(b) { return {_hx_index:3,b:b,__enum__:"tink.json.Value",toString:$estr}; },$_.__params__ = ["b"],$_)
-	,VArray: ($_=function(a) { return {_hx_index:4,a:a,__enum__:"tink.json.Value",toString:$estr}; },$_.__params__ = ["a"],$_)
-	,VObject: ($_=function(a) { return {_hx_index:5,a:a,__enum__:"tink.json.Value",toString:$estr}; },$_.__params__ = ["a"],$_)
-};
-var tink_pure__$List_Node = function() { };
+}
 tink_pure__$List_Node.__name__ = true;
-var tink_state__$Observable_Observable_$Impl_$ = {};
-tink_state__$Observable_Observable_$Impl_$.__name__ = true;
-tink_state__$Observable_Observable_$Impl_$.get_value = function(this1) {
-	return tink_state__$Observable_Observable_$Impl_$.measure(this1).a;
-};
-tink_state__$Observable_Observable_$Impl_$.map = function(this1,f) {
-	return tink_state__$Observable_Observable_$Impl_$.create(function() {
-		var m = tink_state__$Observable_Observable_$Impl_$.measure(this1);
-		var this2 = new tink_core_MPair(f(m.a),m.b);
-		var this3 = this2;
-		return this3;
-	});
-};
-tink_state__$Observable_Observable_$Impl_$.measure = function(this1) {
-	var before = tink_state__$Observable_Observable_$Impl_$.stack.first();
-	tink_state__$Observable_Observable_$Impl_$.stack.push(this1);
-	var p = this1.poll();
-	var c = tink_state__$Observable_AutoObservable;
-	var _g;
-	if(!((before) instanceof c)) {
-		var o = before;
-		_g = o != null && c.__isInterface__ && js_Boot.__interfLoop(js_Boot.getClass(o),c);
-	} else {
-		_g = true;
+Object.assign(tink_pure__$List_Node.prototype, {
+	__class__: tink_pure__$List_Node
+});
+class tink_pure_NodeIterator {
+	constructor(node) {
+		this.list = [];
+		if(node != null) {
+			this.list.push(node);
+		}
 	}
-	var _g1 = _g ? before : null;
-	if(_g1 != null) {
-		var v = _g1;
-		v.subscribe(p.b);
+	hasNext() {
+		return this.list.length > 0;
 	}
-	tink_state__$Observable_Observable_$Impl_$.stack.pop();
-	return p;
-};
-tink_state__$Observable_Observable_$Impl_$.bind = function(this1,options,cb) {
-	var cb1;
-	if(options == null) {
-		cb1 = cb;
-	} else {
-		var _g1 = options.direct;
-		var _g = options.comparator;
+	next() {
+		var _g = this.list.pop();
 		if(_g == null) {
+			return null;
+		} else {
+			var next = _g;
+			var _g1 = -next.tails.length;
+			var _g11 = 0;
+			while(_g1 < _g11) {
+				var i = _g1++;
+				this.list.push(next.tails[-i - 1]);
+			}
+			return next.value;
+		}
+	}
+}
+tink_pure_NodeIterator.__name__ = true;
+Object.assign(tink_pure_NodeIterator.prototype, {
+	__class__: tink_pure_NodeIterator
+});
+class tink_state__$Observable_Observable_$Impl_$ {
+	static get_value(this1) {
+		return tink_state__$Observable_Observable_$Impl_$.measure(this1).a;
+	}
+	static map(this1,f) {
+		return tink_state__$Observable_Observable_$Impl_$.create(function() {
+			var m = tink_state__$Observable_Observable_$Impl_$.measure(this1);
+			var this2 = new tink_core_MPair(f(m.a),m.b);
+			var this3 = this2;
+			return this3;
+		});
+	}
+	static measure(this1) {
+		var before = tink_state__$Observable_Observable_$Impl_$.stack.first();
+		tink_state__$Observable_Observable_$Impl_$.stack.push(this1);
+		var p = this1.poll();
+		var c = tink_state__$Observable_AutoObservable;
+		var _g;
+		if(!((before) instanceof c)) {
+			var o = before;
+			_g = o != null && c.__isInterface__ && js_Boot.__interfLoop(js_Boot.getClass(o),c);
+		} else {
+			_g = true;
+		}
+		var _g1 = _g ? before : null;
+		if(_g1 != null) {
+			var v = _g1;
+			v.subscribe(p.b);
+		}
+		tink_state__$Observable_Observable_$Impl_$.stack.pop();
+		return p;
+	}
+	static bind(this1,options,cb) {
+		var cb1;
+		if(options == null) {
 			cb1 = cb;
 		} else {
-			var equal = _g;
-			var isFirst = true;
-			var last = null;
-			cb1 = function(data) {
-				if(isFirst) {
-					isFirst = false;
-					tink_core__$Callback_Callback_$Impl_$.invoke(cb,data);
-				} else if(!equal(last,data)) {
-					tink_core__$Callback_Callback_$Impl_$.invoke(cb,data);
-				}
-				last = data;
-			};
+			var _g1 = options.direct;
+			var _g = options.comparator;
+			if(_g == null) {
+				cb1 = cb;
+			} else {
+				var equal = _g;
+				var isFirst = true;
+				var last = null;
+				cb1 = function(data) {
+					if(isFirst) {
+						isFirst = false;
+						tink_core__$Callback_Callback_$Impl_$.invoke(cb,data);
+					} else if(!equal(last,data)) {
+						tink_core__$Callback_Callback_$Impl_$.invoke(cb,data);
+					}
+					last = data;
+				};
+			}
 		}
-	}
-	if(options == null) {
-		var scheduled = false;
-		var active = true;
-		var updated = null;
-		var link = null;
-		var update = function() {
-			if(active) {
-				var next = tink_state__$Observable_Observable_$Impl_$.measure(this1);
-				tink_core__$Callback_Callback_$Impl_$.invoke(cb1,next.a);
-				scheduled = false;
-				link = next.b.handle(updated);
-			}
-		};
-		var doSchedule = function() {
-			if(scheduled) {
-				return;
-			}
-			scheduled = true;
-			tink_state__$Observable_Observable_$Impl_$.schedule(update);
-		};
-		updated = tink_core__$Callback_Callback_$Impl_$.fromNiladic(doSchedule);
-		doSchedule();
-		var this2 = new tink_core__$Callback_SimpleLink(function() {
-			if(active) {
-				active = false;
-				if(link != null) {
-					link.cancel();
-				}
-			}
-		});
-		return this2;
-	} else {
-		var _g3 = options.direct;
-		var _g2 = options.comparator;
-		if(_g3 == null) {
-			var scheduled1 = false;
-			var active1 = true;
-			var updated1 = null;
-			var link1 = null;
-			var update1 = function() {
-				if(active1) {
-					var next1 = tink_state__$Observable_Observable_$Impl_$.measure(this1);
-					tink_core__$Callback_Callback_$Impl_$.invoke(cb1,next1.a);
-					scheduled1 = false;
-					link1 = next1.b.handle(updated1);
+		if(options == null) {
+			var scheduled = false;
+			var active = true;
+			var updated = null;
+			var link = null;
+			var update = function() {
+				if(active) {
+					var next = tink_state__$Observable_Observable_$Impl_$.measure(this1);
+					tink_core__$Callback_Callback_$Impl_$.invoke(cb1,next.a);
+					scheduled = false;
+					link = next.b.handle(updated);
 				}
 			};
-			var doSchedule1 = function() {
-				if(scheduled1) {
+			var doSchedule = function() {
+				if(scheduled) {
 					return;
 				}
-				scheduled1 = true;
-				tink_state__$Observable_Observable_$Impl_$.schedule(update1);
+				scheduled = true;
+				tink_state__$Observable_Observable_$Impl_$.schedule(update);
 			};
-			updated1 = tink_core__$Callback_Callback_$Impl_$.fromNiladic(doSchedule1);
-			doSchedule1();
-			var this3 = new tink_core__$Callback_SimpleLink(function() {
-				if(active1) {
-					active1 = false;
-					if(link1 != null) {
-						link1.cancel();
+			updated = tink_core__$Callback_Callback_$Impl_$.fromNiladic(doSchedule);
+			doSchedule();
+			var this2 = new tink_core__$Callback_SimpleLink(function() {
+				if(active) {
+					active = false;
+					if(link != null) {
+						link.cancel();
 					}
 				}
 			});
-			return this3;
-		} else if(_g3 == false) {
-			var scheduled2 = false;
-			var active2 = true;
-			var updated2 = null;
-			var link2 = null;
-			var update2 = function() {
-				if(active2) {
-					var next2 = tink_state__$Observable_Observable_$Impl_$.measure(this1);
-					tink_core__$Callback_Callback_$Impl_$.invoke(cb1,next2.a);
-					scheduled2 = false;
-					link2 = next2.b.handle(updated2);
-				}
-			};
-			var doSchedule2 = function() {
-				if(scheduled2) {
-					return;
-				}
-				scheduled2 = true;
-				tink_state__$Observable_Observable_$Impl_$.schedule(update2);
-			};
-			updated2 = tink_core__$Callback_Callback_$Impl_$.fromNiladic(doSchedule2);
-			doSchedule2();
-			var this4 = new tink_core__$Callback_SimpleLink(function() {
-				if(active2) {
-					active2 = false;
-					if(link2 != null) {
-						link2.cancel();
+			return this2;
+		} else {
+			var _g3 = options.direct;
+			var _g2 = options.comparator;
+			if(_g3 == null) {
+				var scheduled1 = false;
+				var active1 = true;
+				var updated1 = null;
+				var link1 = null;
+				var update1 = function() {
+					if(active1) {
+						var next1 = tink_state__$Observable_Observable_$Impl_$.measure(this1);
+						tink_core__$Callback_Callback_$Impl_$.invoke(cb1,next1.a);
+						scheduled1 = false;
+						link1 = next1.b.handle(updated1);
 					}
-				}
-			});
-			return this4;
+				};
+				var doSchedule1 = function() {
+					if(scheduled1) {
+						return;
+					}
+					scheduled1 = true;
+					tink_state__$Observable_Observable_$Impl_$.schedule(update1);
+				};
+				updated1 = tink_core__$Callback_Callback_$Impl_$.fromNiladic(doSchedule1);
+				doSchedule1();
+				var this3 = new tink_core__$Callback_SimpleLink(function() {
+					if(active1) {
+						active1 = false;
+						if(link1 != null) {
+							link1.cancel();
+						}
+					}
+				});
+				return this3;
+			} else if(_g3 == false) {
+				var scheduled2 = false;
+				var active2 = true;
+				var updated2 = null;
+				var link2 = null;
+				var update2 = function() {
+					if(active2) {
+						var next2 = tink_state__$Observable_Observable_$Impl_$.measure(this1);
+						tink_core__$Callback_Callback_$Impl_$.invoke(cb1,next2.a);
+						scheduled2 = false;
+						link2 = next2.b.handle(updated2);
+					}
+				};
+				var doSchedule2 = function() {
+					if(scheduled2) {
+						return;
+					}
+					scheduled2 = true;
+					tink_state__$Observable_Observable_$Impl_$.schedule(update2);
+				};
+				updated2 = tink_core__$Callback_Callback_$Impl_$.fromNiladic(doSchedule2);
+				doSchedule2();
+				var this4 = new tink_core__$Callback_SimpleLink(function() {
+					if(active2) {
+						active2 = false;
+						if(link2 != null) {
+							link2.cancel();
+						}
+					}
+				});
+				return this4;
+			} else {
+				var link3 = null;
+				var update3 = null;
+				update3 = function(_) {
+					var next3 = tink_state__$Observable_Observable_$Impl_$.measure(this1);
+					tink_core__$Callback_Callback_$Impl_$.invoke(cb1,next3.a);
+					link3 = next3.b.handle(update3);
+				};
+				update3(tink_core_Noise.Noise);
+				var this5 = new tink_core__$Callback_SimpleLink(function() {
+					if(link3 != null) {
+						link3.cancel();
+					}
+				});
+				return this5;
+			}
+		}
+	}
+	static schedule(f) {
+		var _g = tink_state__$Observable_Observable_$Impl_$.scheduled;
+		if(_g == null) {
+			f();
 		} else {
-			var link3 = null;
-			var update3 = null;
-			update3 = function(_) {
-				var next3 = tink_state__$Observable_Observable_$Impl_$.measure(this1);
-				tink_core__$Callback_Callback_$Impl_$.invoke(cb1,next3.a);
-				link3 = next3.b.handle(update3);
-			};
-			update3(tink_core_Noise.Noise);
-			var this5 = new tink_core__$Callback_SimpleLink(function() {
-				if(link3 != null) {
-					link3.cancel();
-				}
-			});
-			return this5;
+			var v = _g;
+			v.push(f);
+			tink_state__$Observable_Observable_$Impl_$.scheduleUpdate();
 		}
 	}
-};
-tink_state__$Observable_Observable_$Impl_$.schedule = function(f) {
-	var _g = tink_state__$Observable_Observable_$Impl_$.scheduled;
-	if(_g == null) {
-		f();
-	} else {
-		var v = _g;
-		v.push(f);
-		tink_state__$Observable_Observable_$Impl_$.scheduleUpdate();
+	static scheduleUpdate() {
+		if(!tink_state__$Observable_Observable_$Impl_$.isScheduled) {
+			tink_state__$Observable_Observable_$Impl_$.isScheduled = true;
+			if(tink_state__$Observable_Observable_$Impl_$.hasRAF) {
+				window.requestAnimationFrame(function(_) {
+					tink_state__$Observable_Observable_$Impl_$.scheduledRun();
+				});
+			} else {
+				tink_core__$Callback_Callback_$Impl_$.defer(tink_state__$Observable_Observable_$Impl_$.scheduledRun);
+			}
+		}
 	}
-};
-tink_state__$Observable_Observable_$Impl_$.scheduleUpdate = function() {
-	if(!tink_state__$Observable_Observable_$Impl_$.isScheduled) {
-		tink_state__$Observable_Observable_$Impl_$.isScheduled = true;
-		if(tink_state__$Observable_Observable_$Impl_$.hasRAF) {
-			window.requestAnimationFrame(function(_) {
-				tink_state__$Observable_Observable_$Impl_$.scheduledRun();
-			});
+	static scheduledRun() {
+		tink_state__$Observable_Observable_$Impl_$.isScheduled = false;
+		tink_state__$Observable_Observable_$Impl_$.updatePending();
+	}
+	static updatePending(maxSeconds) {
+		if(maxSeconds == null) {
+			maxSeconds = .01;
+		}
+		var end = Date.now() / 1000 + maxSeconds;
+		while(true) {
+			var old = tink_state__$Observable_Observable_$Impl_$.scheduled;
+			tink_state__$Observable_Observable_$Impl_$.scheduled = [];
+			var _g = 0;
+			while(_g < old.length) {
+				var o = old[_g];
+				++_g;
+				o();
+			}
+			if(!(tink_state__$Observable_Observable_$Impl_$.scheduled.length > 0 && Date.now() / 1000 < end)) {
+				break;
+			}
+		}
+		if(tink_state__$Observable_Observable_$Impl_$.scheduled.length > 0) {
+			tink_state__$Observable_Observable_$Impl_$.scheduleUpdate();
+			return true;
 		} else {
-			tink_core__$Callback_Callback_$Impl_$.defer(tink_state__$Observable_Observable_$Impl_$.scheduledRun);
+			return false;
 		}
 	}
-};
-tink_state__$Observable_Observable_$Impl_$.scheduledRun = function() {
-	tink_state__$Observable_Observable_$Impl_$.isScheduled = false;
-	tink_state__$Observable_Observable_$Impl_$.updatePending();
-};
-tink_state__$Observable_Observable_$Impl_$.updatePending = function(maxSeconds) {
-	if(maxSeconds == null) {
-		maxSeconds = .01;
+	static create(f) {
+		return new tink_state__$Observable_SimpleObservable(f);
 	}
-	var end = Date.now() / 1000 + maxSeconds;
-	while(true) {
-		var old = tink_state__$Observable_Observable_$Impl_$.scheduled;
-		tink_state__$Observable_Observable_$Impl_$.scheduled = [];
-		var _g = 0;
-		while(_g < old.length) {
-			var o = old[_g];
-			++_g;
-			o();
+	static auto(f) {
+		return new tink_state__$Observable_AutoObservable(f);
+	}
+	static const(value) {
+		return new tink_state_ConstObservable(value);
+	}
+}
+tink_state__$Observable_Observable_$Impl_$.__name__ = true;
+class tink_state__$Observable_SimpleObservable {
+	constructor(f) {
+		if(tink_state__$Observable_SimpleObservable._hx_skip_constructor) {
+			return;
 		}
-		if(!(tink_state__$Observable_Observable_$Impl_$.scheduled.length > 0 && Date.now() / 1000 < end)) {
-			break;
-		}
+		this._hx_constructor(f);
 	}
-	if(tink_state__$Observable_Observable_$Impl_$.scheduled.length > 0) {
-		tink_state__$Observable_Observable_$Impl_$.scheduleUpdate();
-		return true;
-	} else {
-		return false;
+	_hx_constructor(f) {
+		this._poll = f;
 	}
-};
-tink_state__$Observable_Observable_$Impl_$.ofPromise = function(p) {
-	if(p == null) {
-		throw new js__$Boot_HaxeError("Expected Promise but got null");
-	}
-	var value = tink_state_Promised.Loading;
-	var _e = p;
-	var f1 = function(f) {
-		var ret = _e.map(f);
-		return ret.gather();
-	};
-	var becameInvalid = new tink_core__$Lazy_LazyFunc(function() {
-		return f1(function(_) {
-			return tink_core_Noise.Noise;
-		});
-	});
-	return tink_state__$Observable_Observable_$Impl_$.create(function() {
-		if(p != null) {
-			p.handle(function(o) {
-				switch(o._hx_index) {
-				case 0:
-					var v = o.data;
-					value = tink_state_Promised.Done(v);
-					break;
-				case 1:
-					var e = o.failure;
-					value = tink_state_Promised.Failed(e);
-					break;
-				}
-				becameInvalid = new tink_core__$Lazy_LazyConst(tink_state_ConstObservable.NEVER);
-			});
-		}
-		var becameInvalid1 = becameInvalid.get();
-		var this1 = new tink_core_MPair(value,becameInvalid1);
-		var this2 = this1;
-		return this2;
-	});
-};
-tink_state__$Observable_Observable_$Impl_$.create = function(f) {
-	return new tink_state__$Observable_SimpleObservable(f);
-};
-tink_state__$Observable_Observable_$Impl_$.auto = function(f) {
-	return new tink_state__$Observable_AutoObservable(f);
-};
-tink_state__$Observable_Observable_$Impl_$.const = function(value) {
-	return new tink_state_ConstObservable(value);
-};
-var tink_state__$Observable_Computation_$Impl_$ = {};
-tink_state__$Observable_Computation_$Impl_$.__name__ = true;
-tink_state__$Observable_Computation_$Impl_$.async = function(f) {
-	var this1 = { f : f};
-	var o = tink_state__$Observable_Observable_$Impl_$.map(tink_state__$Observable_Observable_$Impl_$.auto(this1),tink_state__$Observable_Transform_$Impl_$.plain(tink_state__$Observable_Observable_$Impl_$.ofPromise));
-	var this2 = { f : function() {
-		return tink_state__$Observable_Observable_$Impl_$.get_value(tink_state__$Observable_Observable_$Impl_$.get_value(o));
-	}};
-	return this2;
-};
-var tink_state__$Observable_SimpleObservable = function(f) {
-	this._poll = f;
-};
-tink_state__$Observable_SimpleObservable.__name__ = true;
-tink_state__$Observable_SimpleObservable.prototype = {
-	resetCache: function(_) {
+	resetCache(_) {
 		this.cache = null;
 	}
-	,poll: function() {
+	poll() {
 		var count = 0;
 		var last = null;
 		while(this.cache == null) {
@@ -3120,77 +1323,85 @@ tink_state__$Observable_SimpleObservable.prototype = {
 		}
 		return this.cache;
 	}
-	,__class__: tink_state__$Observable_SimpleObservable
-};
-var tink_state__$Observable_Transform_$Impl_$ = {};
+}
+tink_state__$Observable_SimpleObservable.__name__ = true;
+Object.assign(tink_state__$Observable_SimpleObservable.prototype, {
+	__class__: tink_state__$Observable_SimpleObservable
+});
+class tink_state__$Observable_Transform_$Impl_$ {
+	static plain(f) {
+		var this1 = f;
+		return this1;
+	}
+}
 tink_state__$Observable_Transform_$Impl_$.__name__ = true;
-tink_state__$Observable_Transform_$Impl_$.plain = function(f) {
-	var this1 = f;
-	return this1;
-};
-var tink_state_ConstObservable = function(value) {
-	var this1 = new tink_core_MPair(value,tink_state_ConstObservable.NEVER);
-	var this2 = this1;
-	this.m = this2;
-};
-tink_state_ConstObservable.__name__ = true;
-tink_state_ConstObservable.prototype = {
-	poll: function() {
+class tink_state_ConstObservable {
+	constructor(value) {
+		var this1 = new tink_core_MPair(value,tink_state_ConstObservable.NEVER);
+		var this2 = this1;
+		this.m = this2;
+	}
+	poll() {
 		return this.m;
 	}
-	,__class__: tink_state_ConstObservable
-};
-var tink_state__$Observable_AutoObservable = function(comp) {
-	this.subscriptions = new haxe_ds_ObjectMap();
-	var _gthis = this;
-	tink_state__$Observable_SimpleObservable.call(this,function() {
-		_gthis.subscriptions = new haxe_ds_ObjectMap();
-		_gthis.trigger = new tink_core_FutureTrigger();
-		var this1 = new tink_core_MPair(comp.f(),_gthis.trigger);
-		var this2 = this1;
-		return this2;
-	});
-};
-tink_state__$Observable_AutoObservable.__name__ = true;
-tink_state__$Observable_AutoObservable.__super__ = tink_state__$Observable_SimpleObservable;
-tink_state__$Observable_AutoObservable.prototype = $extend(tink_state__$Observable_SimpleObservable.prototype,{
-	subscribe: function(change) {
+}
+tink_state_ConstObservable.__name__ = true;
+Object.assign(tink_state_ConstObservable.prototype, {
+	__class__: tink_state_ConstObservable
+});
+class tink_state__$Observable_AutoObservable extends tink_state__$Observable_SimpleObservable {
+	constructor(comp) {
+		tink_state__$Observable_SimpleObservable._hx_skip_constructor = true;
+		super();
+		tink_state__$Observable_SimpleObservable._hx_skip_constructor = false;
+		this._hx_constructor(comp);
+	}
+	_hx_constructor(comp) {
+		this.subscriptions = new haxe_ds_ObjectMap();
+		var _gthis = this;
+		super._hx_constructor(function() {
+			_gthis.subscriptions = new haxe_ds_ObjectMap();
+			_gthis.trigger = new tink_core_FutureTrigger();
+			var this1 = new tink_core_MPair(comp.f(),_gthis.trigger);
+			var this2 = this1;
+			return this2;
+		});
+	}
+	subscribe(change) {
 		if(this.subscriptions.h.__keys__[change.__id__] == null) {
 			var this1 = this.subscriptions;
 			var v = change.handle(($_=this.trigger,$bind($_,$_.trigger)));
 			this1.set(change,v);
 		}
 	}
-	,__class__: tink_state__$Observable_AutoObservable
+}
+tink_state__$Observable_AutoObservable.__name__ = true;
+Object.assign(tink_state__$Observable_AutoObservable.prototype, {
+	__class__: tink_state__$Observable_AutoObservable
 });
-var tink_state_Promised = $hxEnums["tink.state.Promised"] = { __ename__ : true, __constructs__ : ["Loading","Done","Failed"]
-	,Loading: {_hx_index:0,__enum__:"tink.state.Promised",toString:$estr}
-	,Done: ($_=function(result) { return {_hx_index:1,result:result,__enum__:"tink.state.Promised",toString:$estr}; },$_.__params__ = ["result"],$_)
-	,Failed: ($_=function(error) { return {_hx_index:2,error:error,__enum__:"tink.state.Promised",toString:$estr}; },$_.__params__ = ["error"],$_)
-};
-var tink_state__$State_State_$Impl_$ = {};
+class tink_state__$State_State_$Impl_$ {
+	static get_value(this1) {
+		return tink_state__$Observable_Observable_$Impl_$.get_value(this1);
+	}
+}
 tink_state__$State_State_$Impl_$.__name__ = true;
-tink_state__$State_State_$Impl_$.get_value = function(this1) {
-	return tink_state__$Observable_Observable_$Impl_$.get_value(this1);
-};
-var tink_state__$State_SimpleState = function(value,isEqual,guard) {
-	this.value = value;
-	this.isEqual = isEqual;
-	this.guard = guard;
-	this.arm();
-};
-tink_state__$State_SimpleState.__name__ = true;
-tink_state__$State_SimpleState.prototype = {
-	poll: function() {
+class tink_state__$State_SimpleState {
+	constructor(value,isEqual,guard) {
+		this.value = value;
+		this.isEqual = isEqual;
+		this.guard = guard;
+		this.arm();
+	}
+	poll() {
 		return this.next;
 	}
-	,arm: function() {
+	arm() {
 		this.trigger = new tink_core_FutureTrigger();
 		var this1 = new tink_core_MPair(this.value,this.trigger);
 		var this2 = this1;
 		this.next = this2;
 	}
-	,set: function(value) {
+	set(value) {
 		if(this.guard != null) {
 			value = this.guard(value,this.value);
 		}
@@ -3202,331 +1413,32 @@ tink_state__$State_SimpleState.prototype = {
 			last.trigger(tink_core_Noise.Noise);
 		}
 	}
-	,__class__: tink_state__$State_SimpleState
-};
-var tink_streams__$Stream_CompoundStream = function(parts) {
-	tink_streams_StreamBase.call(this);
-	this.parts = parts;
-};
-tink_streams__$Stream_CompoundStream.__name__ = true;
-tink_streams__$Stream_CompoundStream.consumeParts = function(parts,handler,cb) {
-	if(parts.length == 0) {
-		cb(tink_streams_Conclusion.Depleted);
-	} else {
-		parts[0].forEach(handler).handle(function(o) {
-			switch(o._hx_index) {
-			case 0:
-				var rest = o.rest;
-				parts = parts.slice();
-				parts[0] = rest;
-				var tmp = tink_streams_Conclusion.Halted(new tink_streams__$Stream_CompoundStream(parts));
-				cb(tmp);
-				break;
-			case 1:
-				var at = o.at;
-				var e = o.error;
-				if(at.get_depleted()) {
-					parts = parts.slice(1);
-				} else {
-					parts = parts.slice();
-					parts[0] = at;
-				}
-				var tmp1 = tink_streams_Conclusion.Clogged(e,new tink_streams__$Stream_CompoundStream(parts));
-				cb(tmp1);
-				break;
-			case 2:
-				var e1 = o.error;
-				cb(tink_streams_Conclusion.Failed(e1));
-				break;
-			case 3:
-				tink_streams__$Stream_CompoundStream.consumeParts(parts.slice(1),handler,cb);
-				break;
-			}
-		});
-	}
-};
-tink_streams__$Stream_CompoundStream.of = function(streams) {
-	var ret = [];
-	var _g = 0;
-	while(_g < streams.length) {
-		var s = streams[_g];
-		++_g;
-		s.decompose(ret);
-	}
-	if(ret.length == 0) {
-		return tink_streams_Empty.inst;
-	} else {
-		return new tink_streams__$Stream_CompoundStream(ret);
-	}
-};
-tink_streams__$Stream_CompoundStream.__super__ = tink_streams_StreamBase;
-tink_streams__$Stream_CompoundStream.prototype = $extend(tink_streams_StreamBase.prototype,{
-	get_depleted: function() {
-		switch(this.parts.length) {
-		case 0:
-			return true;
-		case 1:
-			return this.parts[0].get_depleted();
-		default:
-			return false;
-		}
-	}
-	,decompose: function(into) {
-		var _g = 0;
-		var _g1 = this.parts;
-		while(_g < _g1.length) {
-			var p = _g1[_g];
-			++_g;
-			p.decompose(into);
-		}
-	}
-	,forEach: function(handler) {
-		var parts = this.parts;
-		var handler1 = handler;
-		return tink_core__$Future_Future_$Impl_$.async(function(cb) {
-			tink_streams__$Stream_CompoundStream.consumeParts(parts,handler1,cb);
-		});
-	}
-	,__class__: tink_streams__$Stream_CompoundStream
-});
-var tink_streams_Handled = $hxEnums["tink.streams.Handled"] = { __ename__ : true, __constructs__ : ["BackOff","Finish","Resume","Clog"]
-	,BackOff: {_hx_index:0,__enum__:"tink.streams.Handled",toString:$estr}
-	,Finish: {_hx_index:1,__enum__:"tink.streams.Handled",toString:$estr}
-	,Resume: {_hx_index:2,__enum__:"tink.streams.Handled",toString:$estr}
-	,Clog: ($_=function(e) { return {_hx_index:3,e:e,__enum__:"tink.streams.Handled",toString:$estr}; },$_.__params__ = ["e"],$_)
-};
-var tink_streams_Conclusion = $hxEnums["tink.streams.Conclusion"] = { __ename__ : true, __constructs__ : ["Halted","Clogged","Failed","Depleted"]
-	,Halted: ($_=function(rest) { return {_hx_index:0,rest:rest,__enum__:"tink.streams.Conclusion",toString:$estr}; },$_.__params__ = ["rest"],$_)
-	,Clogged: ($_=function(error,at) { return {_hx_index:1,error:error,at:at,__enum__:"tink.streams.Conclusion",toString:$estr}; },$_.__params__ = ["error","at"],$_)
-	,Failed: ($_=function(error) { return {_hx_index:2,error:error,__enum__:"tink.streams.Conclusion",toString:$estr}; },$_.__params__ = ["error"],$_)
-	,Depleted: {_hx_index:3,__enum__:"tink.streams.Conclusion",toString:$estr}
-};
-var tink_streams_ReductionStep = $hxEnums["tink.streams.ReductionStep"] = { __ename__ : true, __constructs__ : ["Progress","Crash"]
-	,Progress: ($_=function(result) { return {_hx_index:0,result:result,__enum__:"tink.streams.ReductionStep",toString:$estr}; },$_.__params__ = ["result"],$_)
-	,Crash: ($_=function(e) { return {_hx_index:1,e:e,__enum__:"tink.streams.ReductionStep",toString:$estr}; },$_.__params__ = ["e"],$_)
-};
-var tink_streams_Reduction = $hxEnums["tink.streams.Reduction"] = { __ename__ : true, __constructs__ : ["Crashed","Failed","Reduced"]
-	,Crashed: ($_=function(error,at) { return {_hx_index:0,error:error,at:at,__enum__:"tink.streams.Reduction",toString:$estr}; },$_.__params__ = ["error","at"],$_)
-	,Failed: ($_=function(error) { return {_hx_index:1,error:error,__enum__:"tink.streams.Reduction",toString:$estr}; },$_.__params__ = ["error"],$_)
-	,Reduced: ($_=function(result) { return {_hx_index:2,result:result,__enum__:"tink.streams.Reduction",toString:$estr}; },$_.__params__ = ["result"],$_)
-};
-var tink_streams_Single = function(value) {
-	tink_streams_StreamBase.call(this);
-	this.value = value;
-};
-tink_streams_Single.__name__ = true;
-tink_streams_Single.__super__ = tink_streams_StreamBase;
-tink_streams_Single.prototype = $extend(tink_streams_StreamBase.prototype,{
-	forEach: function(handle) {
-		var _gthis = this;
-		var ret = handle(this.value.get()).map(function(step) {
-			switch(step._hx_index) {
-			case 0:
-				return tink_streams_Conclusion.Halted(_gthis);
-			case 1:
-				return tink_streams_Conclusion.Halted(tink_streams_Empty.inst);
-			case 2:
-				return tink_streams_Conclusion.Depleted;
-			case 3:
-				var e = step.e;
-				return tink_streams_Conclusion.Clogged(e,_gthis);
-			}
-		});
-		return ret.gather();
-	}
-	,__class__: tink_streams_Single
-});
-var tink_streams__$Stream_Handler_$Impl_$ = {};
-tink_streams__$Stream_Handler_$Impl_$.__name__ = true;
-tink_streams__$Stream_Handler_$Impl_$.ofUnknown = function(f) {
-	var this1 = f;
-	return this1;
-};
-var tink_streams__$Stream_Reducer_$Impl_$ = {};
-tink_streams__$Stream_Reducer_$Impl_$.__name__ = true;
-tink_streams__$Stream_Reducer_$Impl_$.ofSafe = function(f) {
-	var this1 = f;
-	return this1;
-};
-var tink_streams_Step = $hxEnums["tink.streams.Step"] = { __ename__ : true, __constructs__ : ["Link","Fail","End"]
-	,Link: ($_=function(value,next) { return {_hx_index:0,value:value,next:next,__enum__:"tink.streams.Step",toString:$estr}; },$_.__params__ = ["value","next"],$_)
-	,Fail: ($_=function(e) { return {_hx_index:1,e:e,__enum__:"tink.streams.Step",toString:$estr}; },$_.__params__ = ["e"],$_)
-	,End: {_hx_index:2,__enum__:"tink.streams.Step",toString:$estr}
-};
-var tink_url__$Path_Path_$Impl_$ = {};
-tink_url__$Path_Path_$Impl_$.__name__ = true;
-tink_url__$Path_Path_$Impl_$.ofString = function(s) {
-	var this1 = tink_url__$Path_Path_$Impl_$.normalize(s);
-	return this1;
-};
-tink_url__$Path_Path_$Impl_$.normalize = function(s) {
-	s = StringTools.trim(StringTools.replace(s,"\\","/"));
-	if(s == ".") {
-		return "./";
-	}
-	var isDir = StringTools.endsWith(s,"/..") || StringTools.endsWith(s,"/") || StringTools.endsWith(s,"/.");
-	var parts = [];
-	var isAbsolute = StringTools.startsWith(s,"/");
-	var up = 0;
-	var _g = 0;
-	var _g1 = s.split("/");
-	while(_g < _g1.length) {
-		var part = _g1[_g];
-		++_g;
-		var _g2 = StringTools.trim(part);
-		switch(_g2) {
-		case "":
-			break;
-		case ".":
-			break;
-		case "..":
-			if(parts.pop() == null) {
-				++up;
-			}
-			break;
-		default:
-			var v = _g2;
-			parts.push(v);
-		}
-	}
-	if(isAbsolute) {
-		parts.unshift("");
-	} else {
-		var _g21 = 0;
-		var _g3 = up;
-		while(_g21 < _g3) {
-			var i = _g21++;
-			parts.unshift("..");
-		}
-	}
-	if(isDir) {
-		parts.push("");
-	}
-	return parts.join("/");
-};
-var tink_web_proxy__$Remote_RemoteEndpoint_$Impl_$ = {};
-tink_web_proxy__$Remote_RemoteEndpoint_$Impl_$.__name__ = true;
-tink_web_proxy__$Remote_RemoteEndpoint_$Impl_$._new = function(host) {
-	var this1 = { host : host};
-	return this1;
-};
-tink_web_proxy__$Remote_RemoteEndpoint_$Impl_$.concat = function(a,b) {
-	if(a == null) {
-		var r = b;
-		return r;
-	} else if(b == null) {
-		var r1 = a;
-		return r1;
-	} else {
-		return a.concat(b);
-	}
-};
-tink_web_proxy__$Remote_RemoteEndpoint_$Impl_$.sub = function(this1,options) {
-	return { host : this1.host, headers : tink_web_proxy__$Remote_RemoteEndpoint_$Impl_$.concat(this1.headers,options.headers), query : tink_web_proxy__$Remote_RemoteEndpoint_$Impl_$.concat(this1.query,options.query), path : tink_web_proxy__$Remote_RemoteEndpoint_$Impl_$.concat(this1.path,options.path)};
-};
-tink_web_proxy__$Remote_RemoteEndpoint_$Impl_$.uri = function(this1) {
-	var _g = this1.path;
-	var tmp;
-	if(_g == null) {
-		tmp = "";
-	} else {
-		var v = _g;
-		tmp = tink_url__$Path_Path_$Impl_$.normalize(v.join("/"));
-	}
-	return "/" + tmp + tink_web_proxy__$Remote_QueryParams_$Impl_$.toString(this1.query);
-};
-tink_web_proxy__$Remote_RemoteEndpoint_$Impl_$.request = function(this1,client,method,body,reader) {
-	return tink_core__$Promise_Promise_$Impl_$.next(client.request(new tink_http_OutgoingRequest(new tink_http_OutgoingRequestHeader(method,tink__$Url_Url_$Impl_$.fromString("//" + this1.host + tink_web_proxy__$Remote_RemoteEndpoint_$Impl_$.uri(this1)),null,this1.headers),body)),function(response) {
-		return (tink_web_proxy__$Remote_ResponseReader_$Impl_$.withHeader(reader,response.header))(response.body);
-	});
-};
-var tink_web_proxy__$Remote_ResponseReader_$Impl_$ = {};
-tink_web_proxy__$Remote_ResponseReader_$Impl_$.__name__ = true;
-tink_web_proxy__$Remote_ResponseReader_$Impl_$.withHeader = function(this1,header) {
-	var f = this1;
-	var a1 = header;
-	return function(a2) {
-		return f(a1,a2);
-	};
-};
-tink_web_proxy__$Remote_ResponseReader_$Impl_$.ofStringReader = function(read) {
-	return function(header,body) {
-		return tink_core__$Promise_Promise_$Impl_$.next(tink_io_RealSourceTools.all(body),function(chunk) {
-			if(header.statusCode >= 400) {
-				return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Failure(tink_core_TypedError.withData(header.statusCode,header.reason,chunk.toString(),{ fileName : "tink/web/proxy/Remote.hx", lineNumber : 78, className : "tink.web.proxy._Remote.ResponseReader_Impl_", methodName : "ofStringReader"}))));
-			} else {
-				var o = chunk.toString();
-				return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(read(o)));
-			}
-		});
-	};
-};
-var tink_web_proxy__$Remote_QueryParams_$Impl_$ = {};
-tink_web_proxy__$Remote_QueryParams_$Impl_$.__name__ = true;
-tink_web_proxy__$Remote_QueryParams_$Impl_$.toString = function(this1) {
-	if(this1 == null) {
-		return "";
-	} else if(this1.length == 0) {
-		return "";
-	} else {
-		var this2 = [];
-		var ret = this2;
-		var _g = 0;
-		while(_g < this1.length) {
-			var p = this1[_g];
-			++_g;
-			ret.push(p.name + "=" + p.value);
-		}
-		return "?" + ret.join("&");
-	}
-};
-var tink_web_proxy_RemoteBase = function(client,endpoint) {
-	this.client = client;
-	this.endpoint = endpoint;
-};
-tink_web_proxy_RemoteBase.__name__ = true;
-tink_web_proxy_RemoteBase.prototype = {
-	__class__: tink_web_proxy_RemoteBase
-};
-var tink_web_proxy_Remote0 = function(client,endpoint) {
-	tink_web_proxy_RemoteBase.call(this,client,endpoint);
-};
-tink_web_proxy_Remote0.__name__ = true;
-tink_web_proxy_Remote0.__super__ = tink_web_proxy_RemoteBase;
-tink_web_proxy_Remote0.prototype = $extend(tink_web_proxy_RemoteBase.prototype,{
-	json: function() {
-		var __body__ = tink_chunk_ByteChunk.of(haxe_io_Bytes.ofString(""));
-		var this1 = "tink_api";
-		return tink_web_proxy__$Remote_RemoteEndpoint_$Impl_$.request(tink_web_proxy__$Remote_RemoteEndpoint_$Impl_$.sub(this.endpoint,{ path : [this1], query : [], headers : null}),this.client,"GET",new tink_streams_Single(new tink_core__$Lazy_LazyConst(__body__)),tink_web_proxy__$Remote_ResponseReader_$Impl_$.ofStringReader(($_=new tink_json_Parser0(),$bind($_,$_.tryParse))));
-	}
-	,__class__: tink_web_proxy_Remote0
+}
+tink_state__$State_SimpleState.__name__ = true;
+Object.assign(tink_state__$State_SimpleState.prototype, {
+	__class__: tink_state__$State_SimpleState
 });
 function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $global.$haxeUID++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = m.bind(o); o.hx__closures__[m.__id__] = f; } return f; }
 if(typeof $global.$haxeUID == "undefined") $global.$haxeUID = 0;
-if( String.fromCodePoint == null ) String.fromCodePoint = function(c) { return c < 0x10000 ? String.fromCharCode(c) : String.fromCharCode((c>>10)+0xD7C0)+String.fromCharCode((c&0x3FF)+0xDC00); }
 String.prototype.__class__ = String;
 String.__name__ = true;
 Array.__name__ = true;
-var $$tre = (typeof Symbol === "function" && Symbol.for && Symbol.for("react.element")) || 0xeac7;
+Date.prototype.__class__ = Date;
+Date.__name__ = "Date";
+client_externs_Mobx.decorate(client_data_TodoFilterStore,{ currentFilter : client_externs_Mobx.observable});
+client_externs_Mobx.decorate(client_data_TodoListStore,{ items : client_externs_Mobx.observable, unfinished : client_externs_Mobx.observable, hasAnyCompleted : client_externs_Mobx.observable, length : client_externs_Mobx.observable});
 haxe_ds_ObjectMap.count = 0;
 Object.defineProperty(js__$Boot_HaxeError.prototype,"message",{ get : function() {
 	return String(this.val);
 }});
 js_Boot.__toStr = ({ }).toString;
-if(ArrayBuffer.prototype.slice == null) {
-	ArrayBuffer.prototype.slice = js_lib__$ArrayBuffer_ArrayBufferCompat.sliceImpl;
-}
-tink__$Chunk_EmptyChunk.EMPTY = new haxe_io_Bytes(new ArrayBuffer(0));
-tink__$Chunk_Chunk_$Impl_$.EMPTY = new tink__$Chunk_EmptyChunk();
 tink_core__$Callback_Callback_$Impl_$.depth = 0;
-tink_streams_Empty.inst = new tink_streams_Empty();
-tink_io_nodejs_WrappedBuffer.alloc = "allocUnsafe" in Buffer ? js_node_buffer_Buffer.allocUnsafe : function(size) {
-	return new js_node_buffer_Buffer(size);
-};
+tink_pure__$List_Node.EMPTY = [];
 tink_state__$Observable_Observable_$Impl_$.stack = new haxe_ds_List();
 tink_state__$Observable_Observable_$Impl_$.scheduled = [];
 tink_state__$Observable_Observable_$Impl_$.hasRAF = typeof window != 'undefined' && 'requestAnimationFrame' in window;
 tink_state__$Observable_Observable_$Impl_$.isScheduled = false;
+tink_state__$Observable_SimpleObservable._hx_skip_constructor = false;
 tink_state_ConstObservable.NEVER = (function($this) {
 	var $r;
 	var this1 = new tink_core__$Future_SimpleFuture(function(_) {

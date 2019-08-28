@@ -9,6 +9,7 @@
 # It goes to shared because of SSR, but it's mainly client-specific
 -js src/ts/shared/hx.js
 -D  no-deprecation-warnings
+-D js-es=6
 --macro include('client')
 --macro include('client.data')
 -dce full

@@ -3,34 +3,41 @@ import React, { Component, KeyboardEvent, Ref } from 'react';
 import styles from './TodoList.scss';
 import { style } from '@material-ui/system';
 import { TodoItem } from '../TodoItem';
-import { throws } from 'assert';
+import * as hx from '../../../shared/hx';
+import { observer } from 'mobx-react';
+import { observable, decorate, computed } from 'mobx';
+import uuidv4 from 'uuid/v4';
 
-export default class TodoList extends Component {
-  private todos = [];
-  private filter = {matches: (t: any) => t};
+@observer class TodoList extends Component {
+  @observable private todos = new hx.client.data.TodoListStore();
+  private filter = new hx.client.data.TodoFilterStore();
 
   public render() {
+    console.log(this.todos);
     return (
       <div className={styles['todo-list']}>
         <h1>todos</h1>
-        <Header/>
+        <Header todos={this.todos}/>
         <ol>
-          {
-            this.todos.map(item => {
-              if (this.filter.matches(item)) {
-                return <TodoItem key={item} item={item} onDeleted={(t: any) => t} />;
-              }
-            })
-          }
+          {this.renderItems()}
         </ol>
+        <Footer todos={this.todos} filter={this.filter}/>
       </div>
     );
   }
+
+  private renderItems() {
+    return this.todos.items.map(item => {
+      if (this.filter.matches(item)) {
+        return <TodoItem key={uuidv4()} item={item} onDeleted={this.todos.delete.bind(this.todos, item)} />;
+      }
+    });
+  }
 }
 
-class Header extends Component {
+@observer
+class Header extends Component<{todos: hx.client.data.TodoListStore}> {
   private inputRef = React.createRef<HTMLInputElement>();
-  private todos = {items: [], unfinished: 0, add: v => v}; // TODO refer to store
 
   constructor(props) {
     super(props);
@@ -42,6 +49,7 @@ class Header extends Component {
   }
 
   public render() {
+    const { todos } = this.props;
     return (
     <header>
       <input ref={this.inputRef} type='text' placeholder='What needs to be done?' onKeyPress={this.onKeyPress.bind(this)} />
@@ -51,29 +59,31 @@ class Header extends Component {
   }
 
   private onKeyPress(e: KeyboardEvent) {
+    const { todos } = this.props;
     const inputFromEvent = e.target as HTMLInputElement;
     if (e.which === 13) { // DOM_VK_RETURN
-      this.todos.add(inputFromEvent.value);
+      todos.add(inputFromEvent.value);
       inputFromEvent.value = '';
     }
   }
 
   private renderItems() {
-    if (this.todos.items.length > 0) {
-      if (this.todos.unfinished > 0) {
-        return <button className={styles['mark-all']} onClick={() => this.todos.items.forEach(t => t.completed = true )}>Mark all as completed</button>;
+    const { todos } = this.props;
+    if (todos.length > 0) {
+      if (todos.unfinished > 0) {
+        return <button className={styles['mark-all']} onClick={() => todos.items.map(t => t.completed = true )}>Mark all as completed</button>;
       } else {
-        return <button className='unmark-all' onClick={() => this.todos.items.forEach(t => t.completed = true)}>Unmark all as completed</button>;
+        return <button className='unmark-all' onClick={() => todos.items.map(t => t.completed = true)}>Unmark all as completed</button>;
       }
     }
   }
 }
 
-class Footer extends Component {
-  private todos = {unfinished: 1, hasAnyCompleted: false, clearCompleted: () => true};
-  private filter = {options: [], toggle: (f: any) => f, isActive: (f: any) => true};
-
+@observer
+class Footer extends Component<{todos: hx.client.data.TodoListStore, filter: hx.client.data.TodoFilterStore}> {
   public render() {
+    const { todos, filter } = this.props;
+
     return (
       <footer>
         <span>
@@ -82,21 +92,23 @@ class Footer extends Component {
 
         <menu>
           {
-            this.filter.options.map(fo => {
-              return <button onClick={() => this.filter.toggle(fo.value)}
-                             data-active={this.filter.isActive(fo.value)}
+            filter.mapOptions(fo => {
+              return <button onClick={() => filter.toggle(fo.value)}
+                             data-active={filter.isActive(fo.value)}
                      >{fo.name}</button>;
 
             })
           }
         </menu>
-        {this.todos.hasAnyCompleted && <button onClick={this.todos.clearCompleted}>Clear Completed</button>}
+        {todos.hasAnyCompleted && <button onClick={todos.clearCompleted.bind(todos)}>Clear Completed</button>}
       </footer>
     );
   }
 
   private renderUnfinished() {
-    const v = this.todos.unfinished;
+    const { todos } = this.props;
+
+    const v = todos.unfinished;
     return <span>
       {
         v === 1
@@ -106,3 +118,5 @@ class Footer extends Component {
     </span>;
   }
 }
+
+export default TodoList;

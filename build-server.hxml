@@ -7,6 +7,7 @@
 -js src/ts/server/hx.js
 -main server.Main
 -D nodejs
+-D js-es=6
 -debug
 -D source-map-content
 -D no-deprecation-warnings

@@ -69,9 +69,6 @@ class client_data_TodoFilterModel {
 			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(tink_core_Noise.Noise)));
 		});
 	}
-	isActive(filter) {
-		return filter == tink_state__$State_State_$Impl_$.get_value(this.__coco_currentFilter);
-	}
 	__cocoupdate(ret) {
 		var sync = true;
 		var done = false;
@@ -113,20 +110,16 @@ Object.assign(client_data_TodoFilterModel.prototype, {
 var client_externs_Mobx = require("mobx");
 class client_data_TodoFilterStore {
 	constructor() {
+		this.foo = true;
 		this.filter = new client_data_TodoFilterModel();
 		var _gthis = this;
 		tink_state__$Observable_Observable_$Impl_$.bind(this.filter.observables.currentFilter,{ },function(f) {
 			return _gthis.currentFilter = f;
 		});
-	}
-	mapOptions(cb) {
-		return tink_pure__$List_List_$Impl_$.toArray(tink_pure__$List_List_$Impl_$.map(this.filter.options,cb));
+		this.options = tink_pure__$List_List_$Impl_$.toArray(this.filter.options);
 	}
 	toggle(filter) {
 		return this.filter.toggle(filter);
-	}
-	isActive(filter) {
-		return this.filter.isActive(filter);
 	}
 	matches(store) {
 		return this.currentFilter(store.item);
@@ -170,6 +163,14 @@ class client_data_TodoItemModel {
 			return count > 0;
 		}))};
 	}
+	set_completed(param) {
+		this.__coco_completed.set(param);
+		return param;
+	}
+	set_description(param) {
+		this.__coco_description.set(param);
+		return param;
+	}
 	static isActive(item) {
 		return !tink_state__$State_State_$Impl_$.get_value(item.__coco_completed);
 	}
@@ -186,22 +187,23 @@ Object.assign(client_data_TodoItemModel.prototype, {
 });
 class client_data_TodoItemStore {
 	constructor(item) {
+		var _gthis = this;
 		this.item = item;
 		this.description = tink_state__$State_State_$Impl_$.get_value(item.__coco_description);
 		this.created = item.created;
 		this.completed = tink_state__$State_State_$Impl_$.get_value(item.__coco_completed);
+		tink_state__$Observable_Observable_$Impl_$.bind(this.item.observables.completed,{ },function(val) {
+			return _gthis.completed = val;
+		});
+		tink_state__$Observable_Observable_$Impl_$.bind(this.item.observables.description,{ },function(val1) {
+			return _gthis.description = val1;
+		});
 	}
 	setCompleted(val) {
-		this.completed = val;
+		this.item.set_completed(val);
 	}
 	setDescription(val) {
-		this.description = val;
-	}
-	isActive() {
-		return client_data_TodoItemModel.isActive(this.item);
-	}
-	isCompleted() {
-		return client_data_TodoItemModel.isCompleted(this.item);
+		this.item.set_description(val);
 	}
 	static create(description) {
 		var item = client_data_TodoItemModel.create(description);
@@ -363,11 +365,13 @@ class client_data_TodoListStore {
 				return client_data_TodoItemStore.wrap(item1);
 			});
 			_gthis.items = tink_pure__$List_List_$Impl_$.toArray(tmp);
-			_gthis.length = _gthis.items.length;
-			var tmp1 = tink_state__$Observable_Observable_$Impl_$.get_value(_gthis.todoList.__coco_unfinished);
-			_gthis.unfinished = tmp1;
-			var tmp2 = tink_state__$Observable_Observable_$Impl_$.get_value(_gthis.todoList.__coco_hasAnyCompleted);
-			return _gthis.hasAnyCompleted = tmp2;
+			return _gthis.length = _gthis.items.length;
+		});
+		tink_state__$Observable_Observable_$Impl_$.bind(this.todoList.observables.unfinished,{ },function(val) {
+			return _gthis.unfinished = val;
+		});
+		tink_state__$Observable_Observable_$Impl_$.bind(this.todoList.observables.hasAnyCompleted,{ },function(val1) {
+			return _gthis.hasAnyCompleted = val1;
 		});
 	}
 	get_items() {
@@ -1426,6 +1430,7 @@ Array.__name__ = true;
 Date.prototype.__class__ = Date;
 Date.__name__ = "Date";
 client_externs_Mobx.decorate(client_data_TodoFilterStore,{ currentFilter : client_externs_Mobx.observable});
+client_externs_Mobx.decorate(client_data_TodoItemStore,{ completed : client_externs_Mobx.observable, description : client_externs_Mobx.observable});
 client_externs_Mobx.decorate(client_data_TodoListStore,{ items : client_externs_Mobx.observable, unfinished : client_externs_Mobx.observable, hasAnyCompleted : client_externs_Mobx.observable, length : client_externs_Mobx.observable});
 haxe_ds_ObjectMap.count = 0;
 Object.defineProperty(js__$Boot_HaxeError.prototype,"message",{ get : function() {

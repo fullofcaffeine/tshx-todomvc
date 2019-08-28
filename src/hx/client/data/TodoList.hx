@@ -49,12 +49,13 @@ class TodoListStore {
   private function setupObservables() {
     this.items = this.todoList.items.map((item) -> TodoItemStore.wrap(item)).toArray();
 
-    this.todoList.observables.items.bind({}, (items) -> {
-      this.items = items.map((item) -> TodoItemStore.wrap(item)).toArray();
+    this.todoList.observables.items.bind({}, (items) -> { 
+      this.items = items.map((item) -> TodoItemStore.wrap(item)).toArray(); 
       this.length = this.items.length;
-      this.unfinished = this.todoList.unfinished;
-      this.hasAnyCompleted = this.todoList.hasAnyCompleted;
     });
+
+    this.todoList.observables.unfinished.bind({}, (val) -> this.unfinished = val);
+    this.todoList.observables.hasAnyCompleted.bind({}, (val) -> this.hasAnyCompleted = val);
   }
 
   public function get_items() {

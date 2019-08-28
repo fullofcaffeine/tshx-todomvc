@@ -1,6 +1,3 @@
-ol {
-  border-top: 2px solid #e4e4e4;
-}
 
 .todo-item {
   display: flex;
@@ -17,17 +14,18 @@ ol {
     font: inherit;
     border: none;
   }
-  &[data-editing] {
+
+  &[data-editing="true"] {
     input[name="completed"] {
       visibility: hidden;
     }
   }
-  &[data-completed] {
+
+  &[data-completed="true"] {
     .description {
       text-decoration: line-through;
       color: #ccc;
     }
-    
   }
 
   input[name="completed"] {
@@ -56,6 +54,7 @@ ol {
   }
 
   button.delete {
+    
     flex-basis: 60px;
     align-self: stretch;
     opacity: 0;
@@ -68,5 +67,6 @@ ol {
       font-size: 30px;
       color: #af5b5b;
     }
-  }
+  }  
 }
+

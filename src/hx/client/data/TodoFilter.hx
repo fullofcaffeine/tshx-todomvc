@@ -1,6 +1,8 @@
 package client.data;
 
-import client.externs.Mobx;
+import client.externs.Mobx.Mobx;
+import client.externs.Mobx.MobxUtils;
+
 import coconut.data.*;
 import tink.pure.List;
 using tink.CoreApi;
@@ -36,8 +38,11 @@ class TodoFilterModel implements Model {
 class TodoFilterStore {
   private var filter: TodoFilterModel;
   public var currentFilter: TodoItemModel -> Bool;
+  public var foo: Bool = true;
+  public var options: Array<Named<TodoItemModel->Bool>>;
+  public var isActive: Bool;
 
-  static function __init__() {
+  static function __init__():Void {
     Mobx.decorate(TodoFilterStore, {
       currentFilter: Mobx.observable
     });
@@ -49,18 +54,12 @@ class TodoFilterStore {
     this.filter.observables.currentFilter.bind({}, (f) -> {
       this.currentFilter = f;
     });
-  }
 
-  public function mapOptions<A>(cb: (fo: Named<TodoItemModel->Bool>) -> A): Array<A> {
-    return this.filter.options.map(cb).toArray();
+    this.options = this.filter.options.toArray();
   }
 
   public function toggle(filter: TodoItemModel -> Bool) {
     return this.filter.toggle(filter);
-  }
-
-  public function isActive(filter: TodoItemModel -> Bool) {
-    return this.filter.isActive(filter);
   }
 
   public function matches(store: TodoItemStore): Bool {

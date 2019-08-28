@@ -9,7 +9,7 @@ import { observable, decorate, computed } from 'mobx';
 import uuidv4 from 'uuid/v4';
 
 @observer class TodoList extends Component {
-  @observable private todos = new hx.client.data.TodoListStore();
+  private todos = new hx.client.data.TodoListStore();
   private filter = new hx.client.data.TodoFilterStore();
 
   public render() {
@@ -29,7 +29,7 @@ import uuidv4 from 'uuid/v4';
   private renderItems() {
     return this.todos.items.map(item => {
       if (this.filter.matches(item)) {
-        return <TodoItem key={uuidv4()} item={item} onDeleted={this.todos.delete.bind(this.todos, item)} />;
+        return <TodoItem key={uuidv4()} item={item} onDeleted={() => this.todos.delete(item)} />;
       }
     });
   }
@@ -52,7 +52,7 @@ class Header extends Component<{todos: hx.client.data.TodoListStore}> {
     const { todos } = this.props;
     return (
     <header>
-      <input ref={this.inputRef} type='text' placeholder='What needs to be done?' onKeyPress={this.onKeyPress.bind(this)} />
+      <input ref={this.inputRef} type='text' placeholder='What needs to be done?' onKeyPress={e => this.onKeyPress(e)} />
       {this.renderItems()}
     </header>
     );
@@ -71,9 +71,9 @@ class Header extends Component<{todos: hx.client.data.TodoListStore}> {
     const { todos } = this.props;
     if (todos.length > 0) {
       if (todos.unfinished > 0) {
-        return <button className={styles['mark-all']} onClick={() => todos.items.map(t => t.completed = true )}>Mark all as completed</button>;
+        return <button className={styles['mark-all']} onClick={() => todos.items.map(t => t.setCompleted(true))}>Mark all as completed</button>;
       } else {
-        return <button className='unmark-all' onClick={() => todos.items.map(t => t.completed = true)}>Unmark all as completed</button>;
+        return <button className='unmark-all' onClick={() => todos.items.map(t => t.setCompleted(false))}>Unmark all as completed</button>;
       }
     }
   }
@@ -92,15 +92,17 @@ class Footer extends Component<{todos: hx.client.data.TodoListStore, filter: hx.
 
         <menu>
           {
-            filter.mapOptions(fo => {
-              return <button onClick={() => filter.toggle(fo.value)}
-                             data-active={filter.isActive(fo.value)}
-                     >{fo.name}</button>;
-
+            filter.options.map(o => {
+              return <button key={uuidv4()} onClick={() => filter.toggle(o.value)}
+                              // had to remove the use of a function call here as Mobx was NOT re-rendering
+                              // using a comparsion with an observed attribute solves the issue
+                              // but coconut makes it easier by supporting (?) function calls by default.
+                             data-active={o.value === filter.currentFilter}
+                     >{o.name}</button>;
             })
           }
         </menu>
-        {todos.hasAnyCompleted && <button onClick={todos.clearCompleted.bind(todos)}>Clear Completed</button>}
+        {todos.hasAnyCompleted && <button onClick={() => { todos.clearCompleted();  }}>Clear Completed</button>}
       </footer>
     );
   }

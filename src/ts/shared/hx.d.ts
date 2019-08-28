@@ -61,6 +61,8 @@ export namespace client.data {
 		readonly completed: boolean;
 		readonly description: string;
 		readonly created: Date;
+		set_completed(param: boolean): boolean;
+		set_description(param: string): string;
 		readonly updatePerformed: tink.core.SignalObject<{}>;
 		observables: {completed: tink.state._State.StateObject<boolean>, created: tink.state.ObservableObject<Date>, description: tink.state._State.StateObject<string>, isInTransition: tink.state.ObservableObject<boolean>};
 		transitionErrors: tink.core.SignalObject<tink.core.TypedError<any>>;
@@ -83,9 +85,10 @@ export namespace client.data {
 	export class TodoFilterStore {
 		constructor();
 		currentFilter: (arg0: client.data.TodoItemModel) => boolean;
-		mapOptions<A>(cb: (fo: tink.core.NamedWith<string,(arg0: client.data.TodoItemModel) => boolean>) => A): A[];
+		foo: boolean;
+		options: tink.core.NamedWith<string,(arg0: client.data.TodoItemModel) => boolean>[];
+		isActive: boolean;
 		toggle(filter: (arg0: client.data.TodoItemModel) => boolean): tink.core._Future.FutureObject<any>;
-		isActive(filter: (arg0: client.data.TodoItemModel) => boolean): boolean;
 		matches(store: client.data.TodoItemStore): boolean;
 	}
 }
@@ -99,8 +102,6 @@ export namespace client.data {
 		created: Date;
 		setCompleted(val: boolean): void;
 		setDescription(val: string): void;
-		isActive(): boolean;
-		isCompleted(): boolean;
 		static create(description: string): client.data.TodoItemStore;
 		static wrap(item: client.data.TodoItemModel): client.data.TodoItemStore;
 	}

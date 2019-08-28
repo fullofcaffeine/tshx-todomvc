@@ -6,3 +6,8 @@ extern class Mobx {
   extern static var computed: Dynamic;
   extern static function decorate(klass: Class<{}>, options: Dynamic):Void;
 }
+
+@:jsRequire('mobx-utils')
+extern class MobxUtils {
+  extern static function createTransformer(arg: Dynamic):Dynamic;
+}

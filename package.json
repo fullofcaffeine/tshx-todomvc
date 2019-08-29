@@ -21,7 +21,7 @@
     "lint:css": "stylelint src/**/*.css",
     "lint:deps": "depcruise -c .dependency-cruiser.js src/",
     "plop": "plop",
-    "start": "nodemon --verbose -e hx --watch src/hx --exec \"concurrently 'npm run build-hx-server' 'npm run build-hx-client' && wait-on finished-building-hx-server finished-building-hx-client && rm finished-building-hx-client finished-building-hx-server && npm run dev\"",
+    "start": "concurrently \"nodemon --verbose -e hx --watch src/hx --exec \\\"concurrently 'npm run build-hx-server' 'npm run build-hx-client' && wait-on finished-building-hx-server finished-building-hx-client && rm finished-building-hx-client finished-building-hx-server\\\"\" \"npm run dev\"",
     "dev": "cross-env NODE_ENV=development node scripts/start.js",
     "start:analyzer": "webpack-bundle-analyzer build/client/static/bundle-stats.json",
     "test": "node scripts/test.js --env=jsdom",

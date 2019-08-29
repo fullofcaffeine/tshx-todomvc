@@ -1199,9 +1199,8 @@ class server_Main {
 			return;
 		});
 		server_Main.app = server_SetupFromTypescript(server_Main.app);
-		debugger;
 		server_Main.app.listen(server_Config.SERVER_PORT,function() {
-			console.log("src/hx/server/Main.hx:44:","Express server listening on port " + server_Config.SERVER_PORT);
+			console.log("src/hx/server/Main.hx:43:","Express server listening on port " + server_Config.SERVER_PORT);
 			return;
 		});
 	}

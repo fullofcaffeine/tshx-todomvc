@@ -37,7 +37,6 @@ class Main {
 
     app = SetupFromTypescript.call(app);
 
-    js.Lib.debug();
     app.listen(
       Config.SERVER_PORT,
       () -> { 

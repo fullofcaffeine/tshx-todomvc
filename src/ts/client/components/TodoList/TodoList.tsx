@@ -18,12 +18,22 @@ import uuidv4 from 'uuid/v4';
       <div className={styles['todo-list']}>
         <h1>todos</h1>
         <Header todos={this.todos}/>
-        <ol>
-          {this.renderItems()}
-        </ol>
-        <Footer todos={this.todos} filter={this.filter}/>
+        {this.renderBody()}
       </div>
     );
+  }
+
+  private renderBody() {
+    if (this.todos.length > 0) {
+      return (
+        <>
+          <ol>
+            {this.renderItems()}
+          </ol>
+          <Footer todos={this.todos} filter={this.filter} />
+        </>
+      );
+    }
   }
 
   private renderItems() {
